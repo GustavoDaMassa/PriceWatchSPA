@@ -63,7 +63,7 @@ export class ChangePasswordComponent {
       .pipe(finalize(() => this.loading.set(false)))
       .subscribe({
         next: () => { this.toast.success(this.translate.instant('PROFILE.CHANGE_PASSWORD')); this.router.navigate(['/profile']); },
-        error: (err: HttpErrorResponse) => this.toast.error(err.error?.detail ?? this.translate.instant('COMMON.ERROR_GENERIC')),
+        error: (err: HttpErrorResponse) => this.toast.error(err.error?.message ?? this.translate.instant('COMMON.ERROR_GENERIC')),
       });
   }
 }

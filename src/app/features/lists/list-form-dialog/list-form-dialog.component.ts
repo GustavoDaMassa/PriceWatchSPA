@@ -73,7 +73,7 @@ export class ListFormDialogComponent implements OnInit {
       : this.listsApi.createList(req);
     call$.pipe(finalize(() => this.loading.set(false))).subscribe({
       next: () => this.ref.close(true),
-      error: (err: HttpErrorResponse) => this.toast.error(err.error?.detail ?? this.translate.instant('COMMON.ERROR_GENERIC')),
+      error: (err: HttpErrorResponse) => this.toast.error(err.error?.message ?? this.translate.instant('COMMON.ERROR_GENERIC')),
     });
   }
 }

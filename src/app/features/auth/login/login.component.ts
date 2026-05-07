@@ -111,7 +111,7 @@ export class LoginComponent {
         this.router.navigate(['/dashboard']);
       },
       error: (err: HttpErrorResponse) => {
-        const msg = err.error?.detail ?? this.translate.instant('COMMON.ERROR_GENERIC');
+        const msg = err.error?.message ?? this.translate.instant('COMMON.ERROR_GENERIC');
         this.toast.error(msg);
       },
     });

@@ -145,7 +145,7 @@ export class ListDetailComponent implements OnInit {
   toggleActive(product: TrackedProduct): void {
     this.productsApi.updateProduct(product.id, { isActive: !product.isActive }).subscribe({
       next: () => this.loadProducts(),
-      error: (err: HttpErrorResponse) => this.toast.error(err.error?.detail ?? this.translate.instant('COMMON.ERROR_GENERIC')),
+      error: (err: HttpErrorResponse) => this.toast.error(err.error?.message ?? this.translate.instant('COMMON.ERROR_GENERIC')),
     });
   }
 
@@ -159,7 +159,7 @@ export class ListDetailComponent implements OnInit {
       if (!confirmed) return;
       this.productsApi.removeProduct(product.id).subscribe({
         next: () => { this.toast.success(product.name); this.loadProducts(); },
-        error: (err: HttpErrorResponse) => this.toast.error(err.error?.detail ?? this.translate.instant('COMMON.ERROR_GENERIC')),
+        error: (err: HttpErrorResponse) => this.toast.error(err.error?.message ?? this.translate.instant('COMMON.ERROR_GENERIC')),
       });
     });
   }
