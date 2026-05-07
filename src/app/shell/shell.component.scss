@@ -4,23 +4,28 @@
   left: 0;
   right: 0;
   z-index: 100;
-  background-color: var(--pw-yellow);
-  color: #333;
+  background: var(--pw-toolbar-bg) !important;
+  color: var(--pw-toolbar-color);
   padding: 0 16px;
   gap: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
 }
 
 .shell-brand {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   text-decoration: none;
-  color: inherit;
+  color: var(--pw-toolbar-color);
   font-weight: 700;
   font-size: 1.1rem;
   white-space: nowrap;
+}
 
-  .brand-icon { font-size: 1.3rem; }
+.brand-logo {
+  height: 38px;
+  width: 38px;
+  object-fit: contain;
 }
 
 .shell-nav {
@@ -29,8 +34,10 @@
   gap: 4px;
   margin-left: 16px;
 
-  a { color: inherit; }
-  .nav-active { font-weight: 700; }
+  a {
+    color: var(--pw-toolbar-color);
+    &.nav-active { font-weight: 700; }
+  }
 }
 
 .shell-actions {
@@ -39,7 +46,7 @@
   align-items: center;
   gap: 4px;
 
-  button, a { color: inherit; }
+  button, a { color: var(--pw-toolbar-color); }
 }
 
 .shell-content {

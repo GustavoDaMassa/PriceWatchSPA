@@ -82,18 +82,41 @@ import { TrackedProduct } from '../../shared/models/tracked-product.model';
     }
   `,
   styles: [`
-    h1 { margin-bottom: 24px; }
+    h1 { margin-bottom: 24px; text-align: center; }
     .center { display: flex; justify-content: center; padding: 48px; }
-    .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px; margin-bottom: 24px; }
-    .stat-card { background: var(--pw-surface); cursor: default; text-align: center; }
-    .stat-card mat-card-content { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 16px; }
-    .stat-card mat-icon { font-size: 32px; width: 32px; height: 32px; color: var(--pw-yellow); }
-    .stat-value { font-size: 2rem; font-weight: 700; line-height: 1; }
-    .stat-label { font-size: 0.8rem; color: var(--pw-text-secondary); }
+    .stats-grid {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-bottom: 32px;
+    }
+    .stat-card {
+      background: var(--pw-surface);
+      cursor: default;
+      text-align: center;
+      width: 150px;
+      min-height: 190px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .stat-card mat-card-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 24px 16px;
+      height: 100%;
+    }
+    .stat-card mat-icon { font-size: 40px; width: 40px; height: 40px; color: var(--pw-yellow); }
+    .stat-value { font-size: 2.4rem; font-weight: 700; line-height: 1; }
+    .stat-label { font-size: 0.78rem; color: var(--pw-text-secondary); text-transform: uppercase; letter-spacing: 0.05em; }
     .highlight mat-icon { color: var(--pw-success); }
-    .quick-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 24px; }
+    .quick-actions { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-bottom: 24px; }
     .btn-primary { background-color: var(--pw-yellow); color: #333; font-weight: 600; }
-    .next-check-card { background: var(--pw-surface); }
+    .next-check-card { background: var(--pw-surface); max-width: 480px; margin: 0 auto; }
     .next-check-card mat-card-content { display: flex; align-items: center; gap: 8px; }
   `],
 })

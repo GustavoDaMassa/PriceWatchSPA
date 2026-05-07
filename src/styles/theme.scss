@@ -24,6 +24,11 @@ html {
   --pw-error: #F23D4F;
   --pw-text-primary: #333333;
   --pw-text-secondary: #666666;
+
+  // Toolbar
+  --pw-toolbar-bg: linear-gradient(to bottom, #FFFFFF, #FFE600);
+  --pw-toolbar-color: #333333;
+  --pw-toolbar-hover: rgba(0, 0, 0, 0.06);
 }
 
 html.dark {
@@ -43,4 +48,9 @@ html.dark {
   --pw-surface: #2d2d2d;
   --pw-text-primary: #EBEBEB;
   --pw-text-secondary: #AAAAAA;
+
+  // Toolbar dark: azul escuro da logo → preto
+  --pw-toolbar-bg: linear-gradient(to bottom, #10026C, #000000);
+  --pw-toolbar-color: #EBEBEB;
+  --pw-toolbar-hover: rgba(255, 255, 255, 0.08);
 }
