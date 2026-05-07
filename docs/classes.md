@@ -360,11 +360,50 @@
 <summary><strong>src/app/shared/components/</strong></summary>
 <blockquote>
 
-- `confirm-dialog/` — dialog de confirmação para ações destrutivas *(stub — implementar na Fase 5)*
-- `empty-state/` — estado vazio reutilizável *(stub)*
-- `price-display/` — formata R$/$ por locale *(stub)*
-- `skeleton/` — placeholder de carregamento *(stub)*
-- `source-badge/` — badge ML/Kabum/Manual *(stub)*
+<details id="confirm-dialog-component-ts">
+<summary><strong><a href="../src/app/shared/components/confirm-dialog/confirm-dialog.component.ts">confirm-dialog.component.ts</a></strong></summary>
+<blockquote>
+
+`ConfirmDialogComponent` — MatDialog com título, mensagem e botões Cancelar/Confirmar; fecha com `true`/`false`. Exporta `ConfirmDialogData { title, message, confirmLabel?, cancelLabel? }`.
+
+</blockquote>
+</details>
+
+<details id="empty-state-component-ts">
+<summary><strong><a href="../src/app/shared/components/empty-state/empty-state.component.ts">empty-state.component.ts</a></strong></summary>
+<blockquote>
+
+`EmptyStateComponent` — inputs: `message` (required), `icon` (default `'inbox'`). Centralizado com ícone 48px.
+
+</blockquote>
+</details>
+
+<details id="price-display-component-ts">
+<summary><strong><a href="../src/app/shared/components/price-display/price-display.component.ts">price-display.component.ts</a></strong></summary>
+<blockquote>
+
+`PriceDisplayComponent` — inputs: `value: number` (required), `currency: string` (default `'BRL'`). Formata via `CurrencyPipe` com locale derivado do idioma ativo no `TranslateService`.
+
+</blockquote>
+</details>
+
+<details id="skeleton-component-ts">
+<summary><strong><a href="../src/app/shared/components/skeleton/skeleton.component.ts">skeleton.component.ts</a></strong></summary>
+<blockquote>
+
+`SkeletonComponent` — inputs: `height` (default `'16px'`), `width` (default `'100%'`). Animação shimmer CSS.
+
+</blockquote>
+</details>
+
+<details id="source-badge-component-ts">
+<summary><strong><a href="../src/app/shared/components/source-badge/source-badge.component.ts">source-badge.component.ts</a></strong></summary>
+<blockquote>
+
+`SourceBadgeComponent` — input: `source: ProductSource`. Exibe `MatChip` com label e cor por fonte (amarelo=ML, laranja=Kabum, cinza=Manual).
+
+</blockquote>
+</details>
 
 </blockquote>
 </details>
@@ -373,8 +412,63 @@
 <summary><strong>src/app/shared/pipes/</strong></summary>
 <blockquote>
 
-- `price.pipe.ts` — CurrencyPipe por locale *(stub)*
-- `relative-date.pipe.ts` — "há 2 horas" / "2 hours ago" *(stub)*
+<details id="relative-date-pipe-ts">
+<summary><strong><a href="../src/app/shared/pipes/relative-date.pipe.ts">relative-date.pipe.ts</a></strong></summary>
+<blockquote>
+
+`RelativeDatePipe` — `transform(dateString, lang)` → "agora mesmo" / "há 3 horas" (pt-BR) ou "just now" / "3 hours ago" (en). `pure: false` para reagir a mudanças de idioma.
+
+</blockquote>
+</details>
+
+<details id="dir-core-api-services">
+<summary><strong>src/app/core/services/api/</strong></summary>
+<blockquote>
+
+<details id="auth-api-service-ts">
+<summary><strong><a href="../src/app/core/services/api/auth-api.service.ts">auth-api.service.ts</a></strong></summary>
+<blockquote>
+
+`AuthApiService` — `register`, `login`, `verifyEmail`, `resendVerification`. Base: `/api/auth`.
+
+</blockquote>
+</details>
+
+<details id="lists-api-service-ts">
+<summary><strong><a href="../src/app/core/services/api/lists-api.service.ts">lists-api.service.ts</a></strong></summary>
+<blockquote>
+
+`ListsApiService` — `getLists`, `createList`, `updateList`, `deleteList`, `getAnalysis`. Base: `/api/lists`.
+
+</blockquote>
+</details>
+
+<details id="products-api-service-ts">
+<summary><strong><a href="../src/app/core/services/api/products-api.service.ts">products-api.service.ts</a></strong></summary>
+<blockquote>
+
+`ProductsApiService` — `getProducts`, `addProduct`, `updateProduct`, `removeProduct`, `getPriceHistory`. Base: `/api/lists/:listId/products`.
+
+</blockquote>
+</details>
+
+<details id="notifications-api-service-ts">
+<summary><strong><a href="../src/app/core/services/api/notifications-api.service.ts">notifications-api.service.ts</a></strong></summary>
+<blockquote>
+
+`NotificationsApiService` — `getNotifications(isRead?)`, `markAsRead`, `markAllAsRead`. Base: `/api/notifications`.
+
+</blockquote>
+</details>
+
+<details id="users-api-service-ts">
+<summary><strong><a href="../src/app/core/services/api/users-api.service.ts">users-api.service.ts</a></strong></summary>
+<blockquote>
+
+`UsersApiService` — `getProfile`, `changePassword`, `changeEmail`, `deleteAccount`. Base: `/api/users/me`.
+
+</blockquote>
+</details>
 
 </blockquote>
 </details>
