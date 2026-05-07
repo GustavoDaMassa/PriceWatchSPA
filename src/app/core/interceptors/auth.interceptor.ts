@@ -4,8 +4,14 @@ import { Router } from '@angular/router';
 import { EMPTY, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { AuthService } from '../services/auth.service';
+import { environment } from '../../../environments/environment';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
+  // Interceptar apenas requisições para a API — assets locais (i18n, etc.) passam direto
+  if (!req.url.startsWith(environment.apiUrl)) {
+    return next(req);
+  }
+
   const auth = inject(AuthService);
   const router = inject(Router);
 

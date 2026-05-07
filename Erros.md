@@ -29,3 +29,8 @@
 - Erro: `NG0701: Missing locale data for the locale "pt-BR"` em componentes que usam PriceDisplayComponent
 - Causa: Angular não inclui dados de locale pt-BR por padrão; `registerLocaleData` não estava sendo chamado antes dos testes
 - Correção: (1) Registrar locale em `main.ts` para produção; (2) criar `src/test-setup.ts` incluído nos polyfills de teste via `tsconfig.spec.json`; (3) tornar `PriceDisplayComponent.locale()` seguro com `?? 'en'` como fallback
+
+**2026-05-07 · Fase 8 · authInterceptor bloqueava requisições de assets i18n**
+- Erro: botão de login sem texto — traduções nunca carregavam no browser
+- Causa: `isTokenExpired()` retorna `true` quando não há token; o interceptor devolvia `EMPTY` para TODAS as requisições HTTP unauthenticated, incluindo os requests do ngx-translate para `/assets/i18n/pt-BR.json`
+- Correção: adicionar guard no início do interceptor — só processar requests cujo URL começa com `environment.apiUrl`; assets locais passam direto via `return next(req)`
