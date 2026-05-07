@@ -7,11 +7,17 @@ import { AuthService } from '../services/auth.service';
 import { environment } from '../../../environments/environment';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  // Interceptar apenas requisições para a API — assets locais (i18n, etc.) passam direto
+  // Deixar passar: assets locais (i18n, imagens, etc.)
   if (!req.url.startsWith(environment.apiUrl)) {
     return next(req);
   }
 
+  // Deixar passar: endpoints públicos de autenticação
+  if (req.url.includes('/api/auth/')) {
+    return next(req);
+  }
+
+  // Endpoints protegidos: exigir token válido
   const auth = inject(AuthService);
   const router = inject(Router);
 

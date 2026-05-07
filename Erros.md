@@ -34,3 +34,8 @@
 - Erro: botão de login sem texto — traduções nunca carregavam no browser
 - Causa: `isTokenExpired()` retorna `true` quando não há token; o interceptor devolvia `EMPTY` para TODAS as requisições HTTP unauthenticated, incluindo os requests do ngx-translate para `/assets/i18n/pt-BR.json`
 - Correção: adicionar guard no início do interceptor — só processar requests cujo URL começa com `environment.apiUrl`; assets locais passam direto via `return next(req)`
+
+**2026-05-07 · Fase 8 · authInterceptor bloqueava login e registro**
+- Erro: login não retornava nada — sem toast de erro, sem redirecionamento
+- Causa: o interceptor verificava `isTokenExpired()` em TODAS as requisições API, incluindo `/api/auth/login`. Sem token, `isTokenExpired()` retorna `true` → request cancelada com `EMPTY` antes de chegar ao backend
+- Correção: adicionar segundo guard — endpoints contendo `/api/auth/` passam direto sem verificação de token
