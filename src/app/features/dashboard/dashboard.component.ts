@@ -29,7 +29,7 @@ import { TrackedProduct } from '../../shared/models/tracked-product.model';
       <div class="center"><mat-spinner diameter="40" /></div>
     } @else {
       <div class="stats-grid">
-        <mat-card class="stat-card">
+        <mat-card class="stat-card stat-link" routerLink="/lists">
           <mat-card-content>
             <mat-icon>list</mat-icon>
             <span class="stat-value">{{ lists().length }}</span>
@@ -45,7 +45,7 @@ import { TrackedProduct } from '../../shared/models/tracked-product.model';
           </mat-card-content>
         </mat-card>
 
-        <mat-card class="stat-card" routerLink="/notifications">
+        <mat-card class="stat-card stat-link" routerLink="/notifications">
           <mat-card-content>
             <mat-icon>notifications</mat-icon>
             <span class="stat-value">{{ polling.unreadCount() }}</span>
@@ -114,6 +114,15 @@ import { TrackedProduct } from '../../shared/models/tracked-product.model';
     .stat-card mat-icon { font-size: 40px; width: 40px; height: 40px; color: var(--pw-yellow); }
     .stat-value { font-size: 2.4rem; font-weight: 700; line-height: 1; }
     .stat-label { font-size: 0.78rem; color: var(--pw-text-secondary); text-transform: uppercase; letter-spacing: 0.05em; }
+    .stat-link {
+      cursor: pointer;
+      border: 2px solid var(--pw-yellow) !important;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .stat-link:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15) !important;
+    }
     .highlight mat-icon { color: var(--pw-success); }
     .quick-actions { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-bottom: 24px; }
     .btn-primary { background-color: var(--pw-yellow); color: #333; font-weight: 600; }
