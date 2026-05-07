@@ -447,7 +447,7 @@
 <summary><strong><a href="../src/app/core/services/api/products-api.service.ts">products-api.service.ts</a></strong></summary>
 <blockquote>
 
-`ProductsApiService` — `getProducts`, `addProduct`, `updateProduct`, `removeProduct`, `getPriceHistory`. Base: `/api/lists/:listId/products`.
+`ProductsApiService` — `getProducts(listId)`, `addProduct(listId, req)` em `/api/lists/:listId/products`; `updateProduct(id, req)`, `removeProduct(id)`, `getPriceHistory(id)` em `/api/products/:id` (sem listId).
 
 </blockquote>
 </details>
@@ -521,9 +521,32 @@
 <summary><strong>src/app/features/auth/</strong></summary>
 <blockquote>
 
-- `login/login.component.ts` — `LoginComponent` *(stub)*
-- `register/register.component.ts` — `RegisterComponent` *(stub)*
-- `verify-email/verify-email.component.ts` — `VerifyEmailComponent` *(stub)*
+<details id="login-component-ts">
+<summary><strong><a href="../src/app/features/auth/login/login.component.ts">login/login.component.ts</a></strong></summary>
+<blockquote>
+
+`LoginComponent` — Reactive Form (email + password); chama `AuthApiService.login`; navega para `/dashboard` no sucesso; toast de erro com `ProblemDetails.detail`.
+
+</blockquote>
+</details>
+
+<details id="register-component-ts">
+<summary><strong><a href="../src/app/features/auth/register/register.component.ts">register/register.component.ts</a></strong></summary>
+<blockquote>
+
+`RegisterComponent` — Reactive Form (name + email + password); chama `AuthApiService.register`; redireciona para `/auth/login`.
+
+</blockquote>
+</details>
+
+<details id="verify-email-component-ts">
+<summary><strong><a href="../src/app/features/auth/verify-email/verify-email.component.ts">verify-email/verify-email.component.ts</a></strong></summary>
+<blockquote>
+
+`VerifyEmailComponent` — rota pública; lê `?email=&token=` dos queryParams; chama `AuthApiService.verifyEmail` no `ngOnInit`; signal `status: 'loading' | 'success' | 'error'`.
+
+</blockquote>
+</details>
 
 </blockquote>
 </details>
@@ -532,7 +555,14 @@
 <summary><strong>src/app/features/dashboard/</strong></summary>
 <blockquote>
 
-- `dashboard.component.ts` — `DashboardComponent` *(stub)*
+<details id="dashboard-component-ts">
+<summary><strong><a href="../src/app/features/dashboard/dashboard.component.ts">dashboard.component.ts</a></strong></summary>
+<blockquote>
+
+`DashboardComponent` — carrega listas + produtos (forkJoin por lista) no `ngOnInit`; signals: `lists`, `totalProducts`, `belowTarget`, `nextCheck`; usa `NotificationPollingService.unreadCount`.
+
+</blockquote>
+</details>
 
 </blockquote>
 </details>
@@ -541,9 +571,41 @@
 <summary><strong>src/app/features/lists/</strong></summary>
 <blockquote>
 
-- `list-overview/list-overview.component.ts` — `ListOverviewComponent` *(stub)*
-- `list-detail/list-detail.component.ts` — `ListDetailComponent` *(stub)*
-- `list-analysis/list-analysis.component.ts` — `ListAnalysisComponent` *(stub)*
+<details id="list-overview-component-ts">
+<summary><strong><a href="../src/app/features/lists/list-overview/list-overview.component.ts">list-overview/list-overview.component.ts</a></strong></summary>
+<blockquote>
+
+`ListOverviewComponent` — grid de listas; abre `ListFormDialogComponent` para criar/editar; `ConfirmDialogComponent` para deletar.
+
+</blockquote>
+</details>
+
+<details id="list-form-dialog-component-ts">
+<summary><strong><a href="../src/app/features/lists/list-form-dialog/list-form-dialog.component.ts">list-form-dialog/list-form-dialog.component.ts</a></strong></summary>
+<blockquote>
+
+`ListFormDialogComponent` — MatDialog para criar/editar lista; `MAT_DIALOG_DATA: ProductList | null`; usa `createList` ou `updateList` conforme dados recebidos.
+
+</blockquote>
+</details>
+
+<details id="list-detail-component-ts">
+<summary><strong><a href="../src/app/features/lists/list-detail/list-detail.component.ts">list-detail/list-detail.component.ts</a></strong></summary>
+<blockquote>
+
+`ListDetailComponent` — grid de produtos de uma lista; abre `AddProductDialogComponent` e `EditProductDialogComponent`; toggle ativo/pausado; remoção com confirmação.
+
+</blockquote>
+</details>
+
+<details id="list-analysis-component-ts">
+<summary><strong><a href="../src/app/features/lists/list-analysis/list-analysis.component.ts">list-analysis/list-analysis.component.ts</a></strong></summary>
+<blockquote>
+
+`ListAnalysisComponent` — tabela MatTable; `distanceClass(pct)` → `dist-below` (verde, ≤0%), `dist-near` (amarelo, ≤20%), `dist-far` (vermelho, >20%).
+
+</blockquote>
+</details>
 
 </blockquote>
 </details>
@@ -552,9 +614,32 @@
 <summary><strong>src/app/features/products/</strong></summary>
 <blockquote>
 
-- `add-product/add-product.component.ts` — `AddProductComponent` *(stub)*
-- `edit-product/edit-product.component.ts` — `EditProductComponent` *(stub)*
-- `price-history/price-history.component.ts` — `PriceHistoryComponent` *(stub — usará Chart.js via ElementRef)*
+<details id="add-product-dialog-component-ts">
+<summary><strong><a href="../src/app/features/products/add-product/add-product-dialog.component.ts">add-product/add-product-dialog.component.ts</a></strong></summary>
+<blockquote>
+
+`AddProductDialogComponent` — form com URL + targetPrice opcional; backend auto-detecta source pela URL; `MAT_DIALOG_DATA: { listId: string }`.
+
+</blockquote>
+</details>
+
+<details id="edit-product-dialog-component-ts">
+<summary><strong><a href="../src/app/features/products/edit-product/edit-product-dialog.component.ts">edit-product/edit-product-dialog.component.ts</a></strong></summary>
+<blockquote>
+
+`EditProductDialogComponent` — form com targetPrice + toggle isActive; `MAT_DIALOG_DATA: { product: TrackedProduct }`.
+
+</blockquote>
+</details>
+
+<details id="price-history-component-ts">
+<summary><strong><a href="../src/app/features/products/price-history/price-history.component.ts">price-history/price-history.component.ts</a></strong></summary>
+<blockquote>
+
+`PriceHistoryComponent` — Chart.js via `viewChild<ElementRef>('chartCanvas')`; linha de preço + linha tracejada do alvo; `ngOnDestroy` destrói instância do chart. `listId` mantido para botão de voltar; API usa apenas `productId`.
+
+</blockquote>
+</details>
 
 </blockquote>
 </details>
@@ -563,7 +648,14 @@
 <summary><strong>src/app/features/notifications/</strong></summary>
 <blockquote>
 
-- `notifications.component.ts` — `NotificationsComponent` *(stub)*
+<details id="notifications-component-ts">
+<summary><strong><a href="../src/app/features/notifications/notifications.component.ts">notifications.component.ts</a></strong></summary>
+<blockquote>
+
+`NotificationsComponent` — signal `filterUnread`; `filtered` computed; `markRead` atualiza localmente + decrementa `polling.unreadCount`; `markAll` zera o contador.
+
+</blockquote>
+</details>
 
 </blockquote>
 </details>
@@ -572,10 +664,18 @@
 <summary><strong>src/app/features/profile/</strong></summary>
 <blockquote>
 
-- `profile-overview/profile-overview.component.ts` — `ProfileOverviewComponent` *(stub)*
-- `change-password/change-password.component.ts` — `ChangePasswordComponent` *(stub)*
-- `change-email/change-email.component.ts` — `ChangeEmailComponent` *(stub)*
-- `delete-account/delete-account.component.ts` — `DeleteAccountComponent` *(stub)*
+<details id="profile-overview-component-ts">
+<summary><strong><a href="../src/app/features/profile/profile-overview/profile-overview.component.ts">profile-overview/profile-overview.component.ts</a></strong></summary>
+<blockquote>
+
+`ProfileOverviewComponent` — exibe perfil; badge verificado/não verificado; botão reenviar verificação; links para sub-rotas de perfil.
+
+</blockquote>
+</details>
+
+- `change-password/change-password.component.ts` — `ChangePasswordComponent` — form currentPassword + newPassword
+- `change-email/change-email.component.ts` — `ChangeEmailComponent` — form newEmail
+- `delete-account/delete-account.component.ts` — `DeleteAccountComponent` — form password + `ConfirmDialogComponent` + logout após exclusão
 
 </blockquote>
 </details>
