@@ -23,7 +23,9 @@ import { TrackedProduct } from '../../shared/models/tracked-product.model';
     TranslateModule, PriceDisplayComponent,
   ],
   template: `
-    <h1>{{ 'DASHBOARD.TITLE' | translate }}</h1>
+    <div class="dashboard-hero">
+      <img src="/LogoPriceWatch.png" alt="PriceWatch" class="hero-logo">
+    </div>
 
     @if (loading()) {
       <div class="center"><mat-spinner diameter="40" /></div>
@@ -82,7 +84,8 @@ import { TrackedProduct } from '../../shared/models/tracked-product.model';
     }
   `,
   styles: [`
-    h1 { margin-bottom: 24px; text-align: center; }
+    .dashboard-hero { display: flex; justify-content: center; margin-bottom: 32px; }
+    .hero-logo { height: 180px; width: auto; }
     .center { display: flex; justify-content: center; padding: 48px; }
     .stats-grid {
       display: flex;
