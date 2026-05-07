@@ -6,8 +6,7 @@
   z-index: 100;
   background: var(--pw-toolbar-bg) !important;
   color: var(--pw-toolbar-color);
-  padding: 0 16px;
-  gap: 8px;
+  padding: 0 20px;
 }
 
 .shell-brand {
@@ -17,26 +16,15 @@
   text-decoration: none;
   color: var(--pw-toolbar-color);
   font-weight: 700;
-  font-size: 1.1rem;
+  font-size: 1.6rem;
+  line-height: 1;
   white-space: nowrap;
 }
 
 .brand-logo {
-  height: 52px;
-  width: 52px;
+  height: 1.6rem;
+  width: auto;
   object-fit: contain;
-}
-
-.shell-nav {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  margin-left: 16px;
-
-  a {
-    color: var(--pw-toolbar-color);
-    &.nav-active { font-weight: 700; }
-  }
 }
 
 .shell-actions {
@@ -53,9 +41,4 @@
   padding: 32px 24px;
   min-height: calc(100vh - 64px);
   background: transparent;
-}
-
-@media (max-width: 600px) {
-  .shell-nav span { display: none; }
-  .shell-brand .brand-name { display: none; }
 }
