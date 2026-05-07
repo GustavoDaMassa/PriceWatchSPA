@@ -45,6 +45,10 @@ export const routes: Routes = [
         loadComponent: () => import('./features/lists/list-analysis/list-analysis.component').then(m => m.ListAnalysisComponent),
       },
       {
+        path: 'lists/:id/products/:productId/history',
+        loadComponent: () => import('./features/products/price-history/price-history.component').then(m => m.PriceHistoryComponent),
+      },
+      {
         path: 'notifications',
         loadComponent: () => import('./features/notifications/notifications.component').then(m => m.NotificationsComponent),
       },
