@@ -50,7 +50,7 @@ export class PriceHistoryComponent implements OnInit, OnDestroy {
   empty = signal(false);
 
   ngOnInit(): void {
-    this.productsApi.getPriceHistory(this.listId, this.productId).subscribe({
+    this.productsApi.getPriceHistory(this.productId).subscribe({
       next: snapshots => {
         this.loading.set(false);
         if (snapshots.length === 0) { this.empty.set(true); return; }

@@ -3,7 +3,6 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -17,7 +16,7 @@ import { ToastService } from '../../../core/services/toast.service';
   standalone: true,
   imports: [
     ReactiveFormsModule, MatDialogModule, MatFormFieldModule,
-    MatInputModule, MatSelectModule, MatButtonModule, MatProgressSpinnerModule, TranslateModule,
+    MatInputModule, MatButtonModule, MatProgressSpinnerModule, TranslateModule,
   ],
   template: `
     <h2 mat-dialog-title>{{ 'PRODUCTS.ADD' | translate }}</h2>
@@ -26,14 +25,11 @@ import { ToastService } from '../../../core/services/toast.service';
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>{{ 'PRODUCTS.URL_LABEL' | translate }}</mat-label>
           <input matInput formControlName="url" placeholder="https://...">
+          <mat-hint>{{ 'PRODUCTS.SOURCE' | translate }}: Mercado Livre, Kabum</mat-hint>
         </mat-form-field>
         <mat-form-field appearance="outline" class="full-width">
-          <mat-label>{{ 'PRODUCTS.SOURCE_LABEL' | translate }}</mat-label>
-          <mat-select formControlName="source">
-            <mat-option [value]="0">Mercado Livre</mat-option>
-            <mat-option [value]="1">Kabum</mat-option>
-            <mat-option [value]="2">Manual</mat-option>
-          </mat-select>
+          <mat-label>{{ 'PRODUCTS.TARGET_PRICE' | translate }} ({{ 'PRODUCTS.NO_TARGET' | translate }})</mat-label>
+          <input matInput type="number" formControlName="targetPrice" min="0" step="0.01">
         </mat-form-field>
       </form>
     </mat-dialog-content>
@@ -45,10 +41,10 @@ import { ToastService } from '../../../core/services/toast.service';
       </button>
     </mat-dialog-actions>
   `,
-  styles: [`.full-width { width: 100%; } .btn-primary { background-color: var(--pw-yellow); color: #333; }`],
+  styles: [`.full-width { width: 100%; margin-bottom: 8px; } .btn-primary { background-color: var(--pw-yellow); color: #333; }`],
 })
 export class AddProductDialogComponent {
-  protected readonly ref = inject(MatDialogRef) as MatDialogRef<AddProductDialogComponent, boolean>;
+  protected readonly ref = inject(MatDialogRef) as import('@angular/material/dialog').MatDialogRef<AddProductDialogComponent, boolean>;
   private readonly data = inject<{ listId: string }>(MAT_DIALOG_DATA);
   private readonly fb = inject(FormBuilder);
   private readonly productsApi = inject(ProductsApiService);
@@ -57,7 +53,7 @@ export class AddProductDialogComponent {
 
   form = this.fb.group({
     url: ['', [Validators.required, Validators.pattern(/^https?:\/\/.+/)]],
-    source: [0, Validators.required],
+    targetPrice: [null as number | null],
   });
 
   loading = signal(false);
@@ -65,12 +61,15 @@ export class AddProductDialogComponent {
   submit(): void {
     if (this.form.invalid || this.loading()) return;
     this.loading.set(true);
-    this.productsApi.addProduct(this.data.listId, {
+    const req = {
       url: this.form.value.url!,
-      source: this.form.value.source as 0 | 1 | 2,
-    }).pipe(finalize(() => this.loading.set(false))).subscribe({
-      next: () => this.ref.close(true),
-      error: (err: HttpErrorResponse) => this.toast.error(err.error?.message ?? this.translate.instant('COMMON.ERROR_GENERIC')),
-    });
+      ...(this.form.value.targetPrice ? { targetPrice: this.form.value.targetPrice } : {}),
+    };
+    this.productsApi.addProduct(this.data.listId, req)
+      .pipe(finalize(() => this.loading.set(false)))
+      .subscribe({
+        next: () => this.ref.close(true),
+        error: (err: HttpErrorResponse) => this.toast.error(err.error?.detail ?? this.translate.instant('COMMON.ERROR_GENERIC')),
+      });
   }
 }

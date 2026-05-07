@@ -11,13 +11,11 @@ export interface TrackedProduct {
   name: string;
   url: string;
   source: ProductSource;
-  imageUrl?: string;
   targetPrice: number;
   currentPrice: number;
   lowestPrice: number;
   isActive: boolean;
   nextCheckAt: string;
-  lastCheckedAt?: string;
 }
 
 export interface PriceSnapshot {
@@ -28,7 +26,7 @@ export interface PriceSnapshot {
 
 export interface AddProductRequest {
   url: string;
-  source: ProductSource;
+  targetPrice?: number;
 }
 
 export interface UpdateProductRequest {

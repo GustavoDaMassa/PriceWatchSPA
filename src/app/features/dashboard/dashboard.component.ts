@@ -1,9 +1,131 @@
-import { Component } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { TranslateModule } from '@ngx-translate/core';
+import { forkJoin, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { ListsApiService } from '../../core/services/api/lists-api.service';
+import { ProductsApiService } from '../../core/services/api/products-api.service';
+import { NotificationPollingService } from '../../core/services/notification-polling.service';
+import { PriceDisplayComponent } from '../../shared/components/price-display/price-display.component';
+import { ProductList } from '../../shared/models/product-list.model';
+import { TrackedProduct } from '../../shared/models/tracked-product.model';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [],
-  template: '<p>DashboardComponent</p>',
+  imports: [
+    RouterLink,
+    MatCardModule, MatButtonModule, MatIconModule, MatProgressSpinnerModule,
+    TranslateModule, PriceDisplayComponent,
+  ],
+  template: `
+    <h1>{{ 'DASHBOARD.TITLE' | translate }}</h1>
+
+    @if (loading()) {
+      <div class="center"><mat-spinner diameter="40" /></div>
+    } @else {
+      <div class="stats-grid">
+        <mat-card class="stat-card">
+          <mat-card-content>
+            <mat-icon>list</mat-icon>
+            <span class="stat-value">{{ lists().length }}</span>
+            <span class="stat-label">{{ 'DASHBOARD.TOTAL_LISTS' | translate }}</span>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="stat-card">
+          <mat-card-content>
+            <mat-icon>inventory_2</mat-icon>
+            <span class="stat-value">{{ totalProducts() }}</span>
+            <span class="stat-label">{{ 'DASHBOARD.TOTAL_PRODUCTS' | translate }}</span>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="stat-card" routerLink="/notifications">
+          <mat-card-content>
+            <mat-icon>notifications</mat-icon>
+            <span class="stat-value">{{ polling.unreadCount() }}</span>
+            <span class="stat-label">{{ 'DASHBOARD.UNREAD_ALERTS' | translate }}</span>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="stat-card highlight">
+          <mat-card-content>
+            <mat-icon>flag</mat-icon>
+            <span class="stat-value">{{ belowTarget() }}</span>
+            <span class="stat-label">{{ 'DASHBOARD.BELOW_TARGET' | translate }}</span>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <div class="quick-actions">
+        <button mat-flat-button class="btn-primary" routerLink="/lists">
+          <mat-icon>add</mat-icon>{{ 'DASHBOARD.NEW_LIST' | translate }}
+        </button>
+        <button mat-stroked-button routerLink="/notifications">
+          <mat-icon>notifications</mat-icon>{{ 'DASHBOARD.VIEW_NOTIFICATIONS' | translate }}
+        </button>
+      </div>
+
+      @if (nextCheck()) {
+        <mat-card class="next-check-card">
+          <mat-card-content>
+            <mat-icon>schedule</mat-icon>
+            <span>{{ 'DASHBOARD.NEXT_CHECK' | translate }}: <strong>{{ nextCheck()?.name }}</strong></span>
+          </mat-card-content>
+        </mat-card>
+      }
+    }
+  `,
+  styles: [`
+    h1 { margin-bottom: 24px; }
+    .center { display: flex; justify-content: center; padding: 48px; }
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .stat-card { background: var(--pw-surface); cursor: default; text-align: center; }
+    .stat-card mat-card-content { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 16px; }
+    .stat-card mat-icon { font-size: 32px; width: 32px; height: 32px; color: var(--pw-yellow); }
+    .stat-value { font-size: 2rem; font-weight: 700; line-height: 1; }
+    .stat-label { font-size: 0.8rem; color: var(--pw-text-secondary); }
+    .highlight mat-icon { color: var(--pw-success); }
+    .quick-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 24px; }
+    .btn-primary { background-color: var(--pw-yellow); color: #333; font-weight: 600; }
+    .next-check-card { background: var(--pw-surface); }
+    .next-check-card mat-card-content { display: flex; align-items: center; gap: 8px; }
+  `],
 })
-export class DashboardComponent {}
+export class DashboardComponent implements OnInit {
+  protected readonly polling = inject(NotificationPollingService);
+  private readonly listsApi = inject(ListsApiService);
+  private readonly productsApi = inject(ProductsApiService);
+
+  lists = signal<ProductList[]>([]);
+  private allProducts = signal<TrackedProduct[]>([]);
+  loading = signal(false);
+
+  totalProducts = computed(() => this.allProducts().length);
+  belowTarget = computed(() => this.allProducts().filter(p => p.targetPrice > 0 && p.currentPrice <= p.targetPrice).length);
+  nextCheck = computed(() => {
+    const active = this.allProducts().filter(p => p.isActive);
+    if (!active.length) return null;
+    return active.reduce((a, b) => new Date(a.nextCheckAt) < new Date(b.nextCheckAt) ? a : b);
+  });
+
+  ngOnInit(): void {
+    this.loading.set(true);
+    this.listsApi.getLists().subscribe({
+      next: lists => {
+        this.lists.set(lists);
+        if (!lists.length) { this.loading.set(false); return; }
+        forkJoin(lists.map(l => this.productsApi.getProducts(l.id).pipe(catchError(() => of([]))))).subscribe({
+          next: results => { this.allProducts.set(results.flat()); this.loading.set(false); },
+          error: () => this.loading.set(false),
+        });
+      },
+      error: () => this.loading.set(false),
+    });
+  }
+}

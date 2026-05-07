@@ -2,7 +2,6 @@ export interface ProductList {
   id: string;
   name: string;
   description?: string;
-  createdAt: string;
 }
 
 export interface CreateProductListRequest {

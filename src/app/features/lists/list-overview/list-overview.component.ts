@@ -119,7 +119,7 @@ export class ListOverviewComponent implements OnInit {
       if (!confirmed) return;
       this.listsApi.deleteList(list.id).subscribe({
         next: () => { this.toast.success(list.name); this.loadLists(); },
-        error: (err: HttpErrorResponse) => this.toast.error(err.error?.message ?? this.translate.instant('COMMON.ERROR_GENERIC')),
+        error: (err: HttpErrorResponse) => this.toast.error(err.error?.detail ?? this.translate.instant('COMMON.ERROR_GENERIC')),
       });
     });
   }

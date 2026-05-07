@@ -13,27 +13,23 @@ import {
 export class ProductsApiService {
   private readonly http = inject(HttpClient);
 
-  private base(listId: string): string {
-    return `${environment.apiUrl}/lists/${listId}/products`;
-  }
-
   getProducts(listId: string): Observable<TrackedProduct[]> {
-    return this.http.get<TrackedProduct[]>(this.base(listId));
+    return this.http.get<TrackedProduct[]>(`${environment.apiUrl}/lists/${listId}/products`);
   }
 
   addProduct(listId: string, req: AddProductRequest): Observable<TrackedProduct> {
-    return this.http.post<TrackedProduct>(this.base(listId), req);
+    return this.http.post<TrackedProduct>(`${environment.apiUrl}/lists/${listId}/products`, req);
   }
 
-  updateProduct(listId: string, id: string, req: UpdateProductRequest): Observable<void> {
-    return this.http.put<void>(`${this.base(listId)}/${id}`, req);
+  updateProduct(id: string, req: UpdateProductRequest): Observable<void> {
+    return this.http.put<void>(`${environment.apiUrl}/products/${id}`, req);
   }
 
-  removeProduct(listId: string, id: string): Observable<void> {
-    return this.http.delete<void>(`${this.base(listId)}/${id}`);
+  removeProduct(id: string): Observable<void> {
+    return this.http.delete<void>(`${environment.apiUrl}/products/${id}`);
   }
 
-  getPriceHistory(listId: string, id: string): Observable<PriceSnapshot[]> {
-    return this.http.get<PriceSnapshot[]>(`${this.base(listId)}/${id}/history`);
+  getPriceHistory(id: string): Observable<PriceSnapshot[]> {
+    return this.http.get<PriceSnapshot[]>(`${environment.apiUrl}/products/${id}/history`);
   }
 }
