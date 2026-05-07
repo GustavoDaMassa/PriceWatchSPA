@@ -27,6 +27,9 @@ html {
   --pw-toolbar-bg: #FFFFFF;
   --pw-toolbar-color: #333333;
 
+  // Bordas interativas: azul escuro da logo no claro
+  --pw-border-accent: #10026C;
+
   // Background: branco puro até o fim do navbar (64px), depois transição para amarelo
   --pw-page-bg: linear-gradient(to bottom, #FFFFFF 64px, #FFE600 100%);
 }
@@ -51,6 +54,9 @@ html.dark {
   // Toolbar: preto sólido
   --pw-toolbar-bg: #000000;
   --pw-toolbar-color: #EBEBEB;
+
+  // Bordas interativas: amarelo no escuro
+  --pw-border-accent: #FFE600;
 
   // Background: preto puro até o fim do navbar (64px), depois transição para azul escuro
   --pw-page-bg: linear-gradient(to bottom, #000000 64px, #10026C 100%);

@@ -116,7 +116,7 @@ import { TrackedProduct } from '../../shared/models/tracked-product.model';
     .stat-label { font-size: 0.78rem; color: var(--pw-text-secondary); text-transform: uppercase; letter-spacing: 0.05em; }
     .stat-link {
       cursor: pointer;
-      border: 2px solid var(--pw-yellow) !important;
+      border: 2px solid var(--pw-border-accent) !important;
       transition: transform 0.15s, box-shadow 0.15s;
     }
     .stat-link:hover {
