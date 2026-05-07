@@ -1,0 +1,58 @@
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { TranslateModule } from '@ngx-translate/core';
+import { of, throwError } from 'rxjs';
+import { Router } from '@angular/router';
+import { RegisterComponent } from './register.component';
+import { AuthApiService } from '../../../core/services/api/auth-api.service';
+import { ToastService } from '../../../core/services/toast.service';
+
+describe('RegisterComponent', () => {
+  let fixture: ComponentFixture<RegisterComponent>;
+  let authApi: jasmine.SpyObj<AuthApiService>;
+  let router: jasmine.SpyObj<Router>;
+  let toast: jasmine.SpyObj<ToastService>;
+
+  beforeEach(async () => {
+    authApi = jasmine.createSpyObj('AuthApiService', ['register']);
+    router = jasmine.createSpyObj('Router', ['navigate']);
+    toast = jasmine.createSpyObj('ToastService', ['success', 'error']);
+
+    await TestBed.configureTestingModule({
+      imports: [RegisterComponent, TranslateModule.forRoot()],
+      providers: [
+        provideAnimationsAsync(),
+        { provide: AuthApiService, useValue: authApi },
+        { provide: Router, useValue: router },
+        { provide: ToastService, useValue: toast },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(RegisterComponent);
+    fixture.detectChanges();
+  });
+
+  it('should render name, email and password inputs', () => {
+    const el = fixture.nativeElement;
+    expect(el.querySelector('input[formControlName="name"]')).toBeTruthy();
+    expect(el.querySelector('input[type="email"]')).toBeTruthy();
+    expect(el.querySelector('input[type="password"]')).toBeTruthy();
+  });
+
+  it('should call register and navigate to login on success', fakeAsync(() => {
+    authApi.register.and.returnValue(of({ message: 'ok' }));
+    fixture.componentInstance.form.setValue({ name: 'Test', email: 'a@b.com', password: '123456' });
+    fixture.componentInstance.submit();
+    tick();
+    expect(authApi.register).toHaveBeenCalledWith({ name: 'Test', email: 'a@b.com', password: '123456' });
+    expect(router.navigate).toHaveBeenCalledWith(['/auth/login']);
+  }));
+
+  it('should show error toast on failure', fakeAsync(() => {
+    authApi.register.and.returnValue(throwError(() => ({ status: 400, error: { message: 'Email já existe' } })));
+    fixture.componentInstance.form.setValue({ name: 'Test', email: 'a@b.com', password: '123456' });
+    fixture.componentInstance.submit();
+    tick();
+    expect(toast.error).toHaveBeenCalledWith('Email já existe');
+  }));
+});
