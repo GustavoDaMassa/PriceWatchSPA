@@ -12,23 +12,23 @@ html {
   ));
 
   color-scheme: light;
-  background-color: var(--mat-sys-surface);
   color: var(--mat-sys-on-surface);
 
-  // Paleta ML sobre o tema Material
+  // Paleta ML
   --pw-yellow: #FFE600;
   --pw-yellow-dark: #CCBA00;
-  --pw-bg: #EBEBEB;
   --pw-surface: #FFFFFF;
   --pw-success: #00A650;
   --pw-error: #F23D4F;
   --pw-text-primary: #333333;
   --pw-text-secondary: #666666;
 
-  // Toolbar
-  --pw-toolbar-bg: linear-gradient(to bottom, #FFFFFF, #FFE600);
+  // Toolbar: branco sólido
+  --pw-toolbar-bg: #FFFFFF;
   --pw-toolbar-color: #333333;
-  --pw-toolbar-hover: rgba(0, 0, 0, 0.06);
+
+  // Background: gradiente branco (topo) → amarelo (base)
+  --pw-page-bg: linear-gradient(to bottom, #FFFFFF, #FFE600);
 }
 
 html.dark {
@@ -44,13 +44,14 @@ html.dark {
 
   color-scheme: dark;
 
-  --pw-bg: #1a1a1a;
-  --pw-surface: #2d2d2d;
+  --pw-surface: #1e1e1e;
   --pw-text-primary: #EBEBEB;
   --pw-text-secondary: #AAAAAA;
 
-  // Toolbar dark: azul escuro da logo → preto
-  --pw-toolbar-bg: linear-gradient(to bottom, #10026C, #000000);
+  // Toolbar: preto sólido
+  --pw-toolbar-bg: #000000;
   --pw-toolbar-color: #EBEBEB;
-  --pw-toolbar-hover: rgba(255, 255, 255, 0.08);
+
+  // Background: preto (topo) → azul escuro da logo (base)
+  --pw-page-bg: linear-gradient(to bottom, #000000, #10026C);
 }

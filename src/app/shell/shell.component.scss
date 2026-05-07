@@ -8,7 +8,7 @@
   color: var(--pw-toolbar-color);
   padding: 0 16px;
   gap: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 .shell-brand {
@@ -23,8 +23,8 @@
 }
 
 .brand-logo {
-  height: 38px;
-  width: 38px;
+  height: 52px;
+  width: 52px;
   object-fit: contain;
 }
 
@@ -51,9 +51,9 @@
 
 .shell-content {
   margin-top: 64px;
-  padding: 24px;
+  padding: 32px 24px;
   min-height: calc(100vh - 64px);
-  background-color: var(--pw-bg);
+  background: transparent;
 }
 
 @media (max-width: 600px) {
