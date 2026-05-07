@@ -1,0 +1,126 @@
+{
+  "APP": {
+    "NAME": "PriceWatch",
+    "LOADING": "Carregando..."
+  },
+  "NAV": {
+    "DASHBOARD": "Início",
+    "LISTS": "Minhas Listas",
+    "NOTIFICATIONS": "Notificações",
+    "PROFILE": "Perfil",
+    "LOGOUT": "Sair"
+  },
+  "AUTH": {
+    "LOGIN": {
+      "TITLE": "Entrar",
+      "EMAIL": "E-mail",
+      "PASSWORD": "Senha",
+      "SUBMIT": "Entrar",
+      "NO_ACCOUNT": "Não tem conta?",
+      "REGISTER_LINK": "Cadastre-se"
+    },
+    "REGISTER": {
+      "TITLE": "Criar conta",
+      "NAME": "Nome",
+      "EMAIL": "E-mail",
+      "PASSWORD": "Senha",
+      "SUBMIT": "Criar conta",
+      "HAS_ACCOUNT": "Já tem conta?",
+      "LOGIN_LINK": "Entrar"
+    },
+    "VERIFY_EMAIL": {
+      "TITLE": "Verificar e-mail",
+      "SUCCESS": "E-mail verificado com sucesso!",
+      "ERROR": "Token inválido ou expirado."
+    }
+  },
+  "DASHBOARD": {
+    "TITLE": "Painel",
+    "TOTAL_LISTS": "Listas",
+    "TOTAL_PRODUCTS": "Produtos rastreados",
+    "UNREAD_ALERTS": "Alertas não lidos",
+    "BELOW_TARGET": "Abaixo do preço-alvo",
+    "NEXT_CHECK": "Próxima verificação",
+    "NEW_LIST": "Nova lista",
+    "VIEW_NOTIFICATIONS": "Ver notificações"
+  },
+  "LISTS": {
+    "TITLE": "Minhas Listas",
+    "NEW": "Nova lista",
+    "EDIT": "Editar",
+    "DELETE": "Excluir",
+    "ANALYSIS": "Análise",
+    "NAME_LABEL": "Nome",
+    "DESC_LABEL": "Descrição (opcional)",
+    "EMPTY": "Você ainda não tem listas. Crie uma!",
+    "CONFIRM_DELETE": "Excluir lista?",
+    "CONFIRM_DELETE_MSG": "Esta ação remove a lista e todos os seus produtos. Não pode ser desfeita.",
+    "PRODUCTS": "{{count}} produto(s)"
+  },
+  "PRODUCTS": {
+    "TITLE": "Produtos",
+    "ADD": "Adicionar produto",
+    "EDIT": "Editar",
+    "REMOVE": "Remover",
+    "PAUSE": "Pausar",
+    "RESUME": "Retomar",
+    "CURRENT_PRICE": "Preço atual",
+    "LOWEST_PRICE": "Menor preço",
+    "TARGET_PRICE": "Preço-alvo",
+    "SOURCE": "Fonte",
+    "STATUS_ACTIVE": "Ativo",
+    "STATUS_PAUSED": "Pausado",
+    "NEXT_CHECK": "Próxima verificação",
+    "HISTORY": "Histórico de preços",
+    "EMPTY": "Nenhum produto nesta lista ainda.",
+    "CONFIRM_REMOVE": "Remover produto?",
+    "CONFIRM_REMOVE_MSG": "O histórico de preços será perdido.",
+    "URL_LABEL": "URL do produto",
+    "SOURCE_LABEL": "Fonte",
+    "NO_TARGET": "Sem alvo",
+    "BELOW_TARGET_BADGE": "Abaixo do alvo!"
+  },
+  "NOTIFICATIONS": {
+    "TITLE": "Notificações",
+    "MARK_READ": "Marcar como lida",
+    "MARK_ALL_READ": "Marcar todas como lidas",
+    "FILTER_ALL": "Todas",
+    "FILTER_UNREAD": "Não lidas",
+    "EMPTY": "Nenhuma notificação.",
+    "TYPE_TARGET": "Preço-alvo atingido",
+    "TYPE_LOWEST": "Novo menor preço"
+  },
+  "PROFILE": {
+    "TITLE": "Perfil",
+    "EMAIL_VERIFIED": "E-mail verificado",
+    "EMAIL_NOT_VERIFIED": "E-mail não verificado",
+    "RESEND_VERIFICATION": "Reenviar verificação",
+    "CHANGE_PASSWORD": "Alterar senha",
+    "CHANGE_EMAIL": "Alterar e-mail",
+    "DELETE_ACCOUNT": "Excluir conta",
+    "CURRENT_PASSWORD": "Senha atual",
+    "NEW_PASSWORD": "Nova senha",
+    "NEW_EMAIL": "Novo e-mail",
+    "CONFIRM_DELETE": "Confirmar exclusão da conta?",
+    "CONFIRM_DELETE_MSG": "Esta ação é irreversível. Todos os seus dados serão excluídos.",
+    "PASSWORD_CONFIRM": "Confirme com sua senha:"
+  },
+  "ANALYSIS": {
+    "TITLE": "Análise da lista",
+    "DISTANCE": "Distância do alvo",
+    "BELOW": "Abaixo do alvo",
+    "ABOVE": "acima do alvo"
+  },
+  "COMMON": {
+    "SAVE": "Salvar",
+    "CANCEL": "Cancelar",
+    "CONFIRM": "Confirmar",
+    "DELETE": "Excluir",
+    "CLOSE": "Fechar",
+    "BACK": "Voltar",
+    "YES": "Sim",
+    "NO": "Não",
+    "ERROR_GENERIC": "Ocorreu um erro. Tente novamente.",
+    "EMPTY_STATE": "Nada aqui ainda."
+  }
+}

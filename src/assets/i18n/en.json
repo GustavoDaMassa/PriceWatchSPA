@@ -1,0 +1,126 @@
+{
+  "APP": {
+    "NAME": "PriceWatch",
+    "LOADING": "Loading..."
+  },
+  "NAV": {
+    "DASHBOARD": "Home",
+    "LISTS": "My Lists",
+    "NOTIFICATIONS": "Notifications",
+    "PROFILE": "Profile",
+    "LOGOUT": "Sign out"
+  },
+  "AUTH": {
+    "LOGIN": {
+      "TITLE": "Sign in",
+      "EMAIL": "Email",
+      "PASSWORD": "Password",
+      "SUBMIT": "Sign in",
+      "NO_ACCOUNT": "Don't have an account?",
+      "REGISTER_LINK": "Sign up"
+    },
+    "REGISTER": {
+      "TITLE": "Create account",
+      "NAME": "Name",
+      "EMAIL": "Email",
+      "PASSWORD": "Password",
+      "SUBMIT": "Create account",
+      "HAS_ACCOUNT": "Already have an account?",
+      "LOGIN_LINK": "Sign in"
+    },
+    "VERIFY_EMAIL": {
+      "TITLE": "Verify email",
+      "SUCCESS": "Email verified successfully!",
+      "ERROR": "Invalid or expired token."
+    }
+  },
+  "DASHBOARD": {
+    "TITLE": "Dashboard",
+    "TOTAL_LISTS": "Lists",
+    "TOTAL_PRODUCTS": "Tracked products",
+    "UNREAD_ALERTS": "Unread alerts",
+    "BELOW_TARGET": "Below target price",
+    "NEXT_CHECK": "Next check",
+    "NEW_LIST": "New list",
+    "VIEW_NOTIFICATIONS": "View notifications"
+  },
+  "LISTS": {
+    "TITLE": "My Lists",
+    "NEW": "New list",
+    "EDIT": "Edit",
+    "DELETE": "Delete",
+    "ANALYSIS": "Analysis",
+    "NAME_LABEL": "Name",
+    "DESC_LABEL": "Description (optional)",
+    "EMPTY": "You have no lists yet. Create one!",
+    "CONFIRM_DELETE": "Delete list?",
+    "CONFIRM_DELETE_MSG": "This action removes the list and all its products. It cannot be undone.",
+    "PRODUCTS": "{{count}} product(s)"
+  },
+  "PRODUCTS": {
+    "TITLE": "Products",
+    "ADD": "Add product",
+    "EDIT": "Edit",
+    "REMOVE": "Remove",
+    "PAUSE": "Pause",
+    "RESUME": "Resume",
+    "CURRENT_PRICE": "Current price",
+    "LOWEST_PRICE": "Lowest price",
+    "TARGET_PRICE": "Target price",
+    "SOURCE": "Source",
+    "STATUS_ACTIVE": "Active",
+    "STATUS_PAUSED": "Paused",
+    "NEXT_CHECK": "Next check",
+    "HISTORY": "Price history",
+    "EMPTY": "No products in this list yet.",
+    "CONFIRM_REMOVE": "Remove product?",
+    "CONFIRM_REMOVE_MSG": "The price history will be lost.",
+    "URL_LABEL": "Product URL",
+    "SOURCE_LABEL": "Source",
+    "NO_TARGET": "No target",
+    "BELOW_TARGET_BADGE": "Below target!"
+  },
+  "NOTIFICATIONS": {
+    "TITLE": "Notifications",
+    "MARK_READ": "Mark as read",
+    "MARK_ALL_READ": "Mark all as read",
+    "FILTER_ALL": "All",
+    "FILTER_UNREAD": "Unread",
+    "EMPTY": "No notifications.",
+    "TYPE_TARGET": "Target price reached",
+    "TYPE_LOWEST": "New lowest price"
+  },
+  "PROFILE": {
+    "TITLE": "Profile",
+    "EMAIL_VERIFIED": "Email verified",
+    "EMAIL_NOT_VERIFIED": "Email not verified",
+    "RESEND_VERIFICATION": "Resend verification",
+    "CHANGE_PASSWORD": "Change password",
+    "CHANGE_EMAIL": "Change email",
+    "DELETE_ACCOUNT": "Delete account",
+    "CURRENT_PASSWORD": "Current password",
+    "NEW_PASSWORD": "New password",
+    "NEW_EMAIL": "New email",
+    "CONFIRM_DELETE": "Confirm account deletion?",
+    "CONFIRM_DELETE_MSG": "This action is irreversible. All your data will be deleted.",
+    "PASSWORD_CONFIRM": "Confirm with your password:"
+  },
+  "ANALYSIS": {
+    "TITLE": "List analysis",
+    "DISTANCE": "Distance from target",
+    "BELOW": "Below target",
+    "ABOVE": "above target"
+  },
+  "COMMON": {
+    "SAVE": "Save",
+    "CANCEL": "Cancel",
+    "CONFIRM": "Confirm",
+    "DELETE": "Delete",
+    "CLOSE": "Close",
+    "BACK": "Back",
+    "YES": "Yes",
+    "NO": "No",
+    "ERROR_GENERIC": "Something went wrong. Please try again.",
+    "EMPTY_STATE": "Nothing here yet."
+  }
+}

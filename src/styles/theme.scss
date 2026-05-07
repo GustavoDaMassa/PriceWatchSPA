@@ -1,0 +1,46 @@
+@use '@angular/material' as mat;
+
+html {
+  @include mat.theme((
+    color: (
+      primary: mat.$yellow-palette,
+      tertiary: mat.$orange-palette,
+      theme-type: light,
+    ),
+    typography: Roboto,
+    density: 0,
+  ));
+
+  color-scheme: light;
+  background-color: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
+
+  // Paleta ML sobre o tema Material
+  --pw-yellow: #FFE600;
+  --pw-yellow-dark: #CCBA00;
+  --pw-bg: #EBEBEB;
+  --pw-surface: #FFFFFF;
+  --pw-success: #00A650;
+  --pw-error: #F23D4F;
+  --pw-text-primary: #333333;
+  --pw-text-secondary: #666666;
+}
+
+html.dark {
+  @include mat.theme((
+    color: (
+      primary: mat.$yellow-palette,
+      tertiary: mat.$orange-palette,
+      theme-type: dark,
+    ),
+    typography: Roboto,
+    density: 0,
+  ));
+
+  color-scheme: dark;
+
+  --pw-bg: #1a1a1a;
+  --pw-surface: #2d2d2d;
+  --pw-text-primary: #EBEBEB;
+  --pw-text-secondary: #AAAAAA;
+}

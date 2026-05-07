@@ -1,0 +1,43 @@
+<mat-toolbar class="shell-toolbar">
+  <a routerLink="/dashboard" class="shell-brand">
+    <span class="brand-icon">🔔</span>
+    <span class="brand-name">{{ 'APP.NAME' | translate }}</span>
+  </a>
+
+  <nav class="shell-nav">
+    <a mat-button routerLink="/dashboard" routerLinkActive="nav-active">
+      <mat-icon>home</mat-icon>
+      <span>{{ 'NAV.DASHBOARD' | translate }}</span>
+    </a>
+    <a mat-button routerLink="/lists" routerLinkActive="nav-active">
+      <mat-icon>list</mat-icon>
+      <span>{{ 'NAV.LISTS' | translate }}</span>
+    </a>
+    <a mat-button routerLink="/notifications" routerLinkActive="nav-active"
+       [matBadge]="polling.unreadCount() || null"
+       matBadgeColor="warn"
+       matBadgeSize="small">
+      <mat-icon>notifications</mat-icon>
+      <span>{{ 'NAV.NOTIFICATIONS' | translate }}</span>
+    </a>
+  </nav>
+
+  <div class="shell-actions">
+    <button mat-icon-button (click)="toggleLang()" [title]="lang.current()">
+      <mat-icon>translate</mat-icon>
+    </button>
+    <button mat-icon-button (click)="toggleTheme()">
+      <mat-icon>{{ theme.isDark() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+    </button>
+    <a mat-icon-button routerLink="/profile">
+      <mat-icon>account_circle</mat-icon>
+    </a>
+    <button mat-icon-button (click)="logout()" [title]="'NAV.LOGOUT' | translate">
+      <mat-icon>logout</mat-icon>
+    </button>
+  </div>
+</mat-toolbar>
+
+<main class="shell-content">
+  <router-outlet />
+</main>

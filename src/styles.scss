@@ -1,0 +1,14 @@
+@use 'styles/theme';
+@use 'styles/variables' as vars;
+
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+// Toast customization
+.toast-success .mdc-snackbar__surface { background-color: var(--pw-success); }
+.toast-error .mdc-snackbar__surface { background-color: var(--pw-error); }

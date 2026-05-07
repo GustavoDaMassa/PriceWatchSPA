@@ -1,0 +1,55 @@
+.shell-toolbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background-color: var(--pw-yellow);
+  color: #333;
+  padding: 0 16px;
+  gap: 8px;
+}
+
+.shell-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: inherit;
+  font-weight: 700;
+  font-size: 1.1rem;
+  white-space: nowrap;
+
+  .brand-icon { font-size: 1.3rem; }
+}
+
+.shell-nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 16px;
+
+  a { color: inherit; }
+  .nav-active { font-weight: 700; }
+}
+
+.shell-actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  button, a { color: inherit; }
+}
+
+.shell-content {
+  margin-top: 64px;
+  padding: 24px;
+  min-height: calc(100vh - 64px);
+  background-color: var(--pw-bg);
+}
+
+@media (max-width: 600px) {
+  .shell-nav span { display: none; }
+  .shell-brand .brand-name { display: none; }
+}
