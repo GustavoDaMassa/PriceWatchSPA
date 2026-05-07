@@ -1,9 +1,9 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideRouter } from '@angular/router';
+import { provideTranslateService } from '@ngx-translate/core';
 import { MatDialog } from '@angular/material/dialog';
 import { of } from 'rxjs';
-import { Router } from '@angular/router';
 import { ListOverviewComponent } from './list-overview.component';
 import { ListsApiService } from '../../../core/services/api/lists-api.service';
 import { ToastService } from '../../../core/services/toast.service';
@@ -13,8 +13,8 @@ describe('ListOverviewComponent', () => {
   let listsApi: jasmine.SpyObj<ListsApiService>;
 
   const mockLists = [
-    { id: '1', name: 'Lista A', createdAt: new Date().toISOString() },
-    { id: '2', name: 'Lista B', createdAt: new Date().toISOString() },
+    { id: '1', name: 'Lista A' },
+    { id: '2', name: 'Lista B' },
   ];
 
   beforeEach(async () => {
@@ -22,13 +22,14 @@ describe('ListOverviewComponent', () => {
     listsApi.getLists.and.returnValue(of(mockLists));
 
     await TestBed.configureTestingModule({
-      imports: [ListOverviewComponent, TranslateModule.forRoot()],
+      imports: [ListOverviewComponent],
       providers: [
         provideAnimationsAsync(),
+        provideRouter([]),
+        provideTranslateService({ fallbackLang: 'en' }),
         { provide: ListsApiService, useValue: listsApi },
         { provide: ToastService, useValue: jasmine.createSpyObj('ToastService', ['success', 'error']) },
         { provide: MatDialog, useValue: { open: () => ({ afterClosed: () => of(false) }) } },
-        { provide: Router, useValue: jasmine.createSpyObj('Router', ['navigate']) },
       ],
     }).compileComponents();
 
@@ -43,19 +44,9 @@ describe('ListOverviewComponent', () => {
     expect(fixture.componentInstance.lists().length).toBe(2);
   }));
 
-  it('should show empty state when no lists', fakeAsync(async () => {
+  it('should show empty state when no lists', fakeAsync(() => {
     listsApi.getLists.and.returnValue(of([]));
-    fixture = (await TestBed.configureTestingModule({
-      imports: [ListOverviewComponent, TranslateModule.forRoot()],
-      providers: [
-        provideAnimationsAsync(),
-        { provide: ListsApiService, useValue: listsApi },
-        { provide: ToastService, useValue: jasmine.createSpyObj('ToastService', ['success', 'error']) },
-        { provide: MatDialog, useValue: { open: () => ({ afterClosed: () => of(false) }) } },
-        { provide: Router, useValue: jasmine.createSpyObj('Router', ['navigate']) },
-      ],
-    }).compileComponents()).createComponent(ListOverviewComponent);
-    fixture.detectChanges();
+    fixture.componentInstance.loadLists();
     tick();
     fixture.detectChanges();
     expect(fixture.componentInstance.lists().length).toBe(0);

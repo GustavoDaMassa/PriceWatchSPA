@@ -1,8 +1,8 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideRouter, Router } from '@angular/router';
+import { provideTranslateService } from '@ngx-translate/core';
 import { of, throwError } from 'rxjs';
-import { Router } from '@angular/router';
 import { LoginComponent } from './login.component';
 import { AuthApiService } from '../../../core/services/api/auth-api.service';
 import { AuthService } from '../../../core/services/auth.service';
@@ -12,26 +12,28 @@ describe('LoginComponent', () => {
   let fixture: ComponentFixture<LoginComponent>;
   let authApi: jasmine.SpyObj<AuthApiService>;
   let auth: jasmine.SpyObj<AuthService>;
-  let router: jasmine.SpyObj<Router>;
+  let router: Router;
   let toast: jasmine.SpyObj<ToastService>;
 
   beforeEach(async () => {
     authApi = jasmine.createSpyObj('AuthApiService', ['login']);
     auth = jasmine.createSpyObj('AuthService', ['login']);
-    router = jasmine.createSpyObj('Router', ['navigate']);
     toast = jasmine.createSpyObj('ToastService', ['success', 'error']);
 
     await TestBed.configureTestingModule({
-      imports: [LoginComponent, TranslateModule.forRoot()],
+      imports: [LoginComponent],
       providers: [
         provideAnimationsAsync(),
+        provideRouter([]),
+        provideTranslateService({ fallbackLang: 'en' }),
         { provide: AuthApiService, useValue: authApi },
         { provide: AuthService, useValue: auth },
-        { provide: Router, useValue: router },
         { provide: ToastService, useValue: toast },
       ],
     }).compileComponents();
 
+    router = TestBed.inject(Router);
+    spyOn(router, 'navigate');
     fixture = TestBed.createComponent(LoginComponent);
     fixture.detectChanges();
   });
@@ -59,7 +61,7 @@ describe('LoginComponent', () => {
   }));
 
   it('should show error toast on failure', fakeAsync(() => {
-    authApi.login.and.returnValue(throwError(() => ({ status: 401, error: { message: 'Credenciais inválidas' } })));
+    authApi.login.and.returnValue(throwError(() => ({ status: 401, error: { detail: 'Credenciais inválidas' } })));
     fixture.componentInstance.form.setValue({ email: 'a@b.com', password: 'wrong' });
     fixture.componentInstance.submit();
     tick();

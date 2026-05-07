@@ -1,11 +1,12 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { TranslateModule } from '@ngx-translate/core';
-import { RouterLink } from '@angular/router';
+import { provideRouter } from '@angular/router';
+import { provideTranslateService } from '@ngx-translate/core';
 import { of } from 'rxjs';
 import { ProfileOverviewComponent } from './profile-overview.component';
 import { UsersApiService } from '../../../core/services/api/users-api.service';
 import { AuthApiService } from '../../../core/services/api/auth-api.service';
+import { ToastService } from '../../../core/services/toast.service';
 
 describe('ProfileOverviewComponent', () => {
   let fixture: ComponentFixture<ProfileOverviewComponent>;
@@ -18,12 +19,14 @@ describe('ProfileOverviewComponent', () => {
     usersApi.getProfile.and.returnValue(of(mockProfile));
 
     await TestBed.configureTestingModule({
-      imports: [ProfileOverviewComponent, TranslateModule.forRoot()],
+      imports: [ProfileOverviewComponent],
       providers: [
         provideAnimationsAsync(),
+        provideRouter([]),
+        provideTranslateService({ fallbackLang: 'en' }),
         { provide: UsersApiService, useValue: usersApi },
         { provide: AuthApiService, useValue: jasmine.createSpyObj('AuthApiService', ['resendVerification']) },
-        RouterLink,
+        { provide: ToastService, useValue: jasmine.createSpyObj('ToastService', ['success', 'error']) },
       ],
     }).compileComponents();
 
