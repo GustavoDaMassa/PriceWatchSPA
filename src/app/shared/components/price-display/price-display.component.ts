@@ -20,6 +20,7 @@ export class PriceDisplayComponent {
   currency = input<string>('BRL');
 
   locale(): string {
-    return this.translate.currentLang === 'en' ? 'en-US' : 'pt-BR';
+    const lang = this.translate.currentLang ?? this.translate.defaultLang ?? 'en';
+    return lang.startsWith('pt') ? 'pt-BR' : 'en-US';
   }
 }

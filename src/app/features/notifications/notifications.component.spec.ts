@@ -1,7 +1,8 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService } from '@ngx-translate/core';
 import { of } from 'rxjs';
+import { signal } from '@angular/core';
 import { NotificationsComponent } from './notifications.component';
 import { NotificationsApiService } from '../../core/services/api/notifications-api.service';
 import { NotificationPollingService } from '../../core/services/notification-polling.service';
@@ -22,11 +23,12 @@ describe('NotificationsComponent', () => {
     notifApi.getNotifications.and.returnValue(of(mockNotifications));
 
     await TestBed.configureTestingModule({
-      imports: [NotificationsComponent, TranslateModule.forRoot()],
+      imports: [NotificationsComponent],
       providers: [
         provideAnimationsAsync(),
+        provideTranslateService({ fallbackLang: 'en' }),
         { provide: NotificationsApiService, useValue: notifApi },
-        { provide: NotificationPollingService, useValue: { unreadCount: { set: () => {} } } },
+        { provide: NotificationPollingService, useValue: { unreadCount: signal(1), update: () => {}, set: () => {} } },
       ],
     }).compileComponents();
 
@@ -46,6 +48,6 @@ describe('NotificationsComponent', () => {
     fixture.detectChanges();
     fixture.componentInstance.filterUnread.set(true);
     const unread = fixture.componentInstance.filtered();
-    expect(unread.every(n => !n.isRead)).toBeTrue();
+    expect(unread.every((n: { isRead: boolean }) => !n.isRead)).toBeTrue();
   }));
 });

@@ -1,32 +1,36 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { TranslateModule } from '@ngx-translate/core';
-import { RouterLink } from '@angular/router';
+import { provideRouter } from '@angular/router';
+import { provideTranslateService } from '@ngx-translate/core';
 import { of } from 'rxjs';
+import { signal } from '@angular/core';
 import { DashboardComponent } from './dashboard.component';
 import { ListsApiService } from '../../core/services/api/lists-api.service';
+import { ProductsApiService } from '../../core/services/api/products-api.service';
 import { NotificationPollingService } from '../../core/services/notification-polling.service';
-import { signal } from '@angular/core';
 
 describe('DashboardComponent', () => {
   let fixture: ComponentFixture<DashboardComponent>;
   let listsApi: jasmine.SpyObj<ListsApiService>;
+  let productsApi: jasmine.SpyObj<ProductsApiService>;
 
-  const mockLists = [
-    { id: '1', name: 'Lista A', createdAt: new Date().toISOString() },
-  ];
+  const mockLists = [{ id: '1', name: 'Lista A' }];
 
   beforeEach(async () => {
     listsApi = jasmine.createSpyObj('ListsApiService', ['getLists']);
+    productsApi = jasmine.createSpyObj('ProductsApiService', ['getProducts']);
     listsApi.getLists.and.returnValue(of(mockLists));
+    productsApi.getProducts.and.returnValue(of([]));
 
     await TestBed.configureTestingModule({
-      imports: [DashboardComponent, TranslateModule.forRoot()],
+      imports: [DashboardComponent],
       providers: [
         provideAnimationsAsync(),
+        provideRouter([]),
+        provideTranslateService({ fallbackLang: 'en' }),
         { provide: ListsApiService, useValue: listsApi },
+        { provide: ProductsApiService, useValue: productsApi },
         { provide: NotificationPollingService, useValue: { unreadCount: signal(2) } },
-        RouterLink,
       ],
     }).compileComponents();
 

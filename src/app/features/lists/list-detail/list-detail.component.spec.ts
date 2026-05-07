@@ -1,11 +1,10 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { TranslateModule } from '@ngx-translate/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { provideTranslateService } from '@ngx-translate/core';
+import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { of } from 'rxjs';
 import { ListDetailComponent } from './list-detail.component';
-import { ListsApiService } from '../../../core/services/api/lists-api.service';
 import { ProductsApiService } from '../../../core/services/api/products-api.service';
 import { ToastService } from '../../../core/services/toast.service';
 
@@ -23,15 +22,14 @@ describe('ListDetailComponent', () => {
     productsApi.getProducts.and.returnValue(of(mockProducts));
 
     await TestBed.configureTestingModule({
-      imports: [ListDetailComponent, TranslateModule.forRoot()],
+      imports: [ListDetailComponent],
       providers: [
         provideAnimationsAsync(),
+        provideTranslateService({ fallbackLang: 'en' }),
         { provide: ActivatedRoute, useValue: { snapshot: { paramMap: { get: () => 'L1' } } } },
         { provide: ProductsApiService, useValue: productsApi },
-        { provide: ListsApiService, useValue: jasmine.createSpyObj('ListsApiService', ['getLists']) },
         { provide: ToastService, useValue: jasmine.createSpyObj('ToastService', ['success', 'error']) },
         { provide: MatDialog, useValue: { open: () => ({ afterClosed: () => of(false) }) } },
-        { provide: Router, useValue: jasmine.createSpyObj('Router', ['navigate']) },
       ],
     }).compileComponents();
 

@@ -1,6 +1,6 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService } from '@ngx-translate/core';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 import { ListAnalysisComponent } from './list-analysis.component';
@@ -20,9 +20,10 @@ describe('ListAnalysisComponent', () => {
     listsApi.getAnalysis.and.returnValue(of(mockAnalysis));
 
     await TestBed.configureTestingModule({
-      imports: [ListAnalysisComponent, TranslateModule.forRoot()],
+      imports: [ListAnalysisComponent],
       providers: [
         provideAnimationsAsync(),
+        provideTranslateService({ fallbackLang: 'en' }),
         { provide: ActivatedRoute, useValue: { snapshot: { paramMap: { get: () => 'L1' } } } },
         { provide: ListsApiService, useValue: listsApi },
       ],
