@@ -46,9 +46,6 @@ import { EditProductDialogComponent } from '../../products/edit-product/edit-pro
       <div class="products-grid">
         @for (p of products(); track p.id) {
           <mat-card class="product-card" [class.inactive]="!p.isActive">
-            @if (p.imageUrl) {
-              <img mat-card-image [src]="p.imageUrl" [alt]="p.name">
-            }
             <mat-card-header>
               <mat-card-title class="product-name">{{ p.name }}</mat-card-title>
               <mat-card-subtitle>
@@ -141,14 +138,14 @@ export class ListDetailComponent implements OnInit {
   }
 
   openEdit(product: TrackedProduct): void {
-    this.dialog.open(EditProductDialogComponent, { width: '480px', data: { listId: this.listId, product } })
+    this.dialog.open(EditProductDialogComponent, { width: '480px', data: { product } })
       .afterClosed().subscribe(saved => { if (saved) this.loadProducts(); });
   }
 
   toggleActive(product: TrackedProduct): void {
-    this.productsApi.updateProduct(this.listId, product.id, { isActive: !product.isActive }).subscribe({
+    this.productsApi.updateProduct(product.id, { isActive: !product.isActive }).subscribe({
       next: () => this.loadProducts(),
-      error: (err: HttpErrorResponse) => this.toast.error(err.error?.message ?? this.translate.instant('COMMON.ERROR_GENERIC')),
+      error: (err: HttpErrorResponse) => this.toast.error(err.error?.detail ?? this.translate.instant('COMMON.ERROR_GENERIC')),
     });
   }
 
@@ -160,9 +157,9 @@ export class ListDetailComponent implements OnInit {
       },
     }).afterClosed().subscribe(confirmed => {
       if (!confirmed) return;
-      this.productsApi.removeProduct(this.listId, product.id).subscribe({
+      this.productsApi.removeProduct(product.id).subscribe({
         next: () => { this.toast.success(product.name); this.loadProducts(); },
-        error: (err: HttpErrorResponse) => this.toast.error(err.error?.message ?? this.translate.instant('COMMON.ERROR_GENERIC')),
+        error: (err: HttpErrorResponse) => this.toast.error(err.error?.detail ?? this.translate.instant('COMMON.ERROR_GENERIC')),
       });
     });
   }

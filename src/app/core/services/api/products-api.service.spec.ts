@@ -7,7 +7,6 @@ import { environment } from '../../../../environments/environment';
 describe('ProductsApiService', () => {
   let service: ProductsApiService;
   let http: HttpTestingController;
-  const base = `${environment.apiUrl}/lists/L1/products`;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -21,32 +20,32 @@ describe('ProductsApiService', () => {
 
   it('should GET /lists/:listId/products', () => {
     service.getProducts('L1').subscribe();
-    http.expectOne(base).flush([]);
+    http.expectOne(`${environment.apiUrl}/lists/L1/products`).flush([]);
   });
 
   it('should POST /lists/:listId/products', () => {
-    service.addProduct('L1', { url: 'http://ml.com/1', source: 0 }).subscribe();
-    const req = http.expectOne(base);
+    service.addProduct('L1', { url: 'http://ml.com/1' }).subscribe();
+    const req = http.expectOne(`${environment.apiUrl}/lists/L1/products`);
     expect(req.request.method).toBe('POST');
     req.flush({});
   });
 
-  it('should PUT /lists/:listId/products/:id', () => {
-    service.updateProduct('L1', 'P1', { targetPrice: 99 }).subscribe();
-    const req = http.expectOne(`${base}/P1`);
+  it('should PUT /products/:id', () => {
+    service.updateProduct('P1', { targetPrice: 99 }).subscribe();
+    const req = http.expectOne(`${environment.apiUrl}/products/P1`);
     expect(req.request.method).toBe('PUT');
     req.flush(null);
   });
 
-  it('should DELETE /lists/:listId/products/:id', () => {
-    service.removeProduct('L1', 'P1').subscribe();
-    const req = http.expectOne(`${base}/P1`);
+  it('should DELETE /products/:id', () => {
+    service.removeProduct('P1').subscribe();
+    const req = http.expectOne(`${environment.apiUrl}/products/P1`);
     expect(req.request.method).toBe('DELETE');
     req.flush(null);
   });
 
-  it('should GET /lists/:listId/products/:id/history', () => {
-    service.getPriceHistory('L1', 'P1').subscribe();
-    http.expectOne(`${base}/P1/history`).flush([]);
+  it('should GET /products/:id/history', () => {
+    service.getPriceHistory('P1').subscribe();
+    http.expectOne(`${environment.apiUrl}/products/P1/history`).flush([]);
   });
 });

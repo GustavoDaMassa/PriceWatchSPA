@@ -45,7 +45,7 @@ import { TrackedProduct } from '../../../shared/models/tracked-product.model';
 })
 export class EditProductDialogComponent implements OnInit {
   protected readonly ref = inject(MatDialogRef) as MatDialogRef<EditProductDialogComponent, boolean>;
-  protected readonly data = inject<{ listId: string; product: TrackedProduct }>(MAT_DIALOG_DATA);
+  protected readonly data = inject<{ product: TrackedProduct }>(MAT_DIALOG_DATA);
   private readonly fb = inject(FormBuilder);
   private readonly productsApi = inject(ProductsApiService);
   private readonly toast = inject(ToastService);
@@ -65,12 +65,12 @@ export class EditProductDialogComponent implements OnInit {
   submit(): void {
     if (this.form.invalid || this.loading()) return;
     this.loading.set(true);
-    this.productsApi.updateProduct(this.data.listId, this.data.product.id, {
+    this.productsApi.updateProduct(this.data.product.id, {
       targetPrice: this.form.value.targetPrice ?? undefined,
       isActive: this.form.value.isActive ?? undefined,
     }).pipe(finalize(() => this.loading.set(false))).subscribe({
       next: () => this.ref.close(true),
-      error: (err: HttpErrorResponse) => this.toast.error(err.error?.message ?? this.translate.instant('COMMON.ERROR_GENERIC')),
+      error: (err: HttpErrorResponse) => this.toast.error(err.error?.detail ?? this.translate.instant('COMMON.ERROR_GENERIC')),
     });
   }
 }
