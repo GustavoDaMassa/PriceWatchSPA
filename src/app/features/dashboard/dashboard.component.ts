@@ -37,7 +37,7 @@ import { TrackedProduct } from '../../shared/models/tracked-product.model';
           </mat-card-content>
         </mat-card>
 
-        <mat-card class="stat-card">
+        <mat-card class="stat-card stat-link" routerLink="/lists">
           <mat-card-content>
             <mat-icon>inventory_2</mat-icon>
             <span class="stat-value">{{ totalProducts() }}</span>
@@ -53,7 +53,7 @@ import { TrackedProduct } from '../../shared/models/tracked-product.model';
           </mat-card-content>
         </mat-card>
 
-        <mat-card class="stat-card highlight">
+        <mat-card class="stat-card stat-link" routerLink="/notifications">
           <mat-card-content>
             <mat-icon>flag</mat-icon>
             <span class="stat-value">{{ belowTarget() }}</span>
