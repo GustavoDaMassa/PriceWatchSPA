@@ -83,8 +83,8 @@ import { TrackedProduct } from '../../shared/models/tracked-product.model';
       margin-bottom: 32px;
     }
     .stat-card {
-      background: #FFFFFF;
-      color: #10026C;
+      background: var(--pw-card-bg);
+      color: var(--pw-card-color);
       cursor: default;
       text-align: center;
       width: 340px;
@@ -102,9 +102,9 @@ import { TrackedProduct } from '../../shared/models/tracked-product.model';
       padding: 56px 32px;
       height: 100%;
     }
-    .stat-card mat-icon { font-size: 88px; width: 88px; height: 88px; color: #10026C; }
-    .stat-value { font-size: 6rem; font-weight: 700; line-height: 1; color: #10026C; }
-    .stat-label { font-size: 0.85rem; color: #10026C; text-transform: uppercase; letter-spacing: 0.08em; }
+    .stat-card mat-icon { font-size: 88px; width: 88px; height: 88px; color: var(--pw-card-color); }
+    .stat-value { font-size: 6rem; font-weight: 700; line-height: 1; color: var(--pw-card-color); }
+    .stat-label { font-size: 0.85rem; color: var(--pw-card-color); text-transform: uppercase; letter-spacing: 0.08em; }
     .stat-link {
       cursor: pointer;
       border: 2px solid var(--pw-border-accent) !important;
