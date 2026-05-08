@@ -75,7 +75,7 @@ import { ListFormDialogComponent } from '../list-form-dialog/list-form-dialog.co
   styles: [`
     .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; max-width: 760px; margin-left: auto; margin-right: auto; }
     .page-header h1 { margin: 0; }
-    .btn-primary { background-color: var(--pw-card-bg) !important; color: var(--pw-card-color) !important; font-weight: 600; }
+    .btn-primary { background-color: var(--pw-btn-bg) !important; color: var(--pw-btn-color) !important; font-weight: 600; }
     .center { display: flex; justify-content: center; padding: 48px; }
     .lists-grid {
       display: flex;
