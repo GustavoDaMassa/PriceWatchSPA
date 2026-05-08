@@ -110,8 +110,8 @@ import { TrackedProduct } from '../../shared/models/tracked-product.model';
       transition: transform 0.15s, box-shadow 0.15s;
     }
     .stat-link:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15) !important;
+      transform: translateY(-10px) scale(1.04);
+      box-shadow: 0 20px 48px rgba(0, 0, 0, 0.35) !important;
     }
     .highlight mat-icon { color: var(--pw-success); }
     .quick-actions { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-bottom: 24px; }
