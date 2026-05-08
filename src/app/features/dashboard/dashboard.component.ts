@@ -62,16 +62,7 @@ import { TrackedProduct } from '../../shared/models/tracked-product.model';
         </mat-card>
       </div>
 
-      <div class="quick-actions">
-        <button mat-flat-button class="btn-primary" routerLink="/lists">
-          <mat-icon>add</mat-icon>{{ 'DASHBOARD.NEW_LIST' | translate }}
-        </button>
-        <button mat-stroked-button routerLink="/notifications">
-          <mat-icon>notifications</mat-icon>{{ 'DASHBOARD.VIEW_NOTIFICATIONS' | translate }}
-        </button>
-      </div>
-
-      @if (nextCheck()) {
+@if (nextCheck()) {
         <mat-card class="next-check-card">
           <mat-card-content>
             <mat-icon>schedule</mat-icon>
@@ -96,8 +87,8 @@ import { TrackedProduct } from '../../shared/models/tracked-product.model';
       backdrop-filter: blur(8px);
       cursor: default;
       text-align: center;
-      width: 150px;
-      min-height: 190px;
+      width: 240px;
+      min-height: 300px;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -107,13 +98,13 @@ import { TrackedProduct } from '../../shared/models/tracked-product.model';
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 12px;
-      padding: 24px 16px;
+      gap: 20px;
+      padding: 40px 24px;
       height: 100%;
     }
-    .stat-card mat-icon { font-size: 40px; width: 40px; height: 40px; color: var(--pw-yellow); }
-    .stat-value { font-size: 2.4rem; font-weight: 700; line-height: 1; }
-    .stat-label { font-size: 0.78rem; color: var(--pw-text-secondary); text-transform: uppercase; letter-spacing: 0.05em; }
+    .stat-card mat-icon { font-size: 64px; width: 64px; height: 64px; color: var(--pw-yellow); }
+    .stat-value { font-size: 4rem; font-weight: 700; line-height: 1; }
+    .stat-label { font-size: 0.85rem; color: var(--pw-text-secondary); text-transform: uppercase; letter-spacing: 0.08em; }
     .stat-link {
       cursor: pointer;
       border: 2px solid var(--pw-border-accent) !important;
