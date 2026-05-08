@@ -73,12 +73,21 @@ import { ListFormDialogComponent } from '../list-form-dialog/list-form-dialog.co
     }
   `,
   styles: [`
-    .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+    .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; max-width: 760px; margin-left: auto; margin-right: auto; }
     .page-header h1 { margin: 0; }
     .btn-primary { background-color: var(--pw-yellow); color: #333; font-weight: 600; }
     .center { display: flex; justify-content: center; padding: 48px; }
-    .lists-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
-    .list-card { background: var(--pw-surface); }
+    .lists-grid {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+    .list-card {
+      background: var(--pw-surface);
+      width: 100%;
+      max-width: 760px;
+    }
     .text-danger { color: var(--pw-error); }
   `],
 })
