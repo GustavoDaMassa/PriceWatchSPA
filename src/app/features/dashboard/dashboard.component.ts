@@ -87,8 +87,8 @@ import { TrackedProduct } from '../../shared/models/tracked-product.model';
       backdrop-filter: blur(8px);
       cursor: default;
       text-align: center;
-      width: 240px;
-      min-height: 300px;
+      width: 340px;
+      min-height: 420px;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -98,12 +98,12 @@ import { TrackedProduct } from '../../shared/models/tracked-product.model';
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 20px;
-      padding: 40px 24px;
+      gap: 28px;
+      padding: 56px 32px;
       height: 100%;
     }
-    .stat-card mat-icon { font-size: 64px; width: 64px; height: 64px; color: var(--pw-yellow); }
-    .stat-value { font-size: 4rem; font-weight: 700; line-height: 1; }
+    .stat-card mat-icon { font-size: 88px; width: 88px; height: 88px; color: var(--pw-yellow); }
+    .stat-value { font-size: 6rem; font-weight: 700; line-height: 1; }
     .stat-label { font-size: 0.85rem; color: var(--pw-text-secondary); text-transform: uppercase; letter-spacing: 0.08em; }
     .stat-link {
       cursor: pointer;
