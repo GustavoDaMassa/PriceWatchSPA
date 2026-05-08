@@ -84,10 +84,16 @@ import { ListFormDialogComponent } from '../list-form-dialog/list-form-dialog.co
       gap: 16px;
     }
     .list-card {
-      background: var(--pw-surface);
+      background: var(--pw-card-bg);
+      color: var(--pw-card-color);
       width: 100%;
       max-width: 760px;
     }
+    .list-card mat-card-title,
+    .list-card mat-card-subtitle,
+    .list-card mat-icon,
+    .list-card a,
+    .list-card button { color: var(--pw-card-color) !important; }
     .text-danger { color: var(--pw-error); }
   `],
 })
