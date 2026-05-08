@@ -83,8 +83,7 @@ import { TrackedProduct } from '../../shared/models/tracked-product.model';
       margin-bottom: 32px;
     }
     .stat-card {
-      background: rgba(255, 255, 255, 0.75);
-      backdrop-filter: blur(8px);
+      background: #10026C;
       cursor: default;
       text-align: center;
       width: 340px;
