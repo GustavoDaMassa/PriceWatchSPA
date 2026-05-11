@@ -14,6 +14,18 @@ html {
   color-scheme: light;
   color: var(--mat-sys-on-surface);
 
+  // Escala tipográfica
+  --pw-font-base: 'Inter', 'Helvetica Neue', sans-serif;
+  --pw-font-size-xs: 0.75rem;
+  --pw-font-size-sm: 0.875rem;
+  --pw-font-size-md: 1rem;
+  --pw-font-size-lg: 1.25rem;
+  --pw-font-size-xl: 1.5rem;
+  --pw-font-weight-regular: 400;
+  --pw-font-weight-medium: 500;
+  --pw-font-weight-semibold: 600;
+  --pw-font-weight-bold: 700;
+
   // Paleta ML
   --pw-yellow: #FFE600;
   --pw-yellow-dark: #CCBA00;
