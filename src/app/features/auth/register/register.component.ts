@@ -16,7 +16,7 @@ import { RegisterRequest } from '../../../shared/models/auth.model';
   template: `
     <div class="ml-auth-page">
       <div class="ml-auth-header">
-        <img src="/LogoPriceWatch.png" class="ml-auth-logo" alt="PriceWatch">
+        <span class="ml-auth-brand">PriceWatch</span>
       </div>
 
       <div class="ml-auth-card">
@@ -72,7 +72,7 @@ import { RegisterRequest } from '../../../shared/models/auth.model';
       justify-content: center;
     }
 
-    .ml-auth-logo { height: 38px; width: auto; }
+    .ml-auth-brand { font-size: 28px; font-weight: 700; color: #333; letter-spacing: -0.5px; }
 
     .ml-auth-card {
       background: white;
