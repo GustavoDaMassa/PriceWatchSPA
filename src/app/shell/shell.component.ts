@@ -7,7 +7,6 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { TranslateModule } from '@ngx-translate/core';
 import { AuthService } from '../core/services/auth.service';
 import { NotificationPollingService } from '../core/services/notification-polling.service';
-import { ThemeService } from '../core/services/theme.service';
 import { LanguageService } from '../core/services/language.service';
 import { Router } from '@angular/router';
 
@@ -25,7 +24,6 @@ import { Router } from '@angular/router';
 export class ShellComponent implements OnInit, OnDestroy {
   protected readonly auth = inject(AuthService);
   protected readonly polling = inject(NotificationPollingService);
-  protected readonly theme = inject(ThemeService);
   protected readonly lang = inject(LanguageService);
   private readonly router = inject(Router);
 
@@ -40,10 +38,6 @@ export class ShellComponent implements OnInit, OnDestroy {
   logout(): void {
     this.auth.logout();
     this.router.navigate(['/auth/login']);
-  }
-
-  toggleTheme(): void {
-    this.theme.toggle();
   }
 
   toggleLang(): void {

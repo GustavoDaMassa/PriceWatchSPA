@@ -53,43 +53,6 @@ html {
   --pw-btn-color: #333333;
 
   // Background: branco puro até o fim do navbar (64px), depois transição para amarelo
-  --pw-page-bg: linear-gradient(to bottom, #FFE600 0%, #FFFFFF 100%);
+  --pw-page-bg: linear-gradient(to bottom, #FFE600 0%, #BBBBBB 100%);
 }
 
-html.dark {
-  @include mat.theme((
-    color: (
-      primary: mat.$yellow-palette,
-      tertiary: mat.$orange-palette,
-      theme-type: dark,
-    ),
-    typography: Roboto,
-    density: 0,
-  ));
-
-  color-scheme: dark;
-
-  --pw-surface: #1e1e1e;
-  --pw-text-primary: #EBEBEB;
-  --pw-text-secondary: #CCCCCC;
-
-  // Toolbar: amarelo ML
-  --pw-toolbar-bg: #FFE600;
-  --pw-toolbar-color: #333333;
-  --mat-toolbar-container-background-color: #FFE600;
-  --mat-toolbar-container-text-color: #333333;
-
-  // Bordas interativas: amarelo no escuro
-  --pw-border-accent: #FFE600;
-
-  // Cards do dashboard
-  --pw-card-bg: #06013A;
-  --pw-card-color: #FFFFFF;
-
-  // Botão primário
-  --pw-btn-bg: #06013A;
-  --pw-btn-color: #FFFFFF;
-
-  // Background: preto puro até o fim do navbar (64px), depois transição para amarelo
-  --pw-page-bg: linear-gradient(to bottom, #FFE600 64px, #000000 100%);
-}

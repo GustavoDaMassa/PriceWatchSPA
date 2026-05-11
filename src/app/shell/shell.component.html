@@ -13,10 +13,7 @@
     <button mat-icon-button (click)="toggleLang()" [title]="lang.current()">
       <mat-icon>translate</mat-icon>
     </button>
-    <button mat-icon-button (click)="toggleTheme()">
-      <mat-icon>{{ theme.isDark() ? 'light_mode' : 'dark_mode' }}</mat-icon>
-    </button>
-    <a mat-icon-button routerLink="/profile">
+<a mat-icon-button routerLink="/profile">
       <mat-icon>account_circle</mat-icon>
     </a>
     <button mat-icon-button (click)="logout()" [title]="'NAV.LOGOUT' | translate">

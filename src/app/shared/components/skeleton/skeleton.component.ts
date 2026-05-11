@@ -19,10 +19,6 @@ import { Component, input } from '@angular/core';
       }
     }
 
-    :host-context(html.dark) .skeleton {
-      --sk-base: rgba(255, 255, 255, 0.07);
-      --sk-shine: rgba(255, 255, 255, 0.12);
-    }
   `],
 })
 export class SkeletonComponent {
