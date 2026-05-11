@@ -4,6 +4,11 @@
     <span class="brand-name">{{ 'APP.NAME' | translate }}</span>
   </a>
 
+  <div class="shell-nav">
+    <a mat-button routerLink="/lists"><mat-icon>list</mat-icon></a>
+    <a mat-button routerLink="/items"><mat-icon>inventory_2</mat-icon></a>
+  </div>
+
   <div class="shell-actions">
     <button mat-icon-button (click)="toggleLang()" [title]="lang.current()">
       <mat-icon>translate</mat-icon>

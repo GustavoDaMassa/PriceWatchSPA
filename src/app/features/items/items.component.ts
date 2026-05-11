@@ -1,38 +1,36 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
-import { MatDialog } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatDialog } from '@angular/material/dialog';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { ProductsApiService } from '../../../core/services/api/products-api.service';
-import { ToastService } from '../../../core/services/toast.service';
-import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
-import { EmptyStateComponent } from '../../../shared/components/empty-state/empty-state.component';
-import { SourceBadgeComponent } from '../../../shared/components/source-badge/source-badge.component';
-import { PriceDisplayComponent } from '../../../shared/components/price-display/price-display.component';
-import { TrackedProduct } from '../../../shared/models/tracked-product.model';
-import { AddProductDialogComponent } from '../../products/add-product/add-product-dialog.component';
-import { EditProductDialogComponent } from '../../products/edit-product/edit-product-dialog.component';
+import { ProductsApiService } from '../../core/services/api/products-api.service';
+import { ToastService } from '../../core/services/toast.service';
+import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
+import { EmptyStateComponent } from '../../shared/components/empty-state/empty-state.component';
+import { SourceBadgeComponent } from '../../shared/components/source-badge/source-badge.component';
+import { PriceDisplayComponent } from '../../shared/components/price-display/price-display.component';
+import { TrackedProduct } from '../../shared/models/tracked-product.model';
+import { AddProductDialogComponent } from '../products/add-product/add-product-dialog.component';
+import { EditProductDialogComponent } from '../products/edit-product/edit-product-dialog.component';
 
 @Component({
-  selector: 'app-list-detail',
+  selector: 'app-items',
   standalone: true,
   imports: [
     RouterLink,
     MatCardModule, MatButtonModule, MatIconModule, MatChipsModule,
-    MatMenuModule, MatProgressSpinnerModule, MatSlideToggleModule,
+    MatMenuModule, MatProgressSpinnerModule,
     TranslateModule, EmptyStateComponent, SourceBadgeComponent, PriceDisplayComponent,
   ],
   template: `
     <div class="page-header">
-      <button mat-icon-button routerLink="/lists"><mat-icon>arrow_back</mat-icon></button>
-      <h1>{{ 'PRODUCTS.TITLE' | translate }}</h1>
+      <h1>{{ 'ITEMS.TITLE' | translate }}</h1>
       <button mat-flat-button class="btn-primary" (click)="openAdd()">
         <mat-icon>add</mat-icon>{{ 'PRODUCTS.ADD' | translate }}
       </button>
@@ -41,7 +39,7 @@ import { EditProductDialogComponent } from '../../products/edit-product/edit-pro
     @if (loading()) {
       <div class="center"><mat-spinner diameter="40" /></div>
     } @else if (products().length === 0) {
-      <app-empty-state [message]="'PRODUCTS.EMPTY' | translate" icon="inventory_2" />
+      <app-empty-state [message]="'ITEMS.EMPTY' | translate" icon="inventory_2" />
     } @else {
       <div class="products-grid">
         @for (p of products(); track p.id) {
@@ -57,6 +55,9 @@ import { EditProductDialogComponent } from '../../products/edit-product/edit-pro
               <mat-card-title class="product-name">{{ p.name }}</mat-card-title>
               <mat-card-subtitle>
                 <app-source-badge [source]="p.source" />
+                @if (p.listId) {
+                  <mat-chip class="list-chip">{{ 'ITEMS.IN_LIST' | translate }}</mat-chip>
+                }
               </mat-card-subtitle>
             </mat-card-header>
             <mat-card-content>
@@ -77,7 +78,7 @@ import { EditProductDialogComponent } from '../../products/edit-product/edit-pro
               </div>
             </mat-card-content>
             <mat-card-actions align="end">
-              <a mat-button [routerLink]="['/lists', listId, 'products', p.id, 'history']">
+              <a mat-button [routerLink]="['/items', p.id, 'history']">
                 <mat-icon>show_chart</mat-icon>
               </a>
               <button mat-icon-button [matMenuTriggerFor]="menu">
@@ -113,49 +114,48 @@ import { EditProductDialogComponent } from '../../products/edit-product/edit-pro
     .product-image { width: 100%; height: 100%; object-fit: contain; padding: 8px; }
     .product-image-placeholder { font-size: 48px; color: var(--pw-text-secondary); opacity: 0.4; }
     .product-name { font-size: 0.95rem; line-height: 1.3; }
+    .list-chip { font-size: 0.65rem; height: 20px; margin-left: 4px; }
     .price-row { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; font-size: 0.9rem; }
     .price-label { color: var(--pw-text-secondary); }
     .text-danger { color: var(--pw-error); }
     :host ::ng-deep .below-target .price { color: var(--pw-success); font-weight: 700; }
   `],
 })
-export class ListDetailComponent implements OnInit {
-  private readonly route = inject(ActivatedRoute);
+export class ItemsComponent implements OnInit {
   private readonly productsApi = inject(ProductsApiService);
   private readonly dialog = inject(MatDialog);
   private readonly toast = inject(ToastService);
   private readonly translate = inject(TranslateService);
 
-  listId = this.route.snapshot.paramMap.get('id')!;
   products = signal<TrackedProduct[]>([]);
   loading = signal(false);
 
   ngOnInit(): void {
-    this.loadProducts();
+    this.load();
   }
 
-  loadProducts(): void {
+  load(): void {
     this.loading.set(true);
-    this.productsApi.getProducts(this.listId ?? undefined).subscribe({
+    this.productsApi.getProducts().subscribe({
       next: data => { this.products.set(data); this.loading.set(false); },
       error: () => this.loading.set(false),
     });
   }
 
   openAdd(): void {
-    this.dialog.open(AddProductDialogComponent, { width: '480px', data: { listId: this.listId } })
-      .afterClosed().subscribe(saved => { if (saved) this.loadProducts(); });
+    this.dialog.open(AddProductDialogComponent, { width: '480px', data: {} })
+      .afterClosed().subscribe(saved => { if (saved) this.load(); });
   }
 
   openEdit(product: TrackedProduct): void {
     this.dialog.open(EditProductDialogComponent, { width: '480px', data: { product } })
-      .afterClosed().subscribe(saved => { if (saved) this.loadProducts(); });
+      .afterClosed().subscribe(saved => { if (saved) this.load(); });
   }
 
   toggleActive(product: TrackedProduct): void {
     this.productsApi.updateProduct(product.id, { isActive: !product.isActive }).subscribe({
-      next: () => this.loadProducts(),
-      error: (err: HttpErrorResponse) => this.toast.error(err.error?.message ?? this.translate.instant('COMMON.ERROR_GENERIC')),
+      next: () => this.load(),
+      error: (err: HttpErrorResponse) => this.toast.error(err.error?.detail ?? this.translate.instant('COMMON.ERROR_GENERIC')),
     });
   }
 
@@ -168,8 +168,8 @@ export class ListDetailComponent implements OnInit {
     }).afterClosed().subscribe(confirmed => {
       if (!confirmed) return;
       this.productsApi.removeProduct(product.id).subscribe({
-        next: () => { this.toast.success(product.name); this.loadProducts(); },
-        error: (err: HttpErrorResponse) => this.toast.error(err.error?.message ?? this.translate.instant('COMMON.ERROR_GENERIC')),
+        next: () => { this.toast.success(product.name); this.load(); },
+        error: (err: HttpErrorResponse) => this.toast.error(err.error?.detail ?? this.translate.instant('COMMON.ERROR_GENERIC')),
       });
     });
   }

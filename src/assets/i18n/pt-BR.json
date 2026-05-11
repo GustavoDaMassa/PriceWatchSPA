@@ -42,7 +42,8 @@
     "BELOW_TARGET": "Abaixo do preço-alvo",
     "NEXT_CHECK": "Próxima verificação",
     "NEW_LIST": "Nova lista",
-    "VIEW_NOTIFICATIONS": "Ver notificações"
+    "VIEW_NOTIFICATIONS": "Ver notificações",
+    "NEAR_TARGET": "Mais perto do alvo"
   },
   "LISTS": {
     "TITLE": "Minhas Listas",
@@ -122,5 +123,10 @@
     "NO": "Não",
     "ERROR_GENERIC": "Ocorreu um erro. Tente novamente.",
     "EMPTY_STATE": "Nada aqui ainda."
+  },
+  "ITEMS": {
+    "TITLE": "Meus Produtos",
+    "EMPTY": "Nenhum produto monitorado ainda.",
+    "IN_LIST": "Em lista"
   }
 }

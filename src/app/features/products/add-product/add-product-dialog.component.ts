@@ -45,7 +45,7 @@ import { ToastService } from '../../../core/services/toast.service';
 })
 export class AddProductDialogComponent {
   protected readonly ref = inject(MatDialogRef) as import('@angular/material/dialog').MatDialogRef<AddProductDialogComponent, boolean>;
-  private readonly data = inject<{ listId: string }>(MAT_DIALOG_DATA);
+  private readonly data = inject<{ listId?: string }>(MAT_DIALOG_DATA);
   private readonly fb = inject(FormBuilder);
   private readonly productsApi = inject(ProductsApiService);
   private readonly toast = inject(ToastService);
@@ -64,12 +64,13 @@ export class AddProductDialogComponent {
     const req = {
       url: this.form.value.url!,
       targetPrice: this.form.value.targetPrice ?? 0,
+      listId: this.data?.listId,
     };
-    this.productsApi.addProduct(this.data.listId, req)
+    this.productsApi.addProduct(req)
       .pipe(finalize(() => this.loading.set(false)))
       .subscribe({
         next: () => this.ref.close(true),
-        error: (err: HttpErrorResponse) => this.toast.error(err.error?.message ?? this.translate.instant('COMMON.ERROR_GENERIC')),
+        error: (err: HttpErrorResponse) => this.toast.error(err.error?.detail ?? this.translate.instant('COMMON.ERROR_GENERIC')),
       });
   }
 }

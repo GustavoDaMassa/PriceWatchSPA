@@ -7,7 +7,6 @@
   background: var(--pw-toolbar-bg) !important;
   color: var(--pw-toolbar-color);
   padding: 0 20px;
-  border-bottom: 1px solid var(--pw-toolbar-border, rgba(0, 0, 0, 0.08));
 }
 
 .shell-brand {
@@ -26,6 +25,15 @@
   height: 2rem;
   width: auto;
   object-fit: contain;
+}
+
+.shell-nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 16px;
+
+  a { color: var(--pw-toolbar-color); }
 }
 
 .shell-actions {

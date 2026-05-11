@@ -7,7 +7,7 @@ export const PRODUCT_SOURCE_LABELS: Record<ProductSource, string> = {
 
 export interface TrackedProduct {
   id: string;
-  listId: string;
+  listId?: string;
   name: string;
   url: string;
   imageUrl?: string;
@@ -28,6 +28,7 @@ export interface PriceSnapshot {
 export interface AddProductRequest {
   url: string;
   targetPrice?: number;
+  listId?: string;
 }
 
 export interface UpdateProductRequest {

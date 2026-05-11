@@ -35,10 +35,11 @@ html {
   --pw-text-primary: #333333;
   --pw-text-secondary: #666666;
 
-  // Toolbar: branco sólido
-  --pw-toolbar-bg: #FFFFFF;
+  // Toolbar: amarelo ML
+  --pw-toolbar-bg: #FFE600;
   --pw-toolbar-color: #333333;
-  --pw-toolbar-border: rgba(0, 0, 0, 0.08);
+  --mat-toolbar-container-background-color: #FFE600;
+  --mat-toolbar-container-text-color: #333333;
 
   // Bordas interativas: azul escuro da logo no claro
   --pw-border-accent: #10026C;
@@ -52,7 +53,7 @@ html {
   --pw-btn-color: #333333;
 
   // Background: branco puro até o fim do navbar (64px), depois transição para amarelo
-  --pw-page-bg: linear-gradient(to bottom, #FFFFFF 64px, #FFE600 100%);
+  --pw-page-bg: linear-gradient(to bottom, #FFE600 0%, #FFFFFF 100%);
 }
 
 html.dark {
@@ -72,10 +73,11 @@ html.dark {
   --pw-text-primary: #EBEBEB;
   --pw-text-secondary: #CCCCCC;
 
-  // Toolbar: preto sólido
-  --pw-toolbar-bg: #000000;
-  --pw-toolbar-color: #EBEBEB;
-  --pw-toolbar-border: rgba(255, 255, 255, 0.08);
+  // Toolbar: amarelo ML
+  --pw-toolbar-bg: #FFE600;
+  --pw-toolbar-color: #333333;
+  --mat-toolbar-container-background-color: #FFE600;
+  --mat-toolbar-container-text-color: #333333;
 
   // Bordas interativas: amarelo no escuro
   --pw-border-accent: #FFE600;
@@ -89,5 +91,5 @@ html.dark {
   --pw-btn-color: #FFFFFF;
 
   // Background: preto puro até o fim do navbar (64px), depois transição para amarelo
-  --pw-page-bg: linear-gradient(to bottom, #000000 64px, #FFE600 100%);
+  --pw-page-bg: linear-gradient(to bottom, #FFE600 64px, #000000 100%);
 }

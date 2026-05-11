@@ -18,14 +18,19 @@ describe('ProductsApiService', () => {
 
   afterEach(() => http.verify());
 
-  it('should GET /lists/:listId/products', () => {
-    service.getProducts('L1').subscribe();
-    http.expectOne(`${environment.apiUrl}/lists/L1/products`).flush([]);
+  it('should GET /products without filter', () => {
+    service.getProducts().subscribe();
+    http.expectOne(`${environment.apiUrl}/products`).flush([]);
   });
 
-  it('should POST /lists/:listId/products', () => {
-    service.addProduct('L1', { url: 'http://ml.com/1' }).subscribe();
-    const req = http.expectOne(`${environment.apiUrl}/lists/L1/products`);
+  it('should GET /products?listId=L1 when listId provided', () => {
+    service.getProducts('L1').subscribe();
+    http.expectOne(`${environment.apiUrl}/products?listId=L1`).flush([]);
+  });
+
+  it('should POST /products', () => {
+    service.addProduct({ url: 'http://ml.com/1' }).subscribe();
+    const req = http.expectOne(`${environment.apiUrl}/products`);
     expect(req.request.method).toBe('POST');
     req.flush({});
   });

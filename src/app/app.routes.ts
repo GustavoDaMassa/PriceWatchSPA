@@ -45,6 +45,14 @@ export const routes: Routes = [
         loadComponent: () => import('./features/lists/list-analysis/list-analysis.component').then(m => m.ListAnalysisComponent),
       },
       {
+        path: 'items',
+        loadComponent: () => import('./features/items/items.component').then(m => m.ItemsComponent),
+      },
+      {
+        path: 'items/:productId/history',
+        loadComponent: () => import('./features/products/price-history/price-history.component').then(m => m.PriceHistoryComponent),
+      },
+      {
         path: 'lists/:id/products/:productId/history',
         loadComponent: () => import('./features/products/price-history/price-history.component').then(m => m.PriceHistoryComponent),
       },

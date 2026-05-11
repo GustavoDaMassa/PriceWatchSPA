@@ -42,7 +42,8 @@
     "BELOW_TARGET": "Below target price",
     "NEXT_CHECK": "Next check",
     "NEW_LIST": "New list",
-    "VIEW_NOTIFICATIONS": "View notifications"
+    "VIEW_NOTIFICATIONS": "View notifications",
+    "NEAR_TARGET": "Closest to target"
   },
   "LISTS": {
     "TITLE": "My Lists",
@@ -122,5 +123,10 @@
     "NO": "No",
     "ERROR_GENERIC": "Something went wrong. Please try again.",
     "EMPTY_STATE": "Nothing here yet."
+  },
+  "ITEMS": {
+    "TITLE": "My Products",
+    "EMPTY": "No products tracked yet.",
+    "IN_LIST": "In list"
   }
 }

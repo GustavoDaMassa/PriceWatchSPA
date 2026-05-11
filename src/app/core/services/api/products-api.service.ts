@@ -13,12 +13,15 @@ import {
 export class ProductsApiService {
   private readonly http = inject(HttpClient);
 
-  getProducts(listId: string): Observable<TrackedProduct[]> {
-    return this.http.get<TrackedProduct[]>(`${environment.apiUrl}/lists/${listId}/products`);
+  getProducts(listId?: string): Observable<TrackedProduct[]> {
+    const url = `${environment.apiUrl}/products`;
+    return listId
+      ? this.http.get<TrackedProduct[]>(url, { params: { listId } })
+      : this.http.get<TrackedProduct[]>(url);
   }
 
-  addProduct(listId: string, req: AddProductRequest): Observable<TrackedProduct> {
-    return this.http.post<TrackedProduct>(`${environment.apiUrl}/lists/${listId}/products`, req);
+  addProduct(req: AddProductRequest): Observable<TrackedProduct> {
+    return this.http.post<TrackedProduct>(`${environment.apiUrl}/products`, req);
   }
 
   updateProduct(id: string, req: UpdateProductRequest): Observable<void> {
