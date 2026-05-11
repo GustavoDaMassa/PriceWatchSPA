@@ -25,7 +25,12 @@ import { ListFormDialogComponent } from '../list-form-dialog/list-form-dialog.co
   ],
   template: `
     <div class="page-header">
-      <h1>{{ 'LISTS.TITLE' | translate }}</h1>
+      <div class="page-header-text">
+        <h1>{{ 'LISTS.TITLE' | translate }}</h1>
+        @if (lists().length > 0) {
+          <span class="page-count">{{ lists().length }}</span>
+        }
+      </div>
       <button mat-flat-button class="btn-primary" (click)="openForm()">
         <mat-icon>add</mat-icon>
         {{ 'LISTS.NEW' | translate }}
@@ -35,7 +40,10 @@ import { ListFormDialogComponent } from '../list-form-dialog/list-form-dialog.co
     @if (loading()) {
       <div class="center"><mat-spinner diameter="40" /></div>
     } @else if (lists().length === 0) {
-      <app-empty-state [message]="'LISTS.EMPTY' | translate" icon="list" />
+      <app-empty-state
+        [message]="'LISTS.EMPTY' | translate"
+        [subtitle]="'LISTS.EMPTY_SUBTITLE' | translate"
+        icon="list" />
     } @else {
       <div class="lists-grid">
         @for (list of lists(); track list.id) {
@@ -73,28 +81,53 @@ import { ListFormDialogComponent } from '../list-form-dialog/list-form-dialog.co
     }
   `,
   styles: [`
-    .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; max-width: 760px; margin-left: auto; margin-right: auto; }
-    .page-header h1 { margin: 0; }
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      max-width: 760px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .page-header-text { display: flex; align-items: center; gap: 10px; }
+    .page-header h1 { margin: 0; font-size: var(--pw-font-size-xl, 1.5rem); font-weight: var(--pw-font-weight-semibold, 600); letter-spacing: -0.01em; }
+    .page-count {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 24px;
+      height: 24px;
+      padding: 0 7px;
+      border-radius: 12px;
+      background: var(--pw-border-accent);
+      color: #fff;
+      font-size: var(--pw-font-size-xs, 0.75rem);
+      font-weight: var(--pw-font-weight-semibold, 600);
+    }
     .btn-primary { background-color: var(--pw-btn-bg) !important; color: var(--pw-btn-color) !important; font-weight: 600; }
     .center { display: flex; justify-content: center; padding: 48px; }
     .lists-grid {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 16px;
+      gap: 12px;
     }
     .list-card {
       background: var(--pw-card-bg);
       color: var(--pw-card-color);
       width: 100%;
       max-width: 760px;
+      border-left: 3px solid var(--pw-border-accent);
+      transition: box-shadow 0.15s ease;
     }
+    .list-card:hover { box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12) !important; }
     .list-card mat-card-title,
     .list-card mat-card-subtitle,
     .list-card mat-icon,
     .list-card a,
     .list-card button { color: var(--pw-card-color) !important; }
-    .text-danger { color: var(--pw-error); }
+    .text-danger { color: var(--pw-error) !important; }
   `],
 })
 export class ListOverviewComponent implements OnInit {
