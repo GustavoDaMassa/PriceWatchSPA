@@ -10,6 +10,7 @@ export interface TrackedProduct {
   listId: string;
   name: string;
   url: string;
+  imageUrl?: string;
   source: ProductSource;
   targetPrice: number;
   currentPrice: number;

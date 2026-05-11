@@ -46,6 +46,13 @@ import { EditProductDialogComponent } from '../../products/edit-product/edit-pro
       <div class="products-grid">
         @for (p of products(); track p.id) {
           <mat-card class="product-card" [class.inactive]="!p.isActive">
+            <div class="product-image-wrapper">
+              @if (p.imageUrl) {
+                <img [src]="p.imageUrl" [alt]="p.name" class="product-image" />
+              } @else {
+                <mat-icon class="product-image-placeholder">image_not_supported</mat-icon>
+              }
+            </div>
             <mat-card-header>
               <mat-card-title class="product-name">{{ p.name }}</mat-card-title>
               <mat-card-subtitle>
@@ -102,6 +109,9 @@ import { EditProductDialogComponent } from '../../products/edit-product/edit-pro
     .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
     .product-card { background: var(--pw-surface); }
     .product-card.inactive { opacity: 0.6; }
+    .product-image-wrapper { height: 160px; background: #fff; display: flex; align-items: center; justify-content: center; border-radius: 12px 12px 0 0; overflow: hidden; }
+    .product-image { width: 100%; height: 100%; object-fit: contain; padding: 8px; }
+    .product-image-placeholder { font-size: 48px; color: var(--pw-text-secondary); opacity: 0.4; }
     .product-name { font-size: 0.95rem; line-height: 1.3; }
     .price-row { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; font-size: 0.9rem; }
     .price-label { color: var(--pw-text-secondary); }
