@@ -23,7 +23,7 @@ import { TrackedProduct } from '../../shared/models/tracked-product.model';
     TranslateModule, PriceDisplayComponent,
   ],
   template: `
-    <h1>{{ 'DASHBOARD.TITLE' | translate }}</h1>
+    <h1 class="page-title">{{ 'DASHBOARD.TITLE' | translate }}</h1>
 
     @if (loading()) {
       <div class="center"><mat-spinner diameter="40" /></div>
@@ -31,7 +31,7 @@ import { TrackedProduct } from '../../shared/models/tracked-product.model';
       <div class="stats-grid">
         <mat-card class="stat-card stat-link" routerLink="/lists">
           <mat-card-content>
-            <mat-icon>list</mat-icon>
+            <div class="stat-icon-wrap"><mat-icon>list</mat-icon></div>
             <span class="stat-value">{{ lists().length }}</span>
             <span class="stat-label">{{ 'DASHBOARD.TOTAL_LISTS' | translate }}</span>
           </mat-card-content>
@@ -39,7 +39,7 @@ import { TrackedProduct } from '../../shared/models/tracked-product.model';
 
         <mat-card class="stat-card stat-link" routerLink="/lists">
           <mat-card-content>
-            <mat-icon>inventory_2</mat-icon>
+            <div class="stat-icon-wrap"><mat-icon>inventory_2</mat-icon></div>
             <span class="stat-value">{{ totalProducts() }}</span>
             <span class="stat-label">{{ 'DASHBOARD.TOTAL_PRODUCTS' | translate }}</span>
           </mat-card-content>
@@ -47,7 +47,7 @@ import { TrackedProduct } from '../../shared/models/tracked-product.model';
 
         <mat-card class="stat-card stat-link" routerLink="/notifications">
           <mat-card-content>
-            <mat-icon>notifications</mat-icon>
+            <div class="stat-icon-wrap"><mat-icon>notifications</mat-icon></div>
             <span class="stat-value">{{ polling.unreadCount() }}</span>
             <span class="stat-label">{{ 'DASHBOARD.UNREAD_ALERTS' | translate }}</span>
           </mat-card-content>
@@ -55,14 +55,14 @@ import { TrackedProduct } from '../../shared/models/tracked-product.model';
 
         <mat-card class="stat-card stat-link" routerLink="/notifications">
           <mat-card-content>
-            <mat-icon>flag</mat-icon>
+            <div class="stat-icon-wrap"><mat-icon>flag</mat-icon></div>
             <span class="stat-value">{{ belowTarget() }}</span>
             <span class="stat-label">{{ 'DASHBOARD.BELOW_TARGET' | translate }}</span>
           </mat-card-content>
         </mat-card>
       </div>
 
-@if (nextCheck()) {
+      @if (nextCheck()) {
         <mat-card class="next-check-card">
           <mat-card-content>
             <mat-icon>schedule</mat-icon>
@@ -73,51 +73,56 @@ import { TrackedProduct } from '../../shared/models/tracked-product.model';
     }
   `,
   styles: [`
-    h1 { margin-bottom: 24px; text-align: center; }
+    .page-title {
+      margin: 0 auto 32px;
+      text-align: center;
+      font-size: var(--pw-font-size-xl, 1.5rem);
+      font-weight: var(--pw-font-weight-semibold, 600);
+      letter-spacing: -0.01em;
+    }
     .center { display: flex; justify-content: center; padding: 48px; }
     .stats-grid {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 20px;
-      margin-bottom: 32px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      max-width: 560px;
+      margin: 0 auto 24px;
     }
     .stat-card {
       background: var(--pw-card-bg);
       color: var(--pw-card-color);
-      cursor: default;
       text-align: center;
-      width: 340px;
-      min-height: 420px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
     }
     .stat-card mat-card-content {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 28px;
-      padding: 56px 32px;
-      height: 100%;
+      gap: 12px;
+      padding: 28px 20px;
     }
-    .stat-card mat-icon { font-size: 88px; width: 88px; height: 88px; color: var(--pw-card-color); }
-    .stat-value { font-size: 6rem; font-weight: 700; line-height: 1; color: var(--pw-card-color); }
-    .stat-label { font-size: 0.85rem; color: var(--pw-card-color); text-transform: uppercase; letter-spacing: 0.08em; }
+    .stat-icon-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: rgba(var(--pw-card-color, 16, 2, 108), 0.08);
+    }
+    .stat-card mat-icon { font-size: 24px; width: 24px; height: 24px; color: var(--pw-card-color); }
+    .stat-value { font-size: 2.25rem; font-weight: var(--pw-font-weight-bold, 700); line-height: 1; color: var(--pw-card-color); }
+    .stat-label { font-size: var(--pw-font-size-xs, 0.75rem); color: var(--pw-card-color); text-transform: uppercase; letter-spacing: 0.08em; opacity: 0.75; }
     .stat-link {
       cursor: pointer;
-      transition: transform 0.15s, box-shadow 0.15s;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
     .stat-link:hover {
-      transform: translateY(-10px) scale(1.04);
-      box-shadow: 0 20px 48px rgba(0, 0, 0, 0.35) !important;
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15) !important;
     }
-    .highlight mat-icon { color: var(--pw-success); }
-    .quick-actions { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-bottom: 24px; }
-    .btn-primary { background-color: var(--pw-yellow); color: #333; font-weight: 600; }
-    .next-check-card { background: var(--pw-surface); max-width: 480px; margin: 0 auto; }
-    .next-check-card mat-card-content { display: flex; align-items: center; gap: 8px; }
+    .next-check-card { background: var(--pw-surface); max-width: 560px; margin: 0 auto; }
+    .next-check-card mat-card-content { display: flex; align-items: center; gap: 8px; padding: 16px; }
   `],
 })
 export class DashboardComponent implements OnInit {
