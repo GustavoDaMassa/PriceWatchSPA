@@ -63,7 +63,7 @@ export class AddProductDialogComponent {
     this.loading.set(true);
     const req = {
       url: this.form.value.url!,
-      ...(this.form.value.targetPrice ? { targetPrice: this.form.value.targetPrice } : {}),
+      targetPrice: this.form.value.targetPrice ?? 0,
     };
     this.productsApi.addProduct(this.data.listId, req)
       .pipe(finalize(() => this.loading.set(false)))
