@@ -38,6 +38,7 @@ html {
   // Toolbar: branco sólido
   --pw-toolbar-bg: #FFFFFF;
   --pw-toolbar-color: #333333;
+  --pw-toolbar-border: rgba(0, 0, 0, 0.08);
 
   // Bordas interativas: azul escuro da logo no claro
   --pw-border-accent: #10026C;
@@ -74,6 +75,7 @@ html.dark {
   // Toolbar: preto sólido
   --pw-toolbar-bg: #000000;
   --pw-toolbar-color: #EBEBEB;
+  --pw-toolbar-border: rgba(255, 255, 255, 0.08);
 
   // Bordas interativas: amarelo no escuro
   --pw-border-accent: #FFE600;
