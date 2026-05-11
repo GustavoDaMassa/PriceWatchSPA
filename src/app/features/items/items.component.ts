@@ -1,5 +1,5 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
@@ -26,7 +26,16 @@ import { EditProductDialogComponent } from '../products/edit-product/edit-produc
   ],
   template: `
     <div class="ml-page-header">
-      <h1>{{ 'ITEMS.TITLE' | translate }}</h1>
+      @if (searchTerm()) {
+        <div class="ml-search-info">
+          <span>{{ filteredProducts().length }} resultado(s) para "<strong>{{ searchTerm() }}</strong>"</span>
+          <button class="ml-clear-search" (click)="clearSearch()">
+            <mat-icon>close</mat-icon> Limpar
+          </button>
+        </div>
+      } @else {
+        <h1>{{ 'ITEMS.TITLE' | translate }}</h1>
+      }
       <button class="ml-btn-primary" (click)="openAdd()">
         <mat-icon>add</mat-icon>{{ 'PRODUCTS.ADD' | translate }}
       </button>
@@ -34,11 +43,13 @@ import { EditProductDialogComponent } from '../products/edit-product/edit-produc
 
     @if (loading()) {
       <div class="center"><mat-spinner diameter="40" /></div>
-    } @else if (products().length === 0) {
-      <app-empty-state [message]="'ITEMS.EMPTY' | translate" icon="inventory_2" />
+    } @else if (filteredProducts().length === 0) {
+      <app-empty-state
+        [message]="searchTerm() ? ('ITEMS.NO_RESULTS' | translate) : ('ITEMS.EMPTY' | translate)"
+        icon="inventory_2" />
     } @else {
       <div class="ml-grid">
-        @for (p of products(); track p.id) {
+        @for (p of filteredProducts(); track p.id) {
           <div class="ml-card" [class.ml-inactive]="!p.isActive">
             <div class="ml-card-img">
               @if (p.imageUrl) {
@@ -99,6 +110,14 @@ import { EditProductDialogComponent } from '../products/edit-product/edit-produc
       display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;
     }
     .ml-page-header h1 { margin: 0; font-size: 20px; font-weight: 300; color: #333; }
+    .ml-search-info { display: flex; align-items: center; gap: 12px; font-size: 15px; color: #333; }
+    .ml-clear-search {
+      display: flex; align-items: center; gap: 4px; background: none; border: none;
+      color: #3483FA; cursor: pointer; font-size: 13px; padding: 4px 8px; border-radius: 4px;
+      font-family: inherit;
+      &:hover { background: #EAF0FB; }
+      mat-icon { font-size: 16px; width: 16px; height: 16px; }
+    }
     .ml-btn-primary {
       display: flex; align-items: center; gap: 4px;
       background: #FFE600; color: #333; border: none; border-radius: 4px;
@@ -167,18 +186,36 @@ export class ItemsComponent implements OnInit {
   private readonly dialog = inject(MatDialog);
   private readonly toast = inject(ToastService);
   private readonly translate = inject(TranslateService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
 
-  products = signal<TrackedProduct[]>([]);
+  private allProducts = signal<TrackedProduct[]>([]);
+  searchTerm = signal('');
   loading = signal(false);
 
-  ngOnInit(): void { this.load(); }
+  filteredProducts = computed(() => {
+    const term = this.searchTerm().toLowerCase().trim();
+    if (!term) return this.allProducts();
+    return this.allProducts().filter(p => p.name.toLowerCase().includes(term));
+  });
+
+  ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      this.searchTerm.set(params['q'] ?? '');
+    });
+    this.load();
+  }
 
   load(): void {
     this.loading.set(true);
     this.productsApi.getProducts().subscribe({
-      next: data => { this.products.set(data); this.loading.set(false); },
+      next: data => { this.allProducts.set(data); this.loading.set(false); },
       error: () => this.loading.set(false),
     });
+  }
+
+  clearSearch(): void {
+    this.router.navigate(['/items']);
   }
 
   openAdd(): void {

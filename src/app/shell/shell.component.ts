@@ -33,8 +33,9 @@ export class ShellComponent implements OnInit, OnDestroy {
     this.polling.stop();
   }
 
-  goToItems(): void {
-    this.router.navigate(['/items']);
+  goToItems(term = ''): void {
+    const q = term.trim();
+    this.router.navigate(['/items'], q ? { queryParams: { q } } : {});
   }
 
   logout(): void {

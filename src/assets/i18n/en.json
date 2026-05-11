@@ -129,6 +129,7 @@
   "ITEMS": {
     "TITLE": "My Products",
     "EMPTY": "No products tracked yet.",
-    "IN_LIST": "In list"
+    "IN_LIST": "In list",
+    "NO_RESULTS": "No products found."
   }
 }

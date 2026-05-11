@@ -129,6 +129,7 @@
   "ITEMS": {
     "TITLE": "Meus Produtos",
     "EMPTY": "Nenhum produto monitorado ainda.",
-    "IN_LIST": "Em lista"
+    "IN_LIST": "Em lista",
+    "NO_RESULTS": "Nenhum produto encontrado."
   }
 }
