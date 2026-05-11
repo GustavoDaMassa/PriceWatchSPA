@@ -52,7 +52,10 @@ html {
   --pw-btn-bg: #FFE600;
   --pw-btn-color: #333333;
 
-  // Background: branco puro até o fim do navbar (64px), depois transição para amarelo
-  --pw-page-bg: linear-gradient(to bottom, #FFE600 0%, #BBBBBB 100%);
+  --pw-ml-blue: #3483FA;
+  --pw-ml-blue-light: #EAF0FB;
+
+  // Background flat ML
+  --pw-page-bg: #EBEBEB;
 }
 

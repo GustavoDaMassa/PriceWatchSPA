@@ -1,9 +1,7 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { MatBadgeModule } from '@angular/material/badge';
 import { TranslateModule } from '@ngx-translate/core';
 import { AuthService } from '../core/services/auth.service';
 import { NotificationPollingService } from '../core/services/notification-polling.service';
@@ -15,7 +13,7 @@ import { Router } from '@angular/router';
   standalone: true,
   imports: [
     RouterOutlet, RouterLink, RouterLinkActive,
-    MatToolbarModule, MatIconModule, MatButtonModule, MatBadgeModule,
+    MatIconModule, MatButtonModule,
     TranslateModule,
   ],
   templateUrl: './shell.component.html',
@@ -33,6 +31,10 @@ export class ShellComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.polling.stop();
+  }
+
+  goToItems(): void {
+    this.router.navigate(['/items']);
   }
 
   logout(): void {

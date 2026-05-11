@@ -1,7 +1,5 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslateModule } from '@ngx-translate/core';
@@ -10,7 +8,6 @@ import { ListsApiService } from '../../core/services/api/lists-api.service';
 import { ProductsApiService } from '../../core/services/api/products-api.service';
 import { NotificationPollingService } from '../../core/services/notification-polling.service';
 import { PriceDisplayComponent } from '../../shared/components/price-display/price-display.component';
-import { SourceBadgeComponent } from '../../shared/components/source-badge/source-badge.component';
 import { ProductList } from '../../shared/models/product-list.model';
 import { TrackedProduct } from '../../shared/models/tracked-product.model';
 
@@ -19,131 +16,160 @@ import { TrackedProduct } from '../../shared/models/tracked-product.model';
   standalone: true,
   imports: [
     RouterLink,
-    MatCardModule, MatButtonModule, MatIconModule, MatProgressSpinnerModule,
-    TranslateModule, PriceDisplayComponent, SourceBadgeComponent,
+    MatIconModule, MatProgressSpinnerModule,
+    TranslateModule, PriceDisplayComponent,
   ],
   template: `
-    <h1 class="page-title">{{ 'DASHBOARD.TITLE' | translate }}</h1>
-
     @if (loading()) {
       <div class="center"><mat-spinner diameter="40" /></div>
     } @else {
-      <div class="stats-grid">
-        <mat-card class="stat-card stat-link" routerLink="/lists">
-          <mat-card-content>
-            <div class="stat-icon-wrap"><mat-icon>list</mat-icon></div>
-            <span class="stat-value">{{ lists().length }}</span>
-            <span class="stat-label">{{ 'DASHBOARD.TOTAL_LISTS' | translate }}</span>
-          </mat-card-content>
-        </mat-card>
+      <div class="ml-stats">
+        <a routerLink="/lists" class="ml-stat-card">
+          <div class="ml-stat-icon blue"><mat-icon>list</mat-icon></div>
+          <div class="ml-stat-info">
+            <span class="ml-stat-value">{{ lists().length }}</span>
+            <span class="ml-stat-label">{{ 'DASHBOARD.TOTAL_LISTS' | translate }}</span>
+          </div>
+        </a>
 
-        <mat-card class="stat-card stat-link" routerLink="/items">
-          <mat-card-content>
-            <div class="stat-icon-wrap"><mat-icon>inventory_2</mat-icon></div>
-            <span class="stat-value">{{ totalProducts() }}</span>
-            <span class="stat-label">{{ 'DASHBOARD.TOTAL_PRODUCTS' | translate }}</span>
-          </mat-card-content>
-        </mat-card>
+        <a routerLink="/items" class="ml-stat-card">
+          <div class="ml-stat-icon yellow"><mat-icon>inventory_2</mat-icon></div>
+          <div class="ml-stat-info">
+            <span class="ml-stat-value">{{ totalProducts() }}</span>
+            <span class="ml-stat-label">{{ 'DASHBOARD.TOTAL_PRODUCTS' | translate }}</span>
+          </div>
+        </a>
 
-        <mat-card class="stat-card stat-link" routerLink="/notifications">
-          <mat-card-content>
-            <div class="stat-icon-wrap"><mat-icon>notifications</mat-icon></div>
-            <span class="stat-value">{{ polling.unreadCount() }}</span>
-            <span class="stat-label">{{ 'DASHBOARD.UNREAD_ALERTS' | translate }}</span>
-          </mat-card-content>
-        </mat-card>
+        <a routerLink="/notifications" class="ml-stat-card">
+          <div class="ml-stat-icon red"><mat-icon>notifications</mat-icon></div>
+          <div class="ml-stat-info">
+            <span class="ml-stat-value">{{ polling.unreadCount() }}</span>
+            <span class="ml-stat-label">{{ 'DASHBOARD.UNREAD_ALERTS' | translate }}</span>
+          </div>
+        </a>
 
-        <mat-card class="stat-card stat-link" routerLink="/items">
-          <mat-card-content>
-            <div class="stat-icon-wrap"><mat-icon>flag</mat-icon></div>
-            <span class="stat-value">{{ belowTarget() }}</span>
-            <span class="stat-label">{{ 'DASHBOARD.BELOW_TARGET' | translate }}</span>
-          </mat-card-content>
-        </mat-card>
+        <a routerLink="/items" class="ml-stat-card">
+          <div class="ml-stat-icon green"><mat-icon>flag</mat-icon></div>
+          <div class="ml-stat-info">
+            <span class="ml-stat-value">{{ belowTarget() }}</span>
+            <span class="ml-stat-label">{{ 'DASHBOARD.BELOW_TARGET' | translate }}</span>
+          </div>
+        </a>
       </div>
 
       @if (nearTarget().length) {
-        <h2 class="section-title">{{ 'DASHBOARD.NEAR_TARGET' | translate }}</h2>
-        <div class="products-row">
-          @for (p of nearTarget(); track p.id) {
-            <mat-card class="mini-card" [routerLink]="['/items']">
-              <div class="mini-image-wrap">
-                @if (p.imageUrl) {
-                  <img [src]="p.imageUrl" [alt]="p.name" class="mini-image" />
-                } @else {
-                  <mat-icon class="mini-placeholder">image_not_supported</mat-icon>
-                }
-              </div>
-              <mat-card-content class="mini-content">
-                <p class="mini-name">{{ p.name }}</p>
-                <app-price-display [value]="p.currentPrice" class="mini-price" />
-                @if (p.targetPrice > 0) {
-                  <span class="mini-distance">{{ distanceLabel(p) }}</span>
-                }
-              </mat-card-content>
-            </mat-card>
-          }
+        <div class="ml-section">
+          <h2 class="ml-section-title">{{ 'DASHBOARD.NEAR_TARGET' | translate }}</h2>
+          <div class="ml-near-grid">
+            @for (p of nearTarget(); track p.id) {
+              <a routerLink="/items" class="ml-near-card">
+                <div class="ml-near-img">
+                  @if (p.imageUrl) {
+                    <img [src]="p.imageUrl" [alt]="p.name" loading="lazy" />
+                  } @else {
+                    <mat-icon class="ml-near-placeholder">image</mat-icon>
+                  }
+                </div>
+                <div class="ml-near-body">
+                  <p class="ml-near-name">{{ p.name }}</p>
+                  <div class="ml-near-price">
+                    <app-price-display [value]="p.currentPrice" />
+                  </div>
+                  @if (p.targetPrice > 0) {
+                    <span class="ml-near-dist" [class.below]="p.currentPrice <= p.targetPrice">
+                      {{ distanceLabel(p) }}
+                    </span>
+                  }
+                </div>
+              </a>
+            }
+          </div>
         </div>
       }
 
       @if (nextCheck()) {
-        <mat-card class="next-check-card">
-          <mat-card-content>
-            <mat-icon>schedule</mat-icon>
-            <span>{{ 'DASHBOARD.NEXT_CHECK' | translate }}: <strong>{{ nextCheck()?.name }}</strong></span>
-          </mat-card-content>
-        </mat-card>
+        <div class="ml-next-check">
+          <mat-icon>schedule</mat-icon>
+          <span>{{ 'DASHBOARD.NEXT_CHECK' | translate }}: <strong>{{ nextCheck()?.name }}</strong></span>
+        </div>
       }
     }
   `,
   styles: [`
-    .page-title {
-      margin: 0 auto 32px;
-      text-align: center;
-      font-size: var(--pw-font-size-xl, 1.5rem);
-      font-weight: var(--pw-font-weight-semibold, 600);
-      letter-spacing: -0.01em;
-    }
     .center { display: flex; justify-content: center; padding: 48px; }
-    .stats-grid {
+
+    .ml-stats {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px;
-      max-width: 560px;
-      margin: 0 auto 32px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 24px;
     }
-    .stat-card { background: var(--pw-card-bg); color: var(--pw-card-color); text-align: center; }
-    .stat-card mat-card-content {
-      display: flex; flex-direction: column; align-items: center;
-      justify-content: center; gap: 12px; padding: 28px 20px;
+    @media (max-width: 768px) { .ml-stats { grid-template-columns: repeat(2, 1fr); } }
+
+    .ml-stat-card {
+      background: white; border-radius: 4px; padding: 20px 16px;
+      display: flex; align-items: center; gap: 16px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+      text-decoration: none;
+      transition: box-shadow 0.15s, transform 0.15s;
+      &:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.14); transform: translateY(-2px); }
     }
-    .stat-icon-wrap {
+
+    .ml-stat-icon {
+      width: 48px; height: 48px; border-radius: 8px; flex-shrink: 0;
       display: flex; align-items: center; justify-content: center;
-      width: 48px; height: 48px; border-radius: 12px;
-      background: rgba(var(--pw-card-color, 16, 2, 108), 0.08);
+      mat-icon { font-size: 24px; width: 24px; height: 24px; }
     }
-    .stat-card mat-icon { font-size: 24px; width: 24px; height: 24px; color: var(--pw-card-color); }
-    .stat-value { font-size: 2.25rem; font-weight: var(--pw-font-weight-bold, 700); line-height: 1; color: var(--pw-card-color); }
-    .stat-label { font-size: var(--pw-font-size-xs, 0.75rem); color: var(--pw-card-color); text-transform: uppercase; letter-spacing: 0.08em; opacity: 0.75; }
-    .stat-link { cursor: pointer; transition: transform 0.2s ease, box-shadow 0.2s ease; }
-    .stat-link:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.15) !important; }
+    .ml-stat-icon.blue   { background: #EAF0FB; mat-icon { color: #3483FA; } }
+    .ml-stat-icon.yellow { background: #FFFDE7; mat-icon { color: #F9A825; } }
+    .ml-stat-icon.red    { background: #FFEBEE; mat-icon { color: #F23D4F; } }
+    .ml-stat-icon.green  { background: #E8F5E9; mat-icon { color: #00A650; } }
 
-    .section-title { font-size: 1rem; font-weight: 600; margin: 0 0 12px; max-width: 560px; margin-left: auto; margin-right: auto; }
-    .products-row {
-      display: flex; gap: 12px; overflow-x: auto; padding-bottom: 8px;
-      max-width: 560px; margin: 0 auto 24px;
+    .ml-stat-info { display: flex; flex-direction: column; gap: 2px; }
+    .ml-stat-value { font-size: 28px; font-weight: 700; color: #333; line-height: 1; }
+    .ml-stat-label { font-size: 12px; color: #666; }
+
+    .ml-section { margin-bottom: 24px; }
+    .ml-section-title { font-size: 18px; font-weight: 400; color: #333; margin: 0 0 12px; }
+
+    .ml-near-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 8px;
     }
-    .mini-card { min-width: 140px; max-width: 140px; background: var(--pw-surface); cursor: pointer; flex-shrink: 0; }
-    .mini-image-wrap { height: 100px; background: #fff; display: flex; align-items: center; justify-content: center; border-radius: 12px 12px 0 0; overflow: hidden; }
-    .mini-image { width: 100%; height: 100%; object-fit: contain; padding: 6px; }
-    .mini-placeholder { font-size: 32px; color: var(--pw-text-secondary); opacity: 0.4; }
-    .mini-content { padding: 8px !important; }
-    .mini-name { font-size: 0.75rem; line-height: 1.3; margin: 0 0 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-    .mini-price { font-size: 0.85rem; }
-    .mini-distance { font-size: 0.7rem; color: var(--pw-success); font-weight: 600; }
 
-    .next-check-card { background: var(--pw-surface); max-width: 560px; margin: 0 auto; }
-    .next-check-card mat-card-content { display: flex; align-items: center; gap: 8px; padding: 16px; }
+    .ml-near-card {
+      background: white; border-radius: 4px; overflow: hidden;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.1); text-decoration: none;
+      display: flex; flex-direction: column;
+      transition: box-shadow 0.15s;
+      &:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.16); }
+    }
+
+    .ml-near-img {
+      aspect-ratio: 1; background: white; padding: 10px;
+      display: flex; align-items: center; justify-content: center;
+      border-bottom: 1px solid #f0f0f0;
+      img { width: 100%; height: 100%; object-fit: contain; }
+    }
+    .ml-near-placeholder { font-size: 40px; color: #ddd; }
+
+    .ml-near-body { padding: 10px; }
+    .ml-near-name {
+      font-size: 13px; color: #333; margin: 0 0 6px; line-height: 1.3;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .ml-near-price ::ng-deep .price { font-size: 18px; font-weight: 300; color: #333; }
+    .ml-near-dist { font-size: 11px; color: #666; }
+    .ml-near-dist.below { color: #00A650; font-weight: 600; }
+
+    .ml-next-check {
+      background: white; border-radius: 4px; padding: 14px 16px;
+      display: flex; align-items: center; gap: 8px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+      font-size: 14px; color: #333;
+      mat-icon { color: #3483FA; }
+    }
   `],
 })
 export class DashboardComponent implements OnInit {
@@ -190,6 +216,8 @@ export class DashboardComponent implements OnInit {
 
   distanceLabel(p: TrackedProduct): string {
     const d = this.distance(p) * 100;
-    return d <= 0 ? `✓ ${Math.abs(d).toFixed(0)}% abaixo` : `${d.toFixed(0)}% acima`;
+    return d <= 0
+      ? `${Math.abs(d).toFixed(0)}% abaixo do alvo`
+      : `${d.toFixed(0)}% acima do alvo`;
   }
 }

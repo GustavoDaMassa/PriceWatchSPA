@@ -1,20 +1,16 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { MatCardModule } from '@angular/material/card';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatChipsModule } from '@angular/material/chips';
 import { MatDialog } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ProductsApiService } from '../../../core/services/api/products-api.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { EmptyStateComponent } from '../../../shared/components/empty-state/empty-state.component';
-import { SourceBadgeComponent } from '../../../shared/components/source-badge/source-badge.component';
 import { PriceDisplayComponent } from '../../../shared/components/price-display/price-display.component';
 import { TrackedProduct } from '../../../shared/models/tracked-product.model';
 import { AddProductDialogComponent } from '../../products/add-product/add-product-dialog.component';
@@ -25,15 +21,16 @@ import { EditProductDialogComponent } from '../../products/edit-product/edit-pro
   standalone: true,
   imports: [
     RouterLink,
-    MatCardModule, MatButtonModule, MatIconModule, MatChipsModule,
-    MatMenuModule, MatProgressSpinnerModule, MatSlideToggleModule,
-    TranslateModule, EmptyStateComponent, SourceBadgeComponent, PriceDisplayComponent,
+    MatButtonModule, MatIconModule, MatMenuModule, MatProgressSpinnerModule,
+    TranslateModule, EmptyStateComponent, PriceDisplayComponent,
   ],
   template: `
-    <div class="page-header">
-      <button mat-icon-button routerLink="/lists"><mat-icon>arrow_back</mat-icon></button>
-      <h1>{{ 'PRODUCTS.TITLE' | translate }}</h1>
-      <button mat-flat-button class="btn-primary" (click)="openAdd()">
+    <div class="ml-page-header">
+      <a routerLink="/lists" class="ml-back">
+        <mat-icon>arrow_back</mat-icon>
+        {{ 'NAV.LISTS' | translate }}
+      </a>
+      <button class="ml-btn-primary" (click)="openAdd()">
         <mat-icon>add</mat-icon>{{ 'PRODUCTS.ADD' | translate }}
       </button>
     </div>
@@ -43,44 +40,40 @@ import { EditProductDialogComponent } from '../../products/edit-product/edit-pro
     } @else if (products().length === 0) {
       <app-empty-state [message]="'PRODUCTS.EMPTY' | translate" icon="inventory_2" />
     } @else {
-      <div class="products-grid">
+      <div class="ml-grid">
         @for (p of products(); track p.id) {
-          <mat-card class="product-card" [class.inactive]="!p.isActive">
-            <div class="product-image-wrapper">
+          <div class="ml-card" [class.ml-inactive]="!p.isActive">
+            <div class="ml-card-img">
               @if (p.imageUrl) {
-                <img [src]="p.imageUrl" [alt]="p.name" class="product-image" />
+                <img [src]="p.imageUrl" [alt]="p.name" loading="lazy" />
               } @else {
-                <mat-icon class="product-image-placeholder">image_not_supported</mat-icon>
+                <mat-icon class="ml-no-img">image</mat-icon>
               }
             </div>
-            <mat-card-header>
-              <mat-card-title class="product-name">{{ p.name }}</mat-card-title>
-              <mat-card-subtitle>
-                <app-source-badge [source]="p.source" />
-              </mat-card-subtitle>
-            </mat-card-header>
-            <mat-card-content>
-              <div class="price-row">
-                <span class="price-label">{{ 'PRODUCTS.CURRENT_PRICE' | translate }}</span>
-                <app-price-display [value]="p.currentPrice"
-                  [class.below-target]="p.targetPrice > 0 && p.currentPrice <= p.targetPrice" />
+            <div class="ml-card-body">
+              <p class="ml-card-name">{{ p.name }}</p>
+              <div class="ml-card-price">
+                <app-price-display [value]="p.currentPrice" />
               </div>
               @if (p.targetPrice > 0) {
-                <div class="price-row">
-                  <span class="price-label">{{ 'PRODUCTS.TARGET_PRICE' | translate }}</span>
-                  <app-price-display [value]="p.targetPrice" />
+                <div class="ml-card-target">
+                  Alvo: <app-price-display [value]="p.targetPrice" />
                 </div>
+                <p class="ml-card-dist" [class.below]="p.currentPrice <= p.targetPrice">
+                  {{ distanceLabel(p) }}
+                </p>
               }
-              <div class="price-row">
-                <span class="price-label">{{ 'PRODUCTS.LOWEST_PRICE' | translate }}</span>
-                <app-price-display [value]="p.lowestPrice" />
+              <div class="ml-card-badges">
+                <span class="ml-badge" [class.active]="p.isActive">
+                  {{ (p.isActive ? 'PRODUCTS.STATUS_ACTIVE' : 'PRODUCTS.STATUS_PAUSED') | translate }}
+                </span>
               </div>
-            </mat-card-content>
-            <mat-card-actions align="end">
-              <a mat-button [routerLink]="['/lists', listId, 'products', p.id, 'history']">
+            </div>
+            <div class="ml-card-footer">
+              <a [routerLink]="['/lists', listId, 'products', p.id, 'history']" class="ml-footer-btn">
                 <mat-icon>show_chart</mat-icon>
               </a>
-              <button mat-icon-button [matMenuTriggerFor]="menu">
+              <button class="ml-footer-btn" [matMenuTriggerFor]="menu">
                 <mat-icon>more_vert</mat-icon>
               </button>
               <mat-menu #menu>
@@ -91,32 +84,84 @@ import { EditProductDialogComponent } from '../../products/edit-product/edit-pro
                   <mat-icon>{{ p.isActive ? 'pause' : 'play_arrow' }}</mat-icon>
                   {{ (p.isActive ? 'PRODUCTS.PAUSE' : 'PRODUCTS.RESUME') | translate }}
                 </button>
-                <button mat-menu-item (click)="confirmRemove(p)" class="text-danger">
+                <button mat-menu-item (click)="confirmRemove(p)" class="danger">
                   <mat-icon>delete</mat-icon>{{ 'PRODUCTS.REMOVE' | translate }}
                 </button>
               </mat-menu>
-            </mat-card-actions>
-          </mat-card>
+            </div>
+          </div>
         }
       </div>
     }
   `,
   styles: [`
-    .page-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
-    .page-header h1 { margin: 0; flex: 1; }
-    .btn-primary { background-color: var(--pw-yellow); color: #333; font-weight: 600; }
+    .ml-page-header {
+      display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;
+    }
+    .ml-back {
+      display: flex; align-items: center; gap: 4px; color: #3483FA;
+      text-decoration: none; font-size: 14px;
+      &:hover { text-decoration: underline; }
+      mat-icon { font-size: 18px; width: 18px; height: 18px; }
+    }
+    .ml-btn-primary {
+      display: flex; align-items: center; gap: 4px;
+      background: #FFE600; color: #333; border: none; border-radius: 4px;
+      padding: 8px 16px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit;
+      &:hover { background: #f0d800; }
+      mat-icon { font-size: 18px; width: 18px; height: 18px; }
+    }
     .center { display: flex; justify-content: center; padding: 48px; }
-    .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
-    .product-card { background: var(--pw-surface); }
-    .product-card.inactive { opacity: 0.6; }
-    .product-image-wrapper { height: 160px; background: #fff; display: flex; align-items: center; justify-content: center; border-radius: 12px 12px 0 0; overflow: hidden; }
-    .product-image { width: 100%; height: 100%; object-fit: contain; padding: 8px; }
-    .product-image-placeholder { font-size: 48px; color: var(--pw-text-secondary); opacity: 0.4; }
-    .product-name { font-size: 0.95rem; line-height: 1.3; }
-    .price-row { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; font-size: 0.9rem; }
-    .price-label { color: var(--pw-text-secondary); }
-    .text-danger { color: var(--pw-error); }
-    :host ::ng-deep .below-target .price { color: var(--pw-success); font-weight: 700; }
+
+    .ml-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 8px;
+    }
+
+    .ml-card {
+      background: white; border-radius: 4px; overflow: hidden;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.1); display: flex; flex-direction: column;
+      transition: box-shadow 0.15s;
+      &:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.16); }
+    }
+    .ml-inactive { opacity: 0.6; }
+
+    .ml-card-img {
+      aspect-ratio: 1; background: #fff; padding: 12px;
+      display: flex; align-items: center; justify-content: center;
+      border-bottom: 1px solid #f0f0f0;
+      img { width: 100%; height: 100%; object-fit: contain; }
+    }
+    .ml-no-img { font-size: 52px; color: #ddd; }
+
+    .ml-card-body { padding: 12px; flex: 1; }
+    .ml-card-name {
+      font-size: 14px; color: #333; margin: 0 0 8px; line-height: 1.4;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .ml-card-price ::ng-deep .price { font-size: 22px; font-weight: 300; color: #333; }
+    .ml-card-target { font-size: 12px; color: #666; margin: 4px 0; }
+    .ml-card-target ::ng-deep .price { font-size: 12px; font-weight: 400; color: #666; }
+    .ml-card-dist { font-size: 12px; color: #666; margin: 2px 0 8px; }
+    .ml-card-dist.below { color: #00A650; font-weight: 600; }
+
+    .ml-card-badges { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 6px; }
+    .ml-badge { font-size: 11px; padding: 2px 8px; border-radius: 2px; background: #f5f5f5; color: #999; }
+    .ml-badge.active { background: #e8f5e9; color: #00A650; }
+
+    .ml-card-footer {
+      display: flex; justify-content: flex-end; align-items: center;
+      padding: 4px 8px; border-top: 1px solid #f5f5f5; gap: 2px;
+    }
+    .ml-footer-btn {
+      background: none; border: none; cursor: pointer; color: #3483FA;
+      display: flex; align-items: center; justify-content: center;
+      padding: 4px; border-radius: 4px; text-decoration: none;
+      &:hover { background: #EAF0FB; }
+      mat-icon { font-size: 20px; width: 20px; height: 20px; }
+    }
+    .danger { color: #F23D4F; }
   `],
 })
 export class ListDetailComponent implements OnInit {
@@ -130,13 +175,11 @@ export class ListDetailComponent implements OnInit {
   products = signal<TrackedProduct[]>([]);
   loading = signal(false);
 
-  ngOnInit(): void {
-    this.loadProducts();
-  }
+  ngOnInit(): void { this.loadProducts(); }
 
   loadProducts(): void {
     this.loading.set(true);
-    this.productsApi.getProducts(this.listId ?? undefined).subscribe({
+    this.productsApi.getProducts(this.listId).subscribe({
       next: data => { this.products.set(data); this.loading.set(false); },
       error: () => this.loading.set(false),
     });
@@ -155,7 +198,8 @@ export class ListDetailComponent implements OnInit {
   toggleActive(product: TrackedProduct): void {
     this.productsApi.updateProduct(product.id, { isActive: !product.isActive }).subscribe({
       next: () => this.loadProducts(),
-      error: (err: HttpErrorResponse) => this.toast.error(err.error?.message ?? this.translate.instant('COMMON.ERROR_GENERIC')),
+      error: (err: HttpErrorResponse) =>
+        this.toast.error(err.error?.detail ?? this.translate.instant('COMMON.ERROR_GENERIC')),
     });
   }
 
@@ -169,8 +213,17 @@ export class ListDetailComponent implements OnInit {
       if (!confirmed) return;
       this.productsApi.removeProduct(product.id).subscribe({
         next: () => { this.toast.success(product.name); this.loadProducts(); },
-        error: (err: HttpErrorResponse) => this.toast.error(err.error?.message ?? this.translate.instant('COMMON.ERROR_GENERIC')),
+        error: (err: HttpErrorResponse) =>
+          this.toast.error(err.error?.detail ?? this.translate.instant('COMMON.ERROR_GENERIC')),
       });
     });
+  }
+
+  distanceLabel(p: TrackedProduct): string {
+    if (!p.targetPrice || p.currentPrice <= 0) return '';
+    const d = ((p.currentPrice - p.targetPrice) / p.targetPrice) * 100;
+    return d <= 0
+      ? `${Math.abs(d).toFixed(0)}% abaixo do alvo`
+      : `${d.toFixed(0)}% acima do alvo`;
   }
 }

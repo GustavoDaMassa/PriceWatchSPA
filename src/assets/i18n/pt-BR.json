@@ -8,7 +8,9 @@
     "LISTS": "Minhas Listas",
     "NOTIFICATIONS": "Notificações",
     "PROFILE": "Perfil",
-    "LOGOUT": "Sair"
+    "LOGOUT": "Sair",
+    "ITEMS": "Meus Produtos",
+    "SEARCH_PLACEHOLDER": "Buscar produto monitorado..."
   },
   "AUTH": {
     "LOGIN": {

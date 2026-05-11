@@ -10,8 +10,7 @@ body {
   min-height: 100vh;
   margin: 0;
   font-family: 'Inter', 'Helvetica Neue', sans-serif;
-  background: var(--pw-page-bg) fixed;
-  background-size: cover;
+  background: var(--pw-page-bg);
 }
 
 * { box-sizing: border-box; }

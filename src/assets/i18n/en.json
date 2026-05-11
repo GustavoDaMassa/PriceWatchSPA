@@ -8,7 +8,9 @@
     "LISTS": "My Lists",
     "NOTIFICATIONS": "Notifications",
     "PROFILE": "Profile",
-    "LOGOUT": "Sign out"
+    "LOGOUT": "Sign out",
+    "ITEMS": "My Products",
+    "SEARCH_PLACEHOLDER": "Search tracked product..."
   },
   "AUTH": {
     "LOGIN": {
