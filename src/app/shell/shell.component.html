@@ -4,8 +4,10 @@
       <img src="/LogoPriceWatch.png" class="ml-logo" alt="PriceWatch">
     </a>
     <div class="ml-search-box">
-      <input #searchInput type="text"
+      <input type="text"
+             [value]="searchQuery()"
              [placeholder]="'NAV.SEARCH_PLACEHOLDER' | translate"
+             (input)="searchQuery.set($any($event.target).value)"
              (keydown.enter)="goToItems()">
       <button type="button" (click)="goToItems()">
         <mat-icon>search</mat-icon>

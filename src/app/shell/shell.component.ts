@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -25,6 +25,8 @@ export class ShellComponent implements OnInit, OnDestroy {
   protected readonly lang = inject(LanguageService);
   private readonly router = inject(Router);
 
+  searchQuery = signal('');
+
   ngOnInit(): void {
     this.polling.start();
   }
@@ -33,8 +35,8 @@ export class ShellComponent implements OnInit, OnDestroy {
     this.polling.stop();
   }
 
-  goToItems(term = ''): void {
-    const q = term.trim();
+  goToItems(): void {
+    const q = this.searchQuery().trim();
     this.router.navigate(['/items'], q ? { queryParams: { q } } : {});
   }
 
