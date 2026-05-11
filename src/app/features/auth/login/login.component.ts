@@ -3,9 +3,6 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { finalize } from 'rxjs/operators';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthApiService } from '../../../core/services/api/auth-api.service';
@@ -16,73 +13,150 @@ import { LoginRequest } from '../../../shared/models/auth.model';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [
-    ReactiveFormsModule, RouterLink,
-    MatFormFieldModule, MatInputModule, MatButtonModule, MatProgressSpinnerModule,
-    TranslateModule,
-  ],
+  imports: [ReactiveFormsModule, RouterLink, MatProgressSpinnerModule, TranslateModule],
   template: `
-    <div class="auth-page">
-      <div class="auth-card mat-elevation-z4">
-        <img src="/logopw.png" class="auth-logo" alt="PriceWatch">
-        <h1 class="auth-title">{{ 'AUTH.LOGIN.TITLE' | translate }}</h1>
+    <div class="ml-auth-page">
+      <div class="ml-auth-header">
+        <img src="/LogoPriceWatch.png" class="ml-auth-logo" alt="PriceWatch">
+      </div>
+
+      <div class="ml-auth-card">
+        <h1 class="ml-auth-title">{{ 'AUTH.LOGIN.TITLE' | translate }}</h1>
 
         <form [formGroup]="form" (ngSubmit)="submit()">
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>{{ 'AUTH.LOGIN.EMAIL' | translate }}</mat-label>
-            <input matInput type="email" formControlName="email" autocomplete="email">
-          </mat-form-field>
+          <div class="ml-field">
+            <label class="ml-label">{{ 'AUTH.LOGIN.EMAIL' | translate }}</label>
+            <input class="ml-input" type="email" formControlName="email"
+                   autocomplete="email">
+          </div>
 
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>{{ 'AUTH.LOGIN.PASSWORD' | translate }}</mat-label>
-            <input matInput type="password" formControlName="password" autocomplete="current-password">
-          </mat-form-field>
+          <div class="ml-field">
+            <label class="ml-label">{{ 'AUTH.LOGIN.PASSWORD' | translate }}</label>
+            <input class="ml-input" type="password" formControlName="password"
+                   autocomplete="current-password">
+          </div>
 
-          <button mat-flat-button type="submit" class="submit-btn"
-                  [disabled]="form.invalid || loading()">
-            @if (loading()) {
-              <mat-spinner diameter="20" />
-            } @else {
-              {{ 'AUTH.LOGIN.SUBMIT' | translate }}
-            }
+          <button type="submit" class="ml-btn-submit" [disabled]="form.invalid || loading()">
+            @if (loading()) { <mat-spinner diameter="20" /> }
+            @else { {{ 'AUTH.LOGIN.SUBMIT' | translate }} }
           </button>
         </form>
 
-        <p class="auth-link">
-          {{ 'AUTH.LOGIN.NO_ACCOUNT' | translate }}
-          <a routerLink="/auth/register">{{ 'AUTH.LOGIN.REGISTER_LINK' | translate }}</a>
-        </p>
+        <div class="ml-divider"><span>ou</span></div>
+
+        <a routerLink="/auth/register" class="ml-btn-secondary">
+          {{ 'AUTH.LOGIN.REGISTER_LINK' | translate }}
+        </a>
       </div>
     </div>
   `,
   styles: [`
-    .auth-page {
+    .ml-auth-page {
       min-height: 100vh;
+      background: #EBEBEB;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .ml-auth-header {
+      width: 100%;
+      background: #FFE600;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .ml-auth-logo { height: 38px; width: auto; }
+
+    .ml-auth-card {
+      background: white;
+      border-radius: 6px;
+      padding: 32px 40px 40px;
+      width: 100%;
+      max-width: 420px;
+      margin-top: 24px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.12);
+    }
+
+    .ml-auth-title {
+      font-size: 22px;
+      font-weight: 600;
+      color: #333;
+      margin: 0 0 24px;
+    }
+
+    .ml-field { margin-bottom: 16px; }
+
+    .ml-label {
+      display: block;
+      font-size: 14px;
+      color: #333;
+      margin-bottom: 6px;
+    }
+
+    .ml-input {
+      width: 100%;
+      height: 48px;
+      padding: 0 14px;
+      border: 1px solid #999;
+      border-radius: 6px;
+      font-size: 16px;
+      outline: none;
+      box-sizing: border-box;
+      font-family: inherit;
+      color: #333;
+      transition: border 0.15s;
+
+      &:focus { border: 2px solid #3483FA; padding: 0 13px; }
+      &.ng-invalid.ng-touched { border-color: #F23D4F; }
+    }
+
+    .ml-btn-submit {
+      width: 100%;
+      height: 48px;
+      background: #FFE600;
+      color: #333;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 8px;
+      font-family: inherit;
       display: flex;
       align-items: center;
       justify-content: center;
-      background-color: var(--pw-bg);
-      padding: 16px;
+
+      &:hover:not(:disabled) { background: #f0d800; }
+      &:disabled { opacity: 0.6; cursor: not-allowed; }
     }
-    .auth-card {
-      background: var(--pw-surface);
-      border-radius: 8px;
-      padding: 40px 32px;
-      width: 100%;
-      max-width: 400px;
+
+    .ml-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 28px 0 16px;
+      color: #999;
+      font-size: 14px;
+
+      &::before, &::after { content: ''; flex: 1; height: 1px; background: #e0e0e0; }
     }
-    .auth-logo { display: block; margin: 0 auto 16px; height: 72px; }
-    .auth-title { text-align: center; margin: 0 0 24px; font-size: 1.5rem; font-weight: 700; }
-    .full-width { width: 100%; }
-    .submit-btn {
-      width: 100%;
-      margin-top: 8px;
-      background-color: var(--pw-yellow);
-      color: #333;
-      height: 44px;
+
+    .ml-btn-secondary {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 48px;
+      border: 1px solid #3483FA;
+      border-radius: 6px;
+      color: #3483FA;
+      font-size: 16px;
       font-weight: 600;
+      text-decoration: none;
+
+      &:hover { background: #EAF0FB; }
     }
-    .auth-link { text-align: center; margin-top: 16px; font-size: 0.9rem; }
   `],
 })
 export class LoginComponent {
@@ -110,10 +184,8 @@ export class LoginComponent {
         this.auth.login(res);
         this.router.navigate(['/dashboard']);
       },
-      error: (err: HttpErrorResponse) => {
-        const msg = err.error?.message ?? this.translate.instant('COMMON.ERROR_GENERIC');
-        this.toast.error(msg);
-      },
+      error: (err: HttpErrorResponse) =>
+        this.toast.error(err.error?.detail ?? this.translate.instant('COMMON.ERROR_GENERIC')),
     });
   }
 }
