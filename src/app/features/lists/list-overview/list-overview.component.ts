@@ -48,10 +48,6 @@ import { ListFormDialogComponent } from '../list-form-dialog/list-form-dialog.co
               }
             </div>
             <div class="ml-list-actions">
-              <a [routerLink]="['/lists', list.id]" class="ml-action-link">
-                <mat-icon>inventory_2</mat-icon>
-                {{ 'PRODUCTS.TITLE' | translate }}
-              </a>
               <a [routerLink]="['/lists', list.id, 'analysis']" class="ml-action-link">
                 <mat-icon>analytics</mat-icon>
                 {{ 'LISTS.ANALYSIS' | translate }}
