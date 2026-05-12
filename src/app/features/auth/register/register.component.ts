@@ -182,7 +182,8 @@ export class RegisterComponent {
   submit(): void {
     if (this.form.invalid || this.loading()) return;
     this.loading.set(true);
-    this.authApi.register(this.form.value as RegisterRequest).pipe(
+    const req: RegisterRequest = { ...this.form.value as RegisterRequest, locale: this.translate.currentLang };
+    this.authApi.register(req).pipe(
       finalize(() => this.loading.set(false))
     ).subscribe({
       next: () => {
