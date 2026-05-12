@@ -81,7 +81,10 @@
     "URL_LABEL": "URL do produto",
     "SOURCE_LABEL": "Fonte",
     "NO_TARGET": "Sem alvo",
-    "BELOW_TARGET_BADGE": "Abaixo do alvo!"
+    "BELOW_TARGET_BADGE": "Abaixo do alvo!",
+    "ASSIGN_TO_LIST": "Adicionar à lista",
+    "OPEN_IN_PLATFORM": "Abrir na plataforma",
+    "BULK_DELETE_MSG": "{{ count }} produto(s) serão removidos. O histórico de preços será perdido."
   },
   "NOTIFICATIONS": {
     "TITLE": "Notificações",
@@ -130,6 +133,7 @@
     "TITLE": "Meus Produtos",
     "EMPTY": "Nenhum produto monitorado ainda.",
     "IN_LIST": "Em lista",
-    "NO_RESULTS": "Nenhum produto encontrado."
+    "NO_RESULTS": "Nenhum produto encontrado.",
+    "SELECT": "Selecionar"
   }
 }

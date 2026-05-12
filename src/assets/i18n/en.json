@@ -81,7 +81,10 @@
     "URL_LABEL": "Product URL",
     "SOURCE_LABEL": "Source",
     "NO_TARGET": "No target",
-    "BELOW_TARGET_BADGE": "Below target!"
+    "BELOW_TARGET_BADGE": "Below target!",
+    "ASSIGN_TO_LIST": "Add to list",
+    "OPEN_IN_PLATFORM": "Open on platform",
+    "BULK_DELETE_MSG": "{{ count }} product(s) will be removed. Price history will be lost."
   },
   "NOTIFICATIONS": {
     "TITLE": "Notifications",
@@ -130,6 +133,7 @@
     "TITLE": "My Products",
     "EMPTY": "No products tracked yet.",
     "IN_LIST": "In list",
-    "NO_RESULTS": "No products found."
+    "NO_RESULTS": "No products found.",
+    "SELECT": "Select"
   }
 }
