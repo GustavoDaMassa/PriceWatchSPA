@@ -14,6 +14,7 @@ export interface AuthResponse {
   token: string;
   email: string;
   name: string;
+  isEmailVerified: boolean;
 }
 
 export interface VerifyEmailRequest {
@@ -29,4 +30,5 @@ export interface CurrentUser {
   name: string;
   email: string;
   token: string;
+  isEmailVerified: boolean;
 }

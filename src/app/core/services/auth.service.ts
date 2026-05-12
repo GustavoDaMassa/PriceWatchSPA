@@ -9,9 +9,17 @@ export class AuthService {
   isAuthenticated = computed(() => this.currentUser() !== null);
 
   login(response: AuthResponse): void {
-    const user: CurrentUser = { name: response.name, email: response.email, token: response.token };
+    const user: CurrentUser = { name: response.name, email: response.email, token: response.token, isEmailVerified: response.isEmailVerified };
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(user));
     this.currentUser.set(user);
+  }
+
+  markEmailVerified(): void {
+    const user = this.currentUser();
+    if (!user) return;
+    const updated = { ...user, isEmailVerified: true };
+    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(updated));
+    this.currentUser.set(updated);
   }
 
   logout(): void {

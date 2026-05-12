@@ -5,6 +5,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { take } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { AuthApiService } from '../../../core/services/api/auth-api.service';
+import { AuthService } from '../../../core/services/auth.service';
 
 type VerifyStatus = 'loading' | 'success' | 'error';
 
@@ -110,6 +111,7 @@ type VerifyStatus = 'loading' | 'success' | 'error';
 export class VerifyEmailComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly authApi = inject(AuthApiService);
+  private readonly auth = inject(AuthService);
 
   status = signal<VerifyStatus>('loading');
 
@@ -122,7 +124,7 @@ export class VerifyEmailComponent implements OnInit {
         return this.authApi.verifyEmail({ email: params['email'], token: params['token'] });
       })
     ).subscribe({
-      next: () => this.status.set('success'),
+      next: () => { this.auth.markEmailVerified(); this.status.set('success'); },
       error: () => this.status.set('error'),
     });
   }
