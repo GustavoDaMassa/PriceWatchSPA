@@ -38,6 +38,10 @@
           <span class="ml-notif-badge">{{ polling.unreadCount() }}</span>
         }
       </a>
+      <button class="ml-extension-btn" (click)="openExtensionDialog()">
+        <mat-icon>extension</mat-icon>
+        {{ 'NAV.EXTENSION' | translate }}
+      </button>
     </div>
   </nav>
 </header>

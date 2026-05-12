@@ -10,7 +10,20 @@
     "PROFILE": "Perfil",
     "LOGOUT": "Sair",
     "ITEMS": "Meus Produtos",
-    "SEARCH_PLACEHOLDER": "Buscar produto monitorado..."
+    "SEARCH_PLACEHOLDER": "Buscar produto monitorado...",
+    "EXTENSION": "Extensão"
+  },
+  "EXTENSION": {
+    "TITLE": "Extensão para Chrome",
+    "SUBTITLE": "Acompanhe produtos direto do Mercado Livre",
+    "DESC": "Com a extensão instalada, um botão \"Acompanhar com PriceWatch\" aparece em qualquer página de produto do Mercado Livre.",
+    "STEP1_TITLE": "Abra o Chrome",
+    "STEP1_DESC": "Acesse a página de extensões:",
+    "STEP2_TITLE": "Ative o modo desenvolvedor",
+    "STEP2_DESC": "Ative o toggle \"Modo do desenvolvedor\" no canto superior direito.",
+    "STEP3_TITLE": "Carregue a extensão",
+    "STEP3_DESC": "Clique em \"Carregar sem compactação\" e selecione a pasta PriceWatchExtension.",
+    "TIP": "Mantenha a extensão ativa e o PriceWatch aberto em outra aba para que o login seja reconhecido automaticamente."
   },
   "AUTH": {
     "LOGIN": {

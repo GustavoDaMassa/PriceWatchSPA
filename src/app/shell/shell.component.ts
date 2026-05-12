@@ -2,18 +2,20 @@ import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { TranslateModule } from '@ngx-translate/core';
 import { AuthService } from '../core/services/auth.service';
 import { NotificationPollingService } from '../core/services/notification-polling.service';
 import { LanguageService } from '../core/services/language.service';
 import { Router } from '@angular/router';
+import { ExtensionDialogComponent } from './extension-dialog.component';
 
 @Component({
   selector: 'app-shell',
   standalone: true,
   imports: [
     RouterOutlet, RouterLink, RouterLinkActive,
-    MatIconModule, MatButtonModule,
+    MatIconModule, MatButtonModule, MatDialogModule,
     TranslateModule,
   ],
   templateUrl: './shell.component.html',
@@ -24,6 +26,7 @@ export class ShellComponent implements OnInit, OnDestroy {
   protected readonly polling = inject(NotificationPollingService);
   protected readonly lang = inject(LanguageService);
   private readonly router = inject(Router);
+  private readonly dialog = inject(MatDialog);
 
   searchQuery = signal('');
 
@@ -47,5 +50,9 @@ export class ShellComponent implements OnInit, OnDestroy {
 
   toggleLang(): void {
     this.lang.switch(this.lang.current() === 'pt-BR' ? 'en' : 'pt-BR');
+  }
+
+  openExtensionDialog(): void {
+    this.dialog.open(ExtensionDialogComponent, { width: '480px' });
   }
 }

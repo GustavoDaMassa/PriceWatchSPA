@@ -128,6 +128,26 @@
   }
 }
 
+.ml-extension-btn {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: 1px solid rgba(0,0,0,0.2);
+  border-radius: 4px;
+  padding: 4px 10px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #333;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s, border-color 0.15s;
+
+  mat-icon { font-size: 16px; width: 16px; height: 16px; }
+  &:hover { background: rgba(0,0,0,0.06); border-color: rgba(0,0,0,0.35); }
+}
+
 .ml-notif-badge {
   background: #F23D4F;
   color: white;
