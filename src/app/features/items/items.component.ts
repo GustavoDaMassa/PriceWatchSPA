@@ -67,7 +67,7 @@ import { ProductLinkDialogComponent } from '../products/product-link/product-lin
               </button>
             </div>
           } @else {
-            <h1>{{ 'ITEMS.TITLE' | translate }}</h1>
+            <h1>{{ 'ITEMS.TITLE' | translate }} <span class="ml-count">{{ filteredProducts().length }}</span></h1>
           }
         </div>
         <div class="ml-header-actions">
@@ -167,6 +167,7 @@ import { ProductLinkDialogComponent } from '../products/product-link/product-lin
       display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; min-height: 40px;
     }
     .ml-page-header h1 { margin: 0; font-size: 20px; font-weight: 300; color: #333; }
+    .ml-count { font-size: 14px; font-weight: 400; color: #999; }
     .ml-header-left { display: flex; align-items: center; }
     .ml-header-actions { display: flex; align-items: center; gap: 8px; }
 
