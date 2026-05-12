@@ -186,9 +186,9 @@ export class DashboardComponent implements OnInit {
     this.allProducts().filter(p => p.targetPrice > 0 && p.currentPrice <= p.targetPrice).length);
   nearTarget = computed(() =>
     this.allProducts()
-      .filter(p => p.isActive && p.targetPrice > 0 && p.currentPrice > 0)
-      .sort((a, b) => this.distance(a) - this.distance(b))
-      .slice(0, 6));
+      .filter(p => p.isActive)
+      .sort((a, b) => this.sortDistance(a) - this.sortDistance(b))
+      .slice(0, 12));
   nextCheck = computed(() => {
     const active = this.allProducts().filter(p => p.isActive);
     if (!active.length) return null;
@@ -208,6 +208,11 @@ export class DashboardComponent implements OnInit {
       },
       error: () => this.loading.set(false),
     });
+  }
+
+  private sortDistance(p: TrackedProduct): number {
+    if (!p.targetPrice || !p.currentPrice) return Infinity;
+    return Math.abs((p.currentPrice - p.targetPrice) / p.targetPrice);
   }
 
   private distance(p: TrackedProduct): number {
