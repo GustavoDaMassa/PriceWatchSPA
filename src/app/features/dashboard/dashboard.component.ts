@@ -98,7 +98,7 @@ import { TrackedProduct } from '../../shared/models/tracked-product.model';
         </div>
       }
 
-      @if (!auth.currentUser()?.isEmailVerified) {
+      @if (auth.currentUser()?.isEmailVerified === false) {
         <div class="ml-verify-banner">
           <mat-icon>mark_email_unread</mat-icon>
           <div class="ml-verify-text">
