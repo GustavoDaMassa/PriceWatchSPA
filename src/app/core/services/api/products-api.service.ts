@@ -28,6 +28,10 @@ export class ProductsApiService {
     return this.http.put<void>(`${environment.apiUrl}/products/${id}`, req);
   }
 
+  assignToList(id: string, listId: string | null): Observable<void> {
+    return this.http.patch<void>(`${environment.apiUrl}/products/${id}/list`, { listId });
+  }
+
   removeProduct(id: string): Observable<void> {
     return this.http.delete<void>(`${environment.apiUrl}/products/${id}`);
   }
