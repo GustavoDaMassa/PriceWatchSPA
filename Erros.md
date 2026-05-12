@@ -35,6 +35,24 @@
 - Causa: `isTokenExpired()` retorna `true` quando não há token; o interceptor devolvia `EMPTY` para TODAS as requisições HTTP unauthenticated, incluindo os requests do ngx-translate para `/assets/i18n/pt-BR.json`
 - Correção: adicionar guard no início do interceptor — só processar requests cujo URL começa com `environment.apiUrl`; assets locais passam direto via `return next(req)`
 
+---
+
+## Gráfico de histórico de preços não renderiza em navegação SPA
+
+**Indícios:** A página de histórico de preços só exibia o gráfico ao carregar a aplicação pela primeira vez ou após um refresh manual do browser. Em navegações SPA subsequentes (ex: voltar para a lista de produtos e acessar o histórico de outro produto), o gráfico não aparecia — a tela ficava em branco após o spinner sumir.
+
+**Diagnóstico:** O componente usava `setTimeout` para adiar a criação do gráfico após `loading.set(false)`. O `viewChild` do `<canvas>` retornava `undefined` porque o Angular ainda não havia executado o change detection para inserir o elemento no DOM.
+
+**Causa raiz:** Condição de corrida entre `setTimeout` e o ciclo de change detection do Angular. No primeiro carregamento, a requisição HTTP demora o suficiente para o DOM já estar atualizado quando o `setTimeout` dispara. Em navegações SPA, o HTTP retorna dados do cache quase instantaneamente, fazendo o `setTimeout` disparar antes do Angular renderizar o `<canvas>`.
+
+**Solução:** Substituído `setTimeout` por `effect()`. O effect rastreia os signals `chartCanvas()` (viewChild) e `snapshots()` (novo signal com os dados carregados). Como `effect` executa após cada ciclo de change detection, o canvas sempre está no DOM quando o gráfico é criado.
+
+**Commit:** `a484d99`
+
+**Lição:** `setTimeout` sem delay é não-determinístico em relação ao ciclo de renderização do Angular — não garante que o DOM foi atualizado. Para operações que dependem de um elemento do DOM gerado condicionalmente por um signal, usar `effect()` que reage reativamente à disponibilidade do `viewChild`.
+
+---
+
 **2026-05-07 · Fase 8 · authInterceptor bloqueava login e registro**
 - Erro: login não retornava nada — sem toast de erro, sem redirecionamento
 - Causa: o interceptor verificava `isTokenExpired()` em TODAS as requisições API, incluindo `/api/auth/login`. Sem token, `isTokenExpired()` retorna `true` → request cancelada com `EMPTY` antes de chegar ao backend
