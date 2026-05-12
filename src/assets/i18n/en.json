@@ -45,7 +45,11 @@
     "NEXT_CHECK": "Next check",
     "NEW_LIST": "New list",
     "VIEW_NOTIFICATIONS": "View notifications",
-    "NEAR_TARGET": "Closest to target"
+    "NEAR_TARGET": "Closest to target",
+    "VERIFY_EMAIL_TITLE": "Verify your email",
+    "VERIFY_EMAIL_MSG": "Confirm your email to receive price notifications.",
+    "VERIFY_EMAIL_ACTION": "Resend email",
+    "VERIFY_EMAIL_SENT": "Verification email sent!"
   },
   "LISTS": {
     "TITLE": "My Lists",

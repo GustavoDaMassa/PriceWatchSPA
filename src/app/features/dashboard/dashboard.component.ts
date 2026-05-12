@@ -2,10 +2,14 @@ import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { forkJoin } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
 import { ListsApiService } from '../../core/services/api/lists-api.service';
 import { ProductsApiService } from '../../core/services/api/products-api.service';
+import { AuthApiService } from '../../core/services/api/auth-api.service';
+import { AuthService } from '../../core/services/auth.service';
+import { ToastService } from '../../core/services/toast.service';
 import { NotificationPollingService } from '../../core/services/notification-polling.service';
 import { PriceDisplayComponent } from '../../shared/components/price-display/price-display.component';
 import { ProductList } from '../../shared/models/product-list.model';
@@ -93,6 +97,20 @@ import { TrackedProduct } from '../../shared/models/tracked-product.model';
           <span>{{ 'DASHBOARD.NEXT_CHECK' | translate }}: <strong>{{ nextCheck()?.name }}</strong></span>
         </div>
       }
+
+      @if (!auth.currentUser()?.isEmailVerified) {
+        <div class="ml-verify-banner">
+          <mat-icon>mark_email_unread</mat-icon>
+          <div class="ml-verify-text">
+            <strong>{{ 'DASHBOARD.VERIFY_EMAIL_TITLE' | translate }}</strong>
+            <span>{{ 'DASHBOARD.VERIFY_EMAIL_MSG' | translate }}</span>
+          </div>
+          <button class="ml-verify-btn" (click)="resendVerification()" [disabled]="resending()">
+            @if (resending()) { <mat-spinner diameter="16" /> }
+            @else { {{ 'DASHBOARD.VERIFY_EMAIL_ACTION' | translate }} }
+          </button>
+        </div>
+      }
     }
   `,
   styles: [`
@@ -170,16 +188,42 @@ import { TrackedProduct } from '../../shared/models/tracked-product.model';
       font-size: 14px; color: #333;
       mat-icon { color: #3483FA; }
     }
+
+    .ml-verify-banner {
+      margin-top: 12px; background: #FFF9E6; border: 1px solid #FFE600;
+      border-radius: 4px; padding: 14px 16px;
+      display: flex; align-items: center; gap: 12px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+      mat-icon { color: #E6A817; flex-shrink: 0; }
+    }
+    .ml-verify-text {
+      flex: 1; display: flex; flex-direction: column; gap: 2px;
+      strong { font-size: 14px; color: #333; }
+      span { font-size: 13px; color: #666; }
+    }
+    .ml-verify-btn {
+      display: flex; align-items: center; gap: 4px;
+      background: #FFE600; color: #333; border: none; border-radius: 4px;
+      padding: 8px 14px; font-size: 13px; font-weight: 600;
+      cursor: pointer; font-family: inherit; white-space: nowrap;
+      &:hover:not(:disabled) { background: #f0d800; }
+      &:disabled { opacity: 0.6; cursor: not-allowed; }
+    }
   `],
 })
 export class DashboardComponent implements OnInit {
   protected readonly polling = inject(NotificationPollingService);
+  protected readonly auth = inject(AuthService);
   private readonly listsApi = inject(ListsApiService);
   private readonly productsApi = inject(ProductsApiService);
+  private readonly authApi = inject(AuthApiService);
+  private readonly toast = inject(ToastService);
+  private readonly translate = inject(TranslateService);
 
   lists = signal<ProductList[]>([]);
   private allProducts = signal<TrackedProduct[]>([]);
   loading = signal(false);
+  resending = signal(false);
 
   totalProducts = computed(() => this.allProducts().length);
   belowTarget = computed(() =>
@@ -217,6 +261,22 @@ export class DashboardComponent implements OnInit {
 
   private distance(p: TrackedProduct): number {
     return (p.currentPrice - p.targetPrice) / p.targetPrice;
+  }
+
+  resendVerification(): void {
+    const email = this.auth.currentUser()?.email;
+    if (!email || this.resending()) return;
+    this.resending.set(true);
+    this.authApi.resendVerification({ email }).subscribe({
+      next: () => {
+        this.toast.success(this.translate.instant('DASHBOARD.VERIFY_EMAIL_SENT'));
+        this.resending.set(false);
+      },
+      error: (err: HttpErrorResponse) => {
+        this.toast.error(err.error?.detail ?? this.translate.instant('COMMON.ERROR_GENERIC'));
+        this.resending.set(false);
+      },
+    });
   }
 
   distanceLabel(p: TrackedProduct): string {
