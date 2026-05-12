@@ -71,11 +71,11 @@ import { ProductLinkDialogComponent } from '../products/product-link/product-lin
           }
         </div>
         <div class="ml-header-actions">
-          <button class="ml-btn-secondary" (click)="enterSelectionMode()">
-            <mat-icon>checklist</mat-icon>{{ 'ITEMS.SELECT' | translate }}
-          </button>
           <button class="ml-btn-primary" (click)="openAdd()">
             <mat-icon>add</mat-icon>{{ 'PRODUCTS.ADD' | translate }}
+          </button>
+          <button class="ml-btn-secondary" (click)="enterSelectionMode()">
+            <mat-icon>checklist</mat-icon>{{ 'ITEMS.SELECT' | translate }}
           </button>
         </div>
       }
