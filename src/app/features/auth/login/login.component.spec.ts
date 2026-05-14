@@ -50,7 +50,7 @@ describe('LoginComponent', () => {
   });
 
   it('should call login and navigate to dashboard on success', fakeAsync(() => {
-    const res = { token: 'jwt', email: 'a@b.com', name: 'Test' };
+    const res = { token: 'jwt', email: 'a@b.com', name: 'Test', isEmailVerified: true };
     authApi.login.and.returnValue(of(res));
     fixture.componentInstance.form.setValue({ email: 'a@b.com', password: '123456' });
     fixture.componentInstance.submit();

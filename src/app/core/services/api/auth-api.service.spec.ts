@@ -20,7 +20,7 @@ describe('AuthApiService', () => {
 
   it('should POST /auth/login and return AuthResponse', () => {
     const body = { email: 'a@b.com', password: '123' };
-    const res = { token: 'jwt', email: 'a@b.com', name: 'Test' };
+    const res = { token: 'jwt', email: 'a@b.com', name: 'Test', isEmailVerified: true };
     service.login(body).subscribe(r => expect(r).toEqual(res));
     const req = http.expectOne(`${environment.apiUrl}/auth/login`);
     expect(req.request.method).toBe('POST');
