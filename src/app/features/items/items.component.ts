@@ -3,7 +3,6 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
-import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDialog } from '@angular/material/dialog';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -13,7 +12,7 @@ import { ProductsApiService } from '../../core/services/api/products-api.service
 import { ToastService } from '../../core/services/toast.service';
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 import { EmptyStateComponent } from '../../shared/components/empty-state/empty-state.component';
-import { PriceDisplayComponent } from '../../shared/components/price-display/price-display.component';
+import { ProductCardComponent } from '../../shared/components/product-card/product-card.component';
 import { TrackedProduct } from '../../shared/models/tracked-product.model';
 import { AddProductDialogComponent } from '../products/add-product/add-product-dialog.component';
 import { EditProductDialogComponent } from '../products/edit-product/edit-product-dialog.component';
@@ -25,8 +24,8 @@ import { ProductLinkDialogComponent } from '../products/product-link/product-lin
   standalone: true,
   imports: [
     RouterLink,
-    MatButtonModule, MatCheckboxModule, MatIconModule, MatMenuModule, MatProgressSpinnerModule,
-    TranslateModule, EmptyStateComponent, PriceDisplayComponent,
+    MatButtonModule, MatCheckboxModule, MatIconModule, MatProgressSpinnerModule,
+    TranslateModule, EmptyStateComponent, ProductCardComponent,
   ],
   template: `
     <div class="ml-page-header">
@@ -90,74 +89,19 @@ import { ProductLinkDialogComponent } from '../products/product-link/product-lin
     } @else {
       <div class="ml-grid">
         @for (p of filteredProducts(); track p.id) {
-          <div class="ml-card"
-               [class.ml-inactive]="!p.isActive"
-               [class.ml-selected]="selectedIds().has(p.id)"
-               [class.ml-selectable]="selectionMode()"
-               [class.ml-clickable]="!selectionMode()"
-               (click)="selectionMode() ? toggleSelect(p.id) : openProductLink(p)">
-            @if (selectionMode()) {
-              <div class="ml-card-checkbox">
-                <mat-checkbox [checked]="selectedIds().has(p.id)" (click)="$event.stopPropagation()" (change)="toggleSelect(p.id)" />
-              </div>
-            }
-            <div class="ml-card-img">
-              @if (p.imageUrl) {
-                <img [src]="p.imageUrl" [alt]="p.name" loading="lazy" />
-              } @else {
-                <mat-icon class="ml-no-img">image</mat-icon>
-              }
-            </div>
-            <div class="ml-card-body">
-              <p class="ml-card-name">{{ p.name }}</p>
-              <div class="ml-card-price">
-                <app-price-display [value]="p.currentPrice" />
-              </div>
-              @if (p.targetPrice > 0) {
-                <div class="ml-card-target">
-                  Alvo: <app-price-display [value]="p.targetPrice" />
-                </div>
-                <p class="ml-card-dist" [class.below]="p.currentPrice <= p.targetPrice">
-                  {{ distanceLabel(p) }}
-                </p>
-              }
-              <div class="ml-card-badges">
-                <span class="ml-badge" [class.active]="p.isActive">
-                  {{ (p.isActive ? 'PRODUCTS.STATUS_ACTIVE' : 'PRODUCTS.STATUS_PAUSED') | translate }}
-                </span>
-                @if (p.listId) {
-                  <span class="ml-badge-list">{{ 'ITEMS.IN_LIST' | translate }}</span>
-                }
-              </div>
-            </div>
-            @if (!selectionMode()) {
-              <div class="ml-card-footer">
-                <a [routerLink]="['/items', p.id, 'history']" class="ml-footer-btn" (click)="$event.stopPropagation()">
-                  <mat-icon>show_chart</mat-icon>
-                </a>
-                <button class="ml-footer-btn" [matMenuTriggerFor]="menu" (click)="$event.stopPropagation()">
-                  <mat-icon>more_vert</mat-icon>
-                </button>
-                <mat-menu #menu>
-                  <button mat-menu-item (click)="openEdit(p)">
-                    <mat-icon>edit</mat-icon>{{ 'PRODUCTS.EDIT' | translate }}
-                  </button>
-                  @if (!p.listId) {
-                    <button mat-menu-item (click)="openAssignToList(p)">
-                      <mat-icon>playlist_add</mat-icon>{{ 'PRODUCTS.ASSIGN_TO_LIST' | translate }}
-                    </button>
-                  }
-                  <button mat-menu-item (click)="toggleActive(p)">
-                    <mat-icon>{{ p.isActive ? 'pause' : 'play_arrow' }}</mat-icon>
-                    {{ (p.isActive ? 'PRODUCTS.PAUSE' : 'PRODUCTS.RESUME') | translate }}
-                  </button>
-                  <button mat-menu-item (click)="confirmRemove(p)" class="danger">
-                    <mat-icon>delete</mat-icon>{{ 'PRODUCTS.REMOVE' | translate }}
-                  </button>
-                </mat-menu>
-              </div>
-            }
-          </div>
+          <app-product-card
+            [product]="p"
+            [historyRoute]="['/items', p.id, 'history']"
+            [selected]="selectedIds().has(p.id)"
+            [selectionMode]="selectionMode()"
+            [showAssignToList]="!p.listId"
+            [showInListBadge]="true"
+            (cardClick)="openProductLink(p)"
+            (selectionChange)="toggleSelect(p.id)"
+            (editClick)="openEdit(p)"
+            (assignToListClick)="openAssignToList(p)"
+            (toggleActiveClick)="toggleActive(p)"
+            (removeClick)="confirmRemove(p)" />
         }
       </div>
     }
@@ -227,67 +171,6 @@ import { ProductLinkDialogComponent } from '../products/product-link/product-lin
       grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
       gap: 8px;
     }
-
-    .ml-card {
-      background: white; border-radius: 4px; overflow: hidden;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-      display: grid;
-      grid-template-columns: 110px 1fr;
-      grid-template-rows: 1fr auto;
-      position: relative;
-      transition: box-shadow 0.15s;
-      outline: 2px solid transparent;
-      &:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.16); }
-    }
-    .ml-card.ml-selectable { cursor: pointer; }
-    .ml-card.ml-selectable:hover { outline-color: #b3cdf8; }
-    .ml-card.ml-clickable { cursor: pointer; }
-    .ml-card.ml-selected { outline-color: #3483FA; }
-    .ml-card.ml-inactive { opacity: 0.6; }
-
-    .ml-card-checkbox {
-      position: absolute; top: 6px; left: 6px; z-index: 1;
-      background: rgba(255,255,255,0.85); border-radius: 3px; padding: 1px;
-    }
-
-    .ml-card-img {
-      grid-row: 1 / 3;
-      background: #fff; padding: 12px;
-      display: flex; align-items: center; justify-content: center;
-      border-right: 1px solid #f0f0f0;
-      img { width: 100%; height: 100%; object-fit: contain; }
-    }
-    .ml-no-img { font-size: 52px; color: #ddd; }
-
-    .ml-card-body { padding: 12px; flex: 1; }
-    .ml-card-name {
-      font-size: 14px; color: #333; margin: 0 0 8px; line-height: 1.4;
-      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
-    }
-    .ml-card-price ::ng-deep .price { font-size: 22px; font-weight: 300; color: #333; }
-    .ml-card-target { font-size: 12px; color: #666; margin: 4px 0; }
-    .ml-card-target ::ng-deep .price { font-size: 12px; font-weight: 400; color: #666; }
-    .ml-card-dist { font-size: 12px; color: #666; margin: 2px 0 8px; }
-    .ml-card-dist.below { color: #00A650; font-weight: 600; }
-
-    .ml-card-badges { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 6px; }
-    .ml-badge { font-size: 11px; padding: 2px 8px; border-radius: 2px; background: #f5f5f5; color: #999; }
-    .ml-badge.active { background: #e8f5e9; color: #00A650; }
-    .ml-badge-list { font-size: 11px; padding: 2px 8px; border-radius: 2px; background: #EAF0FB; color: #3483FA; }
-
-    .ml-card-footer {
-      display: flex; justify-content: flex-end; align-items: center;
-      padding: 4px 8px; border-top: 1px solid #f5f5f5; gap: 2px;
-      grid-column: 2; grid-row: 2;
-    }
-    .ml-footer-btn {
-      background: none; border: none; cursor: pointer; color: #3483FA;
-      display: flex; align-items: center; justify-content: center;
-      padding: 4px; border-radius: 4px; text-decoration: none;
-      &:hover { background: #EAF0FB; }
-      mat-icon { font-size: 20px; width: 20px; height: 20px; }
-    }
-    .danger { color: #F23D4F; }
   `],
 })
 export class ItemsComponent implements OnInit {
@@ -440,11 +323,4 @@ export class ItemsComponent implements OnInit {
     });
   }
 
-  distanceLabel(p: TrackedProduct): string {
-    if (!p.targetPrice || p.currentPrice <= 0) return '';
-    const d = ((p.currentPrice - p.targetPrice) / p.targetPrice) * 100;
-    return d <= 0
-      ? `${Math.abs(d).toFixed(0)}% abaixo do alvo`
-      : `${d.toFixed(0)}% acima do alvo`;
-  }
 }
