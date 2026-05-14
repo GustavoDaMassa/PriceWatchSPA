@@ -224,14 +224,17 @@ import { ProductLinkDialogComponent } from '../products/product-link/product-lin
 
     .ml-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
       gap: 8px;
     }
 
     .ml-card {
       background: white; border-radius: 4px; overflow: hidden;
       box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-      display: flex; flex-direction: column; position: relative;
+      display: grid;
+      grid-template-columns: 110px 1fr;
+      grid-template-rows: 1fr auto;
+      position: relative;
       transition: box-shadow 0.15s;
       outline: 2px solid transparent;
       &:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.16); }
@@ -248,9 +251,10 @@ import { ProductLinkDialogComponent } from '../products/product-link/product-lin
     }
 
     .ml-card-img {
-      aspect-ratio: 1; background: #fff; padding: 12px;
+      grid-row: 1 / 3;
+      background: #fff; padding: 12px;
       display: flex; align-items: center; justify-content: center;
-      border-bottom: 1px solid #f0f0f0;
+      border-right: 1px solid #f0f0f0;
       img { width: 100%; height: 100%; object-fit: contain; }
     }
     .ml-no-img { font-size: 52px; color: #ddd; }
@@ -274,6 +278,7 @@ import { ProductLinkDialogComponent } from '../products/product-link/product-lin
     .ml-card-footer {
       display: flex; justify-content: flex-end; align-items: center;
       padding: 4px 8px; border-top: 1px solid #f5f5f5; gap: 2px;
+      grid-column: 2; grid-row: 2;
     }
     .ml-footer-btn {
       background: none; border: none; cursor: pointer; color: #3483FA;
