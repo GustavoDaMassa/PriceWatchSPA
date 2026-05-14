@@ -94,6 +94,7 @@ import { TrackedProduct } from '../../models/tracked-product.model';
       display: grid;
       grid-template-columns: 110px 1fr;
       grid-template-rows: 1fr auto;
+      height: 200px;
       position: relative;
       transition: box-shadow 0.15s;
       outline: 2px solid transparent;
@@ -119,7 +120,7 @@ import { TrackedProduct } from '../../models/tracked-product.model';
     }
     .ml-no-img { font-size: 52px; color: #ddd; }
 
-    .ml-card-body { padding: 12px; }
+    .ml-card-body { padding: 12px; overflow: hidden; }
     .ml-card-name {
       font-size: 14px; color: #333; margin: 0 0 8px; line-height: 1.4;
       display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;

@@ -152,27 +152,29 @@ import { TrackedProduct } from '../../shared/models/tracked-product.model';
 
     .ml-near-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 8px;
     }
 
     .ml-near-card {
       background: white; border-radius: 4px; overflow: hidden;
       box-shadow: 0 1px 2px rgba(0,0,0,0.1); text-decoration: none;
-      display: flex; flex-direction: column;
+      display: grid;
+      grid-template-columns: 90px 1fr;
+      height: 120px;
       transition: box-shadow 0.15s;
       &:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.16); }
     }
 
     .ml-near-img {
-      aspect-ratio: 1; background: white; padding: 10px;
+      background: white; padding: 10px;
       display: flex; align-items: center; justify-content: center;
-      border-bottom: 1px solid #f0f0f0;
+      border-right: 1px solid #f0f0f0;
       img { width: 100%; height: 100%; object-fit: contain; }
     }
     .ml-near-placeholder { font-size: 40px; color: #ddd; }
 
-    .ml-near-body { padding: 10px; }
+    .ml-near-body { padding: 10px; overflow: hidden; }
     .ml-near-name {
       font-size: 13px; color: #333; margin: 0 0 6px; line-height: 1.3;
       display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
