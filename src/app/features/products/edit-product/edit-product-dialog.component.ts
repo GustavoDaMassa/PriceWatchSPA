@@ -52,7 +52,7 @@ export class EditProductDialogComponent implements OnInit {
   private readonly translate = inject(TranslateService);
 
   form = this.fb.group({
-    targetPrice: [0, [Validators.required, Validators.min(0)]],
+    targetPrice: [<number | null>null, [Validators.min(0)]],
     isActive: [true],
   });
 
