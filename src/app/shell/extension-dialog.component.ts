@@ -4,6 +4,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule } from '@ngx-translate/core';
 
+// TODO: atualizar com a URL real após publicação na Chrome Web Store
+const EXTENSION_STORE_URL = 'https://chromewebstore.google.com/detail/pricewatch';
+
 @Component({
   selector: 'app-extension-dialog',
   standalone: true,
@@ -24,7 +27,6 @@ import { TranslateModule } from '@ngx-translate/core';
         <li>
           <strong>{{ 'EXTENSION.STEP1_TITLE' | translate }}</strong>
           <span>{{ 'EXTENSION.STEP1_DESC' | translate }}</span>
-          <code>chrome://extensions</code>
         </li>
         <li>
           <strong>{{ 'EXTENSION.STEP2_TITLE' | translate }}</strong>
@@ -43,8 +45,12 @@ import { TranslateModule } from '@ngx-translate/core';
     </mat-dialog-content>
 
     <mat-dialog-actions align="end">
-      <button mat-flat-button class="ext-close-btn" (click)="ref.close()">
+      <button mat-button (click)="ref.close()">
         {{ 'COMMON.CLOSE' | translate }}
+      </button>
+      <button mat-flat-button class="ext-install-btn" (click)="openStore()">
+        <mat-icon>open_in_new</mat-icon>
+        {{ 'EXTENSION.INSTALL_BTN' | translate }}
       </button>
     </mat-dialog-actions>
   `,
@@ -72,12 +78,6 @@ import { TranslateModule } from '@ngx-translate/core';
 
         strong { font-weight: 600; }
         span { color: #555; }
-        code {
-          font-family: monospace; font-size: 12px;
-          background: #f5f5f5; border: 1px solid #ddd;
-          padding: 2px 6px; border-radius: 3px;
-          color: #3483FA; width: fit-content;
-        }
       }
     }
 
@@ -89,9 +89,16 @@ import { TranslateModule } from '@ngx-translate/core';
       mat-icon { font-size: 18px; width: 18px; height: 18px; color: #E6A817; flex-shrink: 0; }
     }
 
-    .ext-close-btn { background: #FFE600 !important; color: #333 !important; font-weight: 600 !important; }
+    .ext-install-btn {
+      background: #FFE600 !important; color: #333 !important; font-weight: 600 !important;
+      mat-icon { font-size: 18px; width: 18px; height: 18px; margin-right: 4px; }
+    }
   `],
 })
 export class ExtensionDialogComponent {
   protected readonly ref = inject(MatDialogRef<ExtensionDialogComponent>);
+
+  openStore(): void {
+    window.open(EXTENSION_STORE_URL, '_blank', 'noopener');
+  }
 }

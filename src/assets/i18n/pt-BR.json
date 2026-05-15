@@ -17,13 +17,14 @@
     "TITLE": "Extensão para Chrome",
     "SUBTITLE": "Acompanhe produtos direto do Mercado Livre",
     "DESC": "Com a extensão instalada, um botão \"Acompanhar com PriceWatch\" aparece em qualquer página de produto do Mercado Livre.",
-    "STEP1_TITLE": "Abra o Chrome",
-    "STEP1_DESC": "Acesse a página de extensões:",
-    "STEP2_TITLE": "Ative o modo desenvolvedor",
-    "STEP2_DESC": "Ative o toggle \"Modo do desenvolvedor\" no canto superior direito.",
-    "STEP3_TITLE": "Carregue a extensão",
-    "STEP3_DESC": "Clique em \"Carregar sem compactação\" e selecione a pasta PriceWatchExtension.",
-    "TIP": "Mantenha a extensão ativa e o PriceWatch aberto em outra aba para que o login seja reconhecido automaticamente."
+    "STEP1_TITLE": "Instale a extensão",
+    "STEP1_DESC": "Clique em \"Instalar no Chrome\" abaixo e confirme a instalação na loja.",
+    "STEP2_TITLE": "Faça login",
+    "STEP2_DESC": "Clique no ícone da extensão na barra do Chrome e entre com sua conta PriceWatch.",
+    "STEP3_TITLE": "Acompanhe produtos",
+    "STEP3_DESC": "Acesse qualquer página de produto do Mercado Livre e clique no botão \"Acompanhar com PriceWatch\".",
+    "TIP": "A extensão funciona de forma independente — não é necessário ter o PriceWatch aberto em outra aba.",
+    "INSTALL_BTN": "Instalar no Chrome"
   },
   "AUTH": {
     "LOGIN": {

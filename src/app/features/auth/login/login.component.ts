@@ -15,147 +15,161 @@ import { LoginRequest } from '../../../shared/models/auth.model';
   standalone: true,
   imports: [ReactiveFormsModule, RouterLink, MatProgressSpinnerModule, TranslateModule],
   template: `
-    <div class="ml-auth-page">
-      <div class="ml-auth-header">
-        <span class="ml-auth-brand">PriceWatch</span>
-      </div>
+    <div class="pw-auth-page">
+      <div class="pw-auth-card">
+        <div class="pw-auth-header">
+          <span class="pw-auth-brand">PriceWatch</span>
+        </div>
 
-      <div class="ml-auth-card">
-        <h1 class="ml-auth-title">{{ 'AUTH.LOGIN.TITLE' | translate }}</h1>
+        <div class="pw-auth-body">
+          <h1 class="pw-auth-title">{{ 'AUTH.LOGIN.TITLE' | translate }}</h1>
 
-        <form [formGroup]="form" (ngSubmit)="submit()">
-          <div class="ml-field">
-            <label class="ml-label">{{ 'AUTH.LOGIN.EMAIL' | translate }}</label>
-            <input class="ml-input" type="email" formControlName="email"
-                   autocomplete="email">
-          </div>
+          <form [formGroup]="form" (ngSubmit)="submit()">
+            <div class="pw-field">
+              <label class="pw-label">{{ 'AUTH.LOGIN.EMAIL' | translate }}</label>
+              <input class="pw-input" type="email" formControlName="email"
+                     placeholder="seu@email.com" autocomplete="email">
+            </div>
 
-          <div class="ml-field">
-            <label class="ml-label">{{ 'AUTH.LOGIN.PASSWORD' | translate }}</label>
-            <input class="ml-input" type="password" formControlName="password"
-                   autocomplete="current-password">
-          </div>
+            <div class="pw-field">
+              <label class="pw-label">{{ 'AUTH.LOGIN.PASSWORD' | translate }}</label>
+              <input class="pw-input" type="password" formControlName="password"
+                     placeholder="••••••••" autocomplete="current-password">
+            </div>
 
-          <button type="submit" class="ml-btn-submit" [disabled]="form.invalid || loading()">
-            @if (loading()) { <mat-spinner diameter="20" /> }
-            @else { {{ 'AUTH.LOGIN.SUBMIT' | translate }} }
-          </button>
-        </form>
+            <button type="submit" class="pw-btn-submit" [disabled]="form.invalid || loading()">
+              @if (loading()) {
+                <mat-spinner diameter="18" style="--mdc-circular-progress-active-indicator-color: #1a1a2e" />
+              } @else {
+                {{ 'AUTH.LOGIN.SUBMIT' | translate }}
+              }
+            </button>
+          </form>
 
-        <div class="ml-divider"><span>ou</span></div>
+          <div class="pw-divider"><span>ou</span></div>
 
-        <a routerLink="/auth/register" class="ml-btn-secondary">
-          {{ 'AUTH.LOGIN.REGISTER_LINK' | translate }}
-        </a>
+          <a routerLink="/auth/register" class="pw-btn-secondary">
+            {{ 'AUTH.LOGIN.REGISTER_LINK' | translate }}
+          </a>
+        </div>
       </div>
     </div>
   `,
   styles: [`
-    .ml-auth-page {
+    .pw-auth-page {
       min-height: 100vh;
-      background: #EBEBEB;
+      background: #1a1a2e;
       display: flex;
-      flex-direction: column;
       align-items: center;
-    }
-
-    .ml-auth-header {
-      width: 100%;
-      background: #FFE600;
-      padding: 16px 24px;
-      display: flex;
       justify-content: center;
+      padding: 24px 16px;
     }
 
-    .ml-auth-brand { font-size: 28px; font-weight: 700; color: #333; letter-spacing: -0.5px; }
-
-    .ml-auth-card {
-      background: white;
-      border-radius: 6px;
-      padding: 32px 40px 40px;
+    .pw-auth-card {
       width: 100%;
-      max-width: 420px;
-      margin-top: 24px;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.12);
+      max-width: 360px;
+      background: #16213e;
+      border-radius: 8px;
+      border: 1px solid #0f3460;
+      overflow: hidden;
     }
 
-    .ml-auth-title {
-      font-size: 22px;
-      font-weight: 600;
-      color: #333;
-      margin: 0 0 24px;
+    .pw-auth-header {
+      padding: 14px 20px;
+      border-bottom: 1px solid #0f3460;
     }
 
-    .ml-field { margin-bottom: 16px; }
-
-    .ml-label {
-      display: block;
-      font-size: 14px;
-      color: #333;
-      margin-bottom: 6px;
-    }
-
-    .ml-input {
-      width: 100%;
-      height: 48px;
-      padding: 0 14px;
-      border: 1px solid #999;
-      border-radius: 6px;
+    .pw-auth-brand {
       font-size: 16px;
+      font-weight: 700;
+      color: #4fc3f7;
+      letter-spacing: 0.5px;
+    }
+
+    .pw-auth-body { padding: 20px; }
+
+    .pw-auth-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #e0e0e0;
+      margin: 0 0 18px;
+    }
+
+    .pw-field { margin-bottom: 14px; }
+
+    .pw-label {
+      display: block;
+      font-size: 12px;
+      color: #aaa;
+      margin-bottom: 4px;
+    }
+
+    .pw-input {
+      width: 100%;
+      padding: 8px 10px;
+      background: #0f3460;
+      border: 1px solid #1a4a80;
+      border-radius: 6px;
+      color: #e0e0e0;
+      font-size: 14px;
       outline: none;
       box-sizing: border-box;
       font-family: inherit;
-      color: #333;
-      transition: border 0.15s;
+      transition: border-color 0.15s;
 
-      &:focus { border: 2px solid #3483FA; padding: 0 13px; }
-      &.ng-invalid.ng-touched { border-color: #F23D4F; }
+      &::placeholder { color: #555; }
+      &:focus { border-color: #4fc3f7; }
+      &.ng-invalid.ng-touched { border-color: #ef5350; }
     }
 
-    .ml-btn-submit {
+    .pw-btn-submit {
       width: 100%;
-      height: 48px;
-      background: #FFE600;
-      color: #333;
+      padding: 9px;
+      background: #4fc3f7;
+      color: #000;
+      font-weight: 600;
+      font-size: 14px;
       border: none;
       border-radius: 6px;
-      font-size: 16px;
-      font-weight: 600;
       cursor: pointer;
-      margin-top: 8px;
+      margin-top: 6px;
       font-family: inherit;
       display: flex;
       align-items: center;
       justify-content: center;
+      transition: background 0.15s;
 
-      &:hover:not(:disabled) { background: #f0d800; }
+      &:hover:not(:disabled) { background: #81d4fa; }
       &:disabled { opacity: 0.6; cursor: not-allowed; }
     }
 
-    .ml-divider {
+    .pw-divider {
       display: flex;
       align-items: center;
-      gap: 12px;
-      margin: 28px 0 16px;
-      color: #999;
-      font-size: 14px;
+      gap: 10px;
+      margin: 18px 0 14px;
+      color: #555;
+      font-size: 12px;
 
-      &::before, &::after { content: ''; flex: 1; height: 1px; background: #e0e0e0; }
+      &::before, &::after { content: ''; flex: 1; height: 1px; background: #1e3a5f; }
     }
 
-    .ml-btn-secondary {
+    .pw-btn-secondary {
       display: flex;
       align-items: center;
       justify-content: center;
-      height: 48px;
-      border: 1px solid #3483FA;
+      width: 100%;
+      padding: 9px;
+      background: transparent;
+      border: 1px solid #4fc3f7;
       border-radius: 6px;
-      color: #3483FA;
-      font-size: 16px;
+      color: #4fc3f7;
+      font-size: 14px;
       font-weight: 600;
       text-decoration: none;
+      transition: background 0.15s;
 
-      &:hover { background: #EAF0FB; }
+      &:hover { background: #0f3460; }
     }
   `],
 })

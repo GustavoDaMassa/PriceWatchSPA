@@ -16,14 +16,15 @@
   "EXTENSION": {
     "TITLE": "Chrome Extension",
     "SUBTITLE": "Track products directly from Mercado Livre",
-    "DESC": "With the extension installed, an \"Track with PriceWatch\" button appears on any Mercado Livre product page.",
-    "STEP1_TITLE": "Open Chrome",
-    "STEP1_DESC": "Go to the extensions page:",
-    "STEP2_TITLE": "Enable Developer Mode",
-    "STEP2_DESC": "Toggle \"Developer mode\" in the top right corner.",
-    "STEP3_TITLE": "Load the extension",
-    "STEP3_DESC": "Click \"Load unpacked\" and select the PriceWatchExtension folder.",
-    "TIP": "Keep the extension enabled and PriceWatch open in another tab so your login is recognized automatically."
+    "DESC": "With the extension installed, a \"Track with PriceWatch\" button appears on any Mercado Livre product page.",
+    "STEP1_TITLE": "Install the extension",
+    "STEP1_DESC": "Click \"Install on Chrome\" below and confirm the installation in the store.",
+    "STEP2_TITLE": "Sign in",
+    "STEP2_DESC": "Click the extension icon in your Chrome toolbar and sign in with your PriceWatch account.",
+    "STEP3_TITLE": "Track products",
+    "STEP3_DESC": "Go to any Mercado Livre product page and click the \"Track with PriceWatch\" button.",
+    "TIP": "The extension works independently — you don't need to have PriceWatch open in another tab.",
+    "INSTALL_BTN": "Install on Chrome"
   },
   "AUTH": {
     "LOGIN": {
