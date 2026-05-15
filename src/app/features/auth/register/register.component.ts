@@ -44,7 +44,7 @@ import { RegisterRequest } from '../../../shared/models/auth.model';
 
             <button type="submit" class="pw-btn-submit" [disabled]="form.invalid || loading()">
               @if (loading()) {
-                <mat-spinner diameter="18" style="--mdc-circular-progress-active-indicator-color: #1a1a2e" />
+                <mat-spinner diameter="18" style="--mdc-circular-progress-active-indicator-color: #111100" />
               } @else {
                 {{ 'AUTH.REGISTER.SUBMIT' | translate }}
               }
@@ -63,7 +63,7 @@ import { RegisterRequest } from '../../../shared/models/auth.model';
   styles: [`
     .pw-auth-page {
       min-height: 100vh;
-      background: #1a1a2e;
+      background: #111100;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -73,21 +73,21 @@ import { RegisterRequest } from '../../../shared/models/auth.model';
     .pw-auth-card {
       width: 100%;
       max-width: 360px;
-      background: #16213e;
+      background: #1a1800;
       border-radius: 8px;
-      border: 1px solid #0f3460;
+      border: 1px solid #252000;
       overflow: hidden;
     }
 
     .pw-auth-header {
       padding: 14px 20px;
-      border-bottom: 1px solid #0f3460;
+      border-bottom: 1px solid #252000;
     }
 
     .pw-auth-brand {
       font-size: 16px;
       font-weight: 700;
-      color: #4fc3f7;
+      color: #ffd700;
       letter-spacing: 0.5px;
     }
 
@@ -112,8 +112,8 @@ import { RegisterRequest } from '../../../shared/models/auth.model';
     .pw-input {
       width: 100%;
       padding: 8px 10px;
-      background: #0f3460;
-      border: 1px solid #1a4a80;
+      background: #252000;
+      border: 1px solid #3d3500;
       border-radius: 6px;
       color: #e0e0e0;
       font-size: 14px;
@@ -123,14 +123,14 @@ import { RegisterRequest } from '../../../shared/models/auth.model';
       transition: border-color 0.15s;
 
       &::placeholder { color: #555; }
-      &:focus { border-color: #4fc3f7; }
+      &:focus { border-color: #ffd700; }
       &.ng-invalid.ng-touched { border-color: #ef5350; }
     }
 
     .pw-btn-submit {
       width: 100%;
       padding: 9px;
-      background: #4fc3f7;
+      background: #ffd700;
       color: #000;
       font-weight: 600;
       font-size: 14px;
@@ -144,7 +144,7 @@ import { RegisterRequest } from '../../../shared/models/auth.model';
       justify-content: center;
       transition: background 0.15s;
 
-      &:hover:not(:disabled) { background: #81d4fa; }
+      &:hover:not(:disabled) { background: #ffee58; }
       &:disabled { opacity: 0.6; cursor: not-allowed; }
     }
 
@@ -156,7 +156,7 @@ import { RegisterRequest } from '../../../shared/models/auth.model';
       color: #555;
       font-size: 12px;
 
-      &::before, &::after { content: ''; flex: 1; height: 1px; background: #1e3a5f; }
+      &::before, &::after { content: ''; flex: 1; height: 1px; background: #2d2800; }
     }
 
     .pw-btn-secondary {
@@ -166,15 +166,15 @@ import { RegisterRequest } from '../../../shared/models/auth.model';
       width: 100%;
       padding: 9px;
       background: transparent;
-      border: 1px solid #4fc3f7;
+      border: 1px solid #ffd700;
       border-radius: 6px;
-      color: #4fc3f7;
+      color: #ffd700;
       font-size: 14px;
       font-weight: 600;
       text-decoration: none;
       transition: background 0.15s;
 
-      &:hover { background: #0f3460; }
+      &:hover { background: #252000; }
     }
   `],
 })
