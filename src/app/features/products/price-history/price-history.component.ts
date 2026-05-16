@@ -1,5 +1,6 @@
 import { Component, effect, ElementRef, inject, OnDestroy, OnInit, signal, viewChild } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Location } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -14,10 +15,10 @@ Chart.register(LineController, LineElement, PointElement, LinearScale, CategoryS
 @Component({
   selector: 'app-price-history',
   standalone: true,
-  imports: [RouterLink, MatButtonModule, MatIconModule, MatProgressSpinnerModule, TranslateModule, EmptyStateComponent],
+  imports: [MatButtonModule, MatIconModule, MatProgressSpinnerModule, TranslateModule, EmptyStateComponent],
   template: `
     <div class="page-header">
-      <button mat-icon-button [routerLink]="['/lists', listId]"><mat-icon>arrow_back</mat-icon></button>
+      <button mat-icon-button (click)="back()"><mat-icon>arrow_back</mat-icon></button>
       <h1>{{ 'PRODUCTS.HISTORY' | translate }}</h1>
     </div>
 
@@ -40,13 +41,13 @@ Chart.register(LineController, LineElement, PointElement, LinearScale, CategoryS
 })
 export class PriceHistoryComponent implements OnInit, OnDestroy {
   private readonly route = inject(ActivatedRoute);
+  private readonly location = inject(Location);
   private readonly productsApi = inject(ProductsApiService);
 
   private readonly chartCanvas = viewChild<ElementRef<HTMLCanvasElement>>('chartCanvas');
   private chart?: Chart;
   private snapshots = signal<PriceSnapshot[]>([]);
 
-  listId = this.route.snapshot.paramMap.get('id')!;
   productId = this.route.snapshot.paramMap.get('productId')!;
   loading = signal(true);
   empty = signal(false);
@@ -103,6 +104,10 @@ export class PriceHistoryComponent implements OnInit, OnDestroy {
       },
       error: () => { this.loading.set(false); this.empty.set(true); },
     });
+  }
+
+  back(): void {
+    this.location.back();
   }
 
   ngOnDestroy(): void {
