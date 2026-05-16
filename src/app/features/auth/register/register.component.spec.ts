@@ -46,12 +46,12 @@ describe('RegisterComponent', () => {
     fixture.componentInstance.form.setValue({ name: 'Test', email: 'a@b.com', password: '123456' });
     fixture.componentInstance.submit();
     tick();
-    expect(authApi.register).toHaveBeenCalledWith({ name: 'Test', email: 'a@b.com', password: '123456' });
+    expect(authApi.register).toHaveBeenCalledWith(jasmine.objectContaining({ name: 'Test', email: 'a@b.com', password: '123456' }));
     expect(router.navigate).toHaveBeenCalledWith(['/auth/login']);
   }));
 
   it('should show error toast on failure', fakeAsync(() => {
-    authApi.register.and.returnValue(throwError(() => ({ status: 400, error: { message: 'Email já existe' } })));
+    authApi.register.and.returnValue(throwError(() => ({ status: 400, error: { detail: 'Email já existe' } })));
     fixture.componentInstance.form.setValue({ name: 'Test', email: 'a@b.com', password: '123456' });
     fixture.componentInstance.submit();
     tick();

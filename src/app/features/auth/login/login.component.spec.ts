@@ -61,7 +61,7 @@ describe('LoginComponent', () => {
   }));
 
   it('should show error toast on failure', fakeAsync(() => {
-    authApi.login.and.returnValue(throwError(() => ({ status: 401, error: { message: 'Credenciais inválidas' } })));
+    authApi.login.and.returnValue(throwError(() => ({ status: 401, error: { detail: 'Credenciais inválidas' } })));
     fixture.componentInstance.form.setValue({ email: 'a@b.com', password: 'wrong' });
     fixture.componentInstance.submit();
     tick();
