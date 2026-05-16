@@ -51,7 +51,7 @@
   button {
     width: 52px;
     height: 42px;
-    background: #3483FA;
+    background: #1a1a2e;
     border: none;
     cursor: pointer;
     display: flex;
@@ -59,8 +59,8 @@
     justify-content: center;
     transition: background 0.15s;
 
-    mat-icon { color: white; font-size: 22px; }
-    &:hover { background: #2968c8; }
+    mat-icon { color: #ffd700; font-size: 22px; }
+    &:hover { background: #111100; }
   }
 }
 
