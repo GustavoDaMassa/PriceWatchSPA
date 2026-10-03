@@ -45,8 +45,20 @@ export const routes: Routes = [
         loadComponent: () => import('./features/lists/list-analysis/list-analysis.component').then(m => m.ListAnalysisComponent),
       },
       {
+        path: 'add',
+        loadComponent: () => import('./features/add-offer/add-offer.component').then(m => m.AddOfferComponent),
+      },
+      {
         path: 'items',
         loadComponent: () => import('./features/items/items.component').then(m => m.ItemsComponent),
+      },
+      {
+        path: 'products/:productId/comparison',
+        loadComponent: () => import('./features/products/product-comparison/product-comparison.component').then(m => m.ProductComparisonComponent),
+      },
+      {
+        path: 'products/:productId/candidates',
+        loadComponent: () => import('./features/products/candidate-review/candidate-review.component').then(m => m.CandidateReviewComponent),
       },
       {
         path: 'items/:productId/history',

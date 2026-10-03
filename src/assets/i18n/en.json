@@ -102,7 +102,8 @@
     "BELOW_TARGET_BADGE": "Below target!",
     "ASSIGN_TO_LIST": "Add to list",
     "OPEN_IN_PLATFORM": "Open on platform",
-    "BULK_DELETE_MSG": "{{ count }} product(s) will be removed. Price history will be lost."
+    "BULK_DELETE_MSG": "{{ count }} product(s) will be removed. Price history will be lost.",
+    "COMPARE_STORES": "Compare stores"
   },
   "NOTIFICATIONS": {
     "TITLE": "Notifications",
@@ -153,5 +154,48 @@
     "IN_LIST": "In list",
     "NO_RESULTS": "No products found.",
     "SELECT": "Select"
+  },
+  "ADD_OFFER": {
+    "TITLE": "Add product",
+    "SUBTITLE": "Paste the product link and track its price. Then we look for the same product in other stores.",
+    "URL_LABEL": "Product link",
+    "URL_HINT": "Short share links from the store apps work too",
+    "TARGET_LABEL": "Target price (optional)",
+    "SUBMIT": "Track",
+    "OR": "or",
+    "PICK_STORE": "Pick a store and track straight from its page",
+    "OPEN_STORE": "Open {{store}}",
+    "EXTENSION_NEEDED": "To track straight from the store, install the PriceWatch extension.",
+    "INSTALL_EXTENSION": "Install extension",
+    "EXTENSION_READY": "Extension detected: open the store and click \"Track with PriceWatch\" on the product page.",
+    "ADDED": "Product added! Let's look in other stores."
+  },
+  "CANDIDATES": {
+    "TITLE": "Same product in other stores",
+    "SEARCHING": "Looking in other stores...",
+    "EMPTY": "We could not find this product in other stores for now.",
+    "NOTE": "Check that the model, capacity and color are the same before confirming.",
+    "REASON_GTIN": "Same barcode (GTIN)",
+    "REASON_KEYWORD": "Similar by name and features",
+    "SAME": "It's the same — track it",
+    "NOT_SAME": "Not the same",
+    "SKIP": "Done",
+    "COMPARE": "See comparison",
+    "OUTCOME_ATTACHED": "Offer added to the comparison!",
+    "OUTCOME_PENDING": "Answer saved. The offer joins the comparison once another user also confirms.",
+    "OUTCOME_UNAVAILABLE": "This offer already belongs to another product and could not be added.",
+    "OUTCOME_REJECTED": "Thanks! We won't suggest this offer again.",
+    "OUTCOME_RECORDED": "Answer saved."
+  },
+  "COMPARISON": {
+    "TITLE": "Store comparison",
+    "CHEAPEST": "Lowest price",
+    "LOWEST_EVER": "Lowest seen",
+    "GO_TO_STORE": "Go to the store",
+    "FIND_MORE": "Look in other stores",
+    "LAST_CHECKED": "Updated",
+    "NEVER_CHECKED": "Not checked yet",
+    "FRESHNESS_NOTE": "Prices can lag slightly behind the store's website.",
+    "EMPTY": "There are no offers for this product yet."
   }
 }

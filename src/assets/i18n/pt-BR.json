@@ -102,7 +102,8 @@
     "BELOW_TARGET_BADGE": "Abaixo do alvo!",
     "ASSIGN_TO_LIST": "Adicionar à lista",
     "OPEN_IN_PLATFORM": "Abrir na plataforma",
-    "BULK_DELETE_MSG": "{{ count }} produto(s) serão removidos. O histórico de preços será perdido."
+    "BULK_DELETE_MSG": "{{ count }} produto(s) serão removidos. O histórico de preços será perdido.",
+    "COMPARE_STORES": "Comparar lojas"
   },
   "NOTIFICATIONS": {
     "TITLE": "Notificações",
@@ -153,5 +154,48 @@
     "IN_LIST": "Em lista",
     "NO_RESULTS": "Nenhum produto encontrado.",
     "SELECT": "Selecionar"
+  },
+  "ADD_OFFER": {
+    "TITLE": "Adicionar produto",
+    "SUBTITLE": "Cole o link do produto e acompanhe o preço. Depois procuramos o mesmo produto em outras lojas.",
+    "URL_LABEL": "Link do produto",
+    "URL_HINT": "Links curtos de compartilhamento dos apps das lojas também funcionam",
+    "TARGET_LABEL": "Preço-alvo (opcional)",
+    "SUBMIT": "Acompanhar",
+    "OR": "ou",
+    "PICK_STORE": "Escolha uma loja e acompanhe direto pela página dela",
+    "OPEN_STORE": "Abrir {{store}}",
+    "EXTENSION_NEEDED": "Para acompanhar direto da loja, instale a extensão do PriceWatch.",
+    "INSTALL_EXTENSION": "Instalar extensão",
+    "EXTENSION_READY": "Extensão detectada: abra a loja e clique em \"Acompanhar com PriceWatch\" na página do produto.",
+    "ADDED": "Produto adicionado! Vamos procurar nas outras lojas."
+  },
+  "CANDIDATES": {
+    "TITLE": "Mesmo produto em outras lojas",
+    "SEARCHING": "Procurando em outras lojas...",
+    "EMPTY": "Não encontramos este produto em outras lojas por enquanto.",
+    "NOTE": "Confira se o modelo, a capacidade e a cor são os mesmos antes de confirmar.",
+    "REASON_GTIN": "Mesmo código de barras (GTIN)",
+    "REASON_KEYWORD": "Parecido pelo nome e pelas características",
+    "SAME": "É o mesmo — acompanhar",
+    "NOT_SAME": "Não é o mesmo",
+    "SKIP": "Concluir",
+    "COMPARE": "Ver comparação",
+    "OUTCOME_ATTACHED": "Oferta adicionada à comparação!",
+    "OUTCOME_PENDING": "Resposta registrada. A oferta entra na comparação quando outro usuário também confirmar.",
+    "OUTCOME_UNAVAILABLE": "Esta oferta já pertence a outro produto e não pôde ser adicionada.",
+    "OUTCOME_REJECTED": "Obrigado! Não vamos mais sugerir esta oferta.",
+    "OUTCOME_RECORDED": "Resposta registrada."
+  },
+  "COMPARISON": {
+    "TITLE": "Comparação entre lojas",
+    "CHEAPEST": "Menor preço",
+    "LOWEST_EVER": "Menor já visto",
+    "GO_TO_STORE": "Ir para a loja",
+    "FIND_MORE": "Buscar em outras lojas",
+    "LAST_CHECKED": "Atualizado",
+    "NEVER_CHECKED": "Ainda não verificado",
+    "FRESHNESS_NOTE": "Os preços podem ter um pequeno atraso em relação ao site da loja.",
+    "EMPTY": "Ainda não há ofertas para este produto."
   }
 }
