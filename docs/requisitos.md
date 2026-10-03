@@ -43,6 +43,20 @@
 - Deletar conta com confirmação e senha
 - Reenviar email de verificação (visível se não verificado)
 
+### RF07 — Fluxo da v1: adicionar por link, comparar e confirmar (planejado, 02/10/2026)
+- **Entrada por link:** campo para colar o link do produto; a API identifica a loja, segue link curto e importa o produto (RF20 da API)
+- **Seletor de lojas:** alternativa ao link — o usuário escolhe a loja e é levado à página dela em outra aba; com a extensão instalada aparece o botão "Acompanhar com PriceWatch" e, ao clicar, volta para a aba do site já aberta (RF21)
+- **Detecção da extensão:** o site detecta se a extensão está instalada; sem ela, oferece instalar ou usa o campo de link
+- **Descoberta em outras lojas:** depois de acompanhar, a tela mostra as ofertas candidatas encontradas em outras lojas, com loja, preço, imagem e o motivo ("mesmo GTIN" ou "palavra-chave")
+- **Confirmação:** para cada candidata, "É o mesmo produto?" (sim/não) e "Acompanhar esta oferta?"; pré-seleção quando o GTIN é igual; o veredito é enviado à API (RF22, RF23)
+- **Comparação lado a lado:** ofertas do mesmo produto ordenadas por preço, com destaque da mais barata e indicação de "atualizado há X" por oferta (RF16, RNF18)
+- **Ir para a loja:** o botão passa pelo endpoint de redirect (`GET /api/offers/{id}/redirect`); a SPA nunca abre a URL original direto (RF17, `ProductLinkDialogComponent.openUrl()`)
+- **Lojas indisponíveis:** lojas sem busca não aparecem na descoberta; a lista vem de `GET /api/stores` (RF26)
+
+### RF08 — Notificações (evolução, planejado)
+- Central in-app continua com polling (RF05); passa a exibir também o canal de entrega e o link de afiliado da oferta
+- Preferências de canal (e-mail, push no app) na tela de perfil
+
 ---
 
 ## Requisitos Não-Funcionais
@@ -53,7 +67,9 @@
 - **RNF04** — Angular 20+, standalone components, Angular Signals, Angular Material MD3
 - **RNF05** — Lazy loading por feature (loadComponent)
 - **RNF06** — Interceptor HTTP: injeta JWT e redireciona para login em 401
-- **RNF07** — Deploy no Vercel; URL da API configurável via `environment.prod.ts`
+- **RNF07** — Deploy no Vercel; URL da API configurável via `environment.prod.ts`. **Planejado para a v1:** migrar o deploy para a Cloudflare Pages (gratuito, uso comercial permitido; o plano gratuito da Vercel não permite uso comercial) — ver `priceWatchAPI/docs/analise-financeira.md`
+- **RNF08** — A SPA nunca altera páginas de lojas nem abre links de loja diretamente; toda saída para a loja passa pelo redirect da API (RNF20 da API)
+- **RNF09** — Mostrar o frescor do preço ("atualizado há X") em todas as telas que exibem preço (RNF18 da API)
 
 ---
 
@@ -76,3 +92,9 @@
 
 1. **Email verification para login**: remover validação `isEmailVerified` do fluxo de login
 2. **`AddProductRequest`**: tornar `name` e `targetPrice` opcionais — backend preenche via fetcher
+
+### Impacto no backend — v1 (planejado)
+
+3. `POST /api/offers` aceita link (inclusive curto) e dados extraídos pelo cliente
+4. `GET /api/stores`, `POST /api/products/{id}/discover`, `GET /api/products/{id}/candidates`, `POST /api/candidates/{id}/feedback` (ver `priceWatchAPI/docs/arquitetura.md`, "Arquitetura da v1")
+5. DTOs de oferta expõem `lastCheckedAt` para o indicador de frescor
