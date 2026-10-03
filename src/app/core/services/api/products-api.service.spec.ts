@@ -53,4 +53,15 @@ describe('ProductsApiService', () => {
     service.getPriceHistory('P1').subscribe();
     http.expectOne(`${environment.apiUrl}/products/P1/history`).flush([]);
   });
+
+  it('should POST /products/:id/click and return the store url', () => {
+    let url = '';
+    service.click('P1').subscribe(r => (url = r.url));
+
+    const req = http.expectOne(`${environment.apiUrl}/products/P1/click`);
+    expect(req.request.method).toBe('POST');
+    req.flush({ url: 'https://loja/p/1' });
+
+    expect(url).toBe('https://loja/p/1');
+  });
 });

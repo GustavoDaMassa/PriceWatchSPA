@@ -17,6 +17,8 @@ export interface TrackedProduct {
   lowestPrice: number;
   isActive: boolean;
   nextCheckAt: string;
+  /** Id do produto-mestre do catálogo (comparação e descoberta). Nulo no modelo legado. */
+  productId?: string | null;
 }
 
 export interface PriceSnapshot {
