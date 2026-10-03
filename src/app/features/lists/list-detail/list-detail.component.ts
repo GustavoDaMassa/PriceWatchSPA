@@ -1,5 +1,5 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
@@ -14,7 +14,6 @@ import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialo
 import { EmptyStateComponent } from '../../../shared/components/empty-state/empty-state.component';
 import { ProductCardComponent } from '../../../shared/components/product-card/product-card.component';
 import { TrackedProduct } from '../../../shared/models/tracked-product.model';
-import { AddProductDialogComponent } from '../../products/add-product/add-product-dialog.component';
 import { EditProductDialogComponent } from '../../products/edit-product/edit-product-dialog.component';
 import { AssignToListDialogComponent } from '../../products/assign-to-list/assign-to-list-dialog.component';
 import { ProductLinkDialogComponent } from '../../products/product-link/product-link-dialog.component';
@@ -89,6 +88,7 @@ import { ProductLinkDialogComponent } from '../../products/product-link/product-
             (cardClick)="openProductLink(p)"
             (selectionChange)="toggleSelect(p.id)"
             (editClick)="openEdit(p)"
+            (compareClick)="openComparison(p)"
             (toggleActiveClick)="toggleActive(p)"
             (removeClick)="confirmRemove(p)" />
         }
@@ -158,6 +158,7 @@ import { ProductLinkDialogComponent } from '../../products/product-link/product-
 })
 export class ListDetailComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
   private readonly productsApi = inject(ProductsApiService);
   private readonly dialog = inject(MatDialog);
   private readonly toast = inject(ToastService);
@@ -206,8 +207,11 @@ export class ListDetailComponent implements OnInit {
   }
 
   openAdd(): void {
-    this.dialog.open(AddProductDialogComponent, { width: '480px', data: { listId: this.listId } })
-      .afterClosed().subscribe(saved => { if (saved) this.loadProducts(); });
+    this.router.navigate(['/add'], { queryParams: { listId: this.listId } });
+  }
+
+  openComparison(product: TrackedProduct): void {
+    if (product.productId) this.router.navigate(['/products', product.productId, 'comparison']);
   }
 
   openEdit(product: TrackedProduct): void {

@@ -109,69 +109,39 @@ graph TB
     NPS --> HDR
 ```
 
-## Evolução planejada para a v1 (02/10/2026)
+## Fluxo da v1 (implementado em 03/10/2026)
 
-Nada abaixo está implementado. Detalhes de API em `priceWatchAPI/docs/arquitetura.md` ("Arquitetura da v1").
+Detalhes de API em `priceWatchAPI/docs/arquitetura.md`. O fluxo novo exige a API com `Features__UnifiedCatalogEnabled=true` (o `start-dev.sh` já liga por padrão).
 
-### Features novas
+### Telas e rotas
 
-```
-features/
-├── add-offer/            colar link, seletor de lojas, detecção da extensão
-├── products/
-│   ├── product-comparison/   ofertas lado a lado + destaque da mais barata + frescor
-│   └── candidate-review/     candidatas encontradas + "é o mesmo produto?" + acompanhar
-└── notifications/        evolução: canal de entrega e preferências
-```
+| Rota | Componente | O que faz |
+|---|---|---|
+| `/add` | `AddOfferComponent` | Cola o link (a API normaliza, segue link curto e identifica a loja) e preço-alvo opcional; `?listId=` mantém a lista. Abaixo, "escolha uma loja" (só as com `canFetchByUrl`), que depende da extensão. Depois de adicionar, vai para os candidatos |
+| `/products/:productId/candidates` | `CandidateReviewComponent` | Roda a descoberta (`POST .../discover`), lista as candidatas e deixa confirmar ("é o mesmo — acompanhar") ou descartar; mostra o resultado do voto (anexada, aguardando outro usuário, já pertence a outro produto, descartada) |
+| `/products/:productId/comparison` | `ProductComparisonComponent` | Ofertas lado a lado, a mais barata destacada, "atualizado há X" por oferta (RNF18) e a nota de que o preço pode ter atraso; "Buscar em outras lojas" volta aos candidatos |
 
-Reaproveitam `SourceBadgeComponent`, `ProductCardComponent`, `PriceDisplayComponent` e `EmptyStateComponent`. `ProductLinkDialogComponent.openUrl()` passa a chamar o redirect da API em vez de `window.open(product.url)`.
+`productId` é o do produto-mestre. Itens da lista legada (`TrackedProduct` na SPA) carregam `productId` (aditivo, nulo no modelo legado); o card ganha **Comparar lojas** no menu só quando existe.
 
-### Rotas novas
-
-```
-/add                              protegida — colar link ou escolher a loja
-/products/:id/comparison          protegida — comparação lado a lado
-/products/:id/candidates          protegida — confirmação das candidatas
-```
-
-### Fluxo do usuário
-
-```mermaid
-sequenceDiagram
-    participant U as Usuário
-    participant SPA as SPA
-    participant EXT as Extensão
-    participant API as API
-
-    alt colar link
-        U->>SPA: cola o link
-        SPA->>API: POST /api/offers
-    else escolher a loja
-        U->>SPA: escolhe a loja
-        SPA->>EXT: ping (extensão instalada?)
-        SPA->>U: abre a loja em outra aba (#pw=id)
-        U->>EXT: clica em "Acompanhar"
-        EXT->>API: POST /api/offers (dados extraídos)
-        EXT->>SPA: foca a aba do site
-    end
-    SPA->>API: POST /api/products/{id}/discover
-    API-->>SPA: candidatas
-    U->>SPA: "é o mesmo produto?" + acompanhar
-    SPA->>API: POST /api/candidates/{id}/feedback
-    SPA->>API: GET /api/products/{id}/comparison
-```
+### Saída para a loja (RF17)
+Nenhuma tela abre a URL da loja direto. Comparação e diálogo "abrir na plataforma" abrem a aba **antes** da chamada assíncrona (senão o navegador bloqueia o pop-up), chamam `POST /api/offers/{id}/click` ou `POST /api/products/{id}/click` e só então apontam a aba para a URL devolvida (link de afiliado, quando há rede), com `opener` zerado.
 
 ### Serviços novos (`core/services`)
+`api/stores-api`, `api/offers-api` (importar, comparação, clique), `api/discovery-api` (descobrir, candidatas, voto), `products-api.click` e `extension-bridge`.
 
-| Serviço | Papel |
-|---|---|
-| `extension-bridge` | Ping e mensagens com a extensão (detecta instalação, recebe o retorno do fluxo "abrir loja") |
-| `store-catalog` | Carrega `GET /api/stores` (lojas e capacidades) |
-| `offer` / `candidate` | Chamadas de `/api/offers`, `/api/products/{id}/discover`, `candidates`, `feedback` |
+### Protocolo com a extensão (`ExtensionBridgeService`)
+Troca de mensagens por `window.postMessage` na própria origem do site. O content script da extensão precisa rodar também nesta origem (`matches` do site e de `localhost:4200`) e só aceitar mensagens com `event.source === window`.
+
+| Direção | Mensagem | Quando |
+|---|---|---|
+| Site → extensão | `{ source: "pricewatch-web", type: "PING", id }` | O site pergunta se a extensão está instalada (timeout de 800 ms) |
+| Extensão → site | `{ source: "pricewatch-extension", type: "PONG", id, version }` | Resposta com o mesmo `id` |
+| Extensão → site | `{ source: "pricewatch-extension", type: "TRACKED", productId }` | Depois de acompanhar um produto no fluxo "abrir a loja"; o site vai para os candidatos |
+
+"Abrir a loja": o site abre `<homeUrl>#pw=<uuid>` em aba nova; a extensão reconhece o marcador, mostra o botão "Acompanhar com PriceWatch" em destaque, envia o produto para a API, foca a aba do site e manda o `TRACKED`. Sem extensão, os botões de loja ficam desativados com o convite para instalar e o fluxo é só colar o link.
 
 ### Deploy
-
-Migrar da Vercel (plano gratuito não permite uso comercial) para a Cloudflare Pages, mantendo a URL da API em `environment.prod.ts`. A paleta atual (inspirada no Mercado Livre) é reavaliada junto com a identidade da landing e do app.
+O alvo é a **Cloudflare Pages** (o plano gratuito permite uso comercial; a Vercel Hobby não). `public/_redirects` (`/* /index.html 200`) faz o fallback da SPA. Configuração no painel: comando `npm ci --legacy-peer-deps && npm run build`, diretório de saída `dist/PriceWatchSPA/browser`, `environment.prod.ts` apontando para a API de produção. O `vercel.json` continua até a migração.
 
 ## Decisões Técnicas
 

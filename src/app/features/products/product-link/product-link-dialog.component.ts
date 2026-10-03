@@ -2,7 +2,9 @@ import { Component, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { ProductsApiService } from '../../../core/services/api/products-api.service';
+import { ToastService } from '../../../core/services/toast.service';
 import { PriceDisplayComponent } from '../../../shared/components/price-display/price-display.component';
 import { SourceBadgeComponent } from '../../../shared/components/source-badge/source-badge.component';
 import { TrackedProduct } from '../../../shared/models/tracked-product.model';
@@ -68,9 +70,31 @@ import { TrackedProduct } from '../../../shared/models/tracked-product.model';
 export class ProductLinkDialogComponent {
   protected readonly ref = inject(MatDialogRef) as MatDialogRef<ProductLinkDialogComponent>;
   readonly product = inject<TrackedProduct>(MAT_DIALOG_DATA);
+  private readonly productsApi = inject(ProductsApiService);
+  private readonly toast = inject(ToastService);
+  private readonly translate = inject(TranslateService);
 
+  /**
+   * Nunca abre a URL da loja direto: o endpoint de clique registra o clique e devolve o link de
+   * afiliado. A aba é aberta antes da chamada assíncrona (senão o navegador bloqueia o pop-up).
+   */
   openUrl(): void {
-    window.open(this.product.url, '_blank', 'noopener');
-    this.ref.close();
+    const tab = window.open('about:blank', '_blank');
+
+    this.productsApi.click(this.product.id).subscribe({
+      next: ({ url }) => {
+        if (tab) {
+          tab.opener = null;
+          tab.location.href = url;
+        } else {
+          window.location.href = url;
+        }
+        this.ref.close();
+      },
+      error: () => {
+        tab?.close();
+        this.toast.error(this.translate.instant('COMMON.ERROR_GENERIC'));
+      },
+    });
   }
 }

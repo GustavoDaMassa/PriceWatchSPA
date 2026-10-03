@@ -14,7 +14,6 @@ import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/c
 import { EmptyStateComponent } from '../../shared/components/empty-state/empty-state.component';
 import { ProductCardComponent } from '../../shared/components/product-card/product-card.component';
 import { TrackedProduct } from '../../shared/models/tracked-product.model';
-import { AddProductDialogComponent } from '../products/add-product/add-product-dialog.component';
 import { EditProductDialogComponent } from '../products/edit-product/edit-product-dialog.component';
 import { AssignToListDialogComponent } from '../products/assign-to-list/assign-to-list-dialog.component';
 import { ProductLinkDialogComponent } from '../products/product-link/product-link-dialog.component';
@@ -99,6 +98,7 @@ import { ProductLinkDialogComponent } from '../products/product-link/product-lin
             (cardClick)="openProductLink(p)"
             (selectionChange)="toggleSelect(p.id)"
             (editClick)="openEdit(p)"
+            (compareClick)="openComparison(p)"
             (assignToListClick)="openAssignToList(p)"
             (toggleActiveClick)="toggleActive(p)"
             (removeClick)="confirmRemove(p)" />
@@ -242,8 +242,11 @@ export class ItemsComponent implements OnInit {
   }
 
   openAdd(): void {
-    this.dialog.open(AddProductDialogComponent, { width: '480px', data: {} })
-      .afterClosed().subscribe(saved => { if (saved) this.load(); });
+    this.router.navigate(['/add']);
+  }
+
+  openComparison(product: TrackedProduct): void {
+    if (product.productId) this.router.navigate(['/products', product.productId, 'comparison']);
   }
 
   openEdit(product: TrackedProduct): void {

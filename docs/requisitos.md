@@ -43,7 +43,7 @@
 - Deletar conta com confirmação e senha
 - Reenviar email de verificação (visível se não verificado)
 
-### RF07 — Fluxo da v1: adicionar por link, comparar e confirmar (planejado, 02/10/2026)
+### RF07 — Fluxo da v1: adicionar por link, comparar e confirmar (implementado em 03/10/2026)
 - **Entrada por link:** campo para colar o link do produto; a API identifica a loja, segue link curto e importa o produto (RF20 da API)
 - **Seletor de lojas:** alternativa ao link — o usuário escolhe a loja e é levado à página dela em outra aba; com a extensão instalada aparece o botão "Acompanhar com PriceWatch" e, ao clicar, volta para a aba do site já aberta (RF21)
 - **Detecção da extensão:** o site detecta se a extensão está instalada; sem ela, oferece instalar ou usa o campo de link

@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
+import { ClickResponse } from '../../../shared/models/offer.model';
 import {
   AddProductRequest,
   PriceSnapshot,
@@ -38,5 +39,10 @@ export class ProductsApiService {
 
   getPriceHistory(id: string): Observable<PriceSnapshot[]> {
     return this.http.get<PriceSnapshot[]>(`${environment.apiUrl}/products/${id}/history`);
+  }
+
+  /** Registra o clique e devolve a URL da loja (link de afiliado, se houver); nunca abra a URL da loja direto. */
+  click(id: string): Observable<ClickResponse> {
+    return this.http.post<ClickResponse>(`${environment.apiUrl}/products/${id}/click`, null);
   }
 }
