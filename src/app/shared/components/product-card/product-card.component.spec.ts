@@ -262,4 +262,40 @@ describe('ProductCardComponent', () => {
 
     expect(spy).toHaveBeenCalledTimes(1);
   }));
+
+  // ── comparação entre lojas ─────────────────────────────────────────────────
+
+  it('offers "compare stores" in the menu only when the item has a catalog product id', fakeAsync(async () => {
+    await setup({ product: { ...BASE_PRODUCT, productId: 'CATALOG-1' }, showAssignToList: false });
+
+    openMenu();
+    tick();
+
+    const labels = Array.from(menuItems()).map(el => el.textContent ?? '');
+    expect(labels.some(l => l.includes('PRODUCTS.COMPARE_STORES'))).toBeTrue();
+  }));
+
+  it('does not offer "compare stores" for legacy items without a product id', fakeAsync(async () => {
+    await setup({ showAssignToList: false });
+
+    openMenu();
+    tick();
+
+    const labels = Array.from(menuItems()).map(el => el.textContent ?? '');
+    expect(labels.some(l => l.includes('PRODUCTS.COMPARE_STORES'))).toBeFalse();
+  }));
+
+  it('emits compareClick when "compare stores" is chosen', fakeAsync(async () => {
+    await setup({ product: { ...BASE_PRODUCT, productId: 'CATALOG-1' }, showAssignToList: false });
+    const spy = jasmine.createSpy();
+    component.compareClick.subscribe(spy);
+
+    openMenu();
+    tick();
+    const compare = Array.from(menuItems()).find(el => (el.textContent ?? '').includes('PRODUCTS.COMPARE_STORES')) as HTMLElement;
+    compare.click();
+    tick();
+
+    expect(spy).toHaveBeenCalledTimes(1);
+  }));
 });

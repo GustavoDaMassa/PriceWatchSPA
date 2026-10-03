@@ -70,6 +70,11 @@ import { TrackedProduct } from '../../models/tracked-product.model';
             <button mat-menu-item (click)="editClick.emit()">
               <mat-icon>edit</mat-icon>{{ 'PRODUCTS.EDIT' | translate }}
             </button>
+            @if (product().productId) {
+              <button mat-menu-item (click)="compareClick.emit()">
+                <mat-icon>compare_arrows</mat-icon>{{ 'PRODUCTS.COMPARE_STORES' | translate }}
+              </button>
+            }
             @if (showAssignToList()) {
               <button mat-menu-item (click)="assignToListClick.emit()">
                 <mat-icon>playlist_add</mat-icon>{{ 'PRODUCTS.ASSIGN_TO_LIST' | translate }}
@@ -162,6 +167,7 @@ export class ProductCardComponent {
   cardClick = output<void>();
   selectionChange = output<void>();
   editClick = output<void>();
+  compareClick = output<void>();
   assignToListClick = output<void>();
   toggleActiveClick = output<void>();
   removeClick = output<void>();
