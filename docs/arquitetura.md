@@ -109,6 +109,70 @@ graph TB
     NPS --> HDR
 ```
 
+## Evolução planejada para a v1 (02/10/2026)
+
+Nada abaixo está implementado. Detalhes de API em `priceWatchAPI/docs/arquitetura.md` ("Arquitetura da v1").
+
+### Features novas
+
+```
+features/
+├── add-offer/            colar link, seletor de lojas, detecção da extensão
+├── products/
+│   ├── product-comparison/   ofertas lado a lado + destaque da mais barata + frescor
+│   └── candidate-review/     candidatas encontradas + "é o mesmo produto?" + acompanhar
+└── notifications/        evolução: canal de entrega e preferências
+```
+
+Reaproveitam `SourceBadgeComponent`, `ProductCardComponent`, `PriceDisplayComponent` e `EmptyStateComponent`. `ProductLinkDialogComponent.openUrl()` passa a chamar o redirect da API em vez de `window.open(product.url)`.
+
+### Rotas novas
+
+```
+/add                              protegida — colar link ou escolher a loja
+/products/:id/comparison          protegida — comparação lado a lado
+/products/:id/candidates          protegida — confirmação das candidatas
+```
+
+### Fluxo do usuário
+
+```mermaid
+sequenceDiagram
+    participant U as Usuário
+    participant SPA as SPA
+    participant EXT as Extensão
+    participant API as API
+
+    alt colar link
+        U->>SPA: cola o link
+        SPA->>API: POST /api/offers
+    else escolher a loja
+        U->>SPA: escolhe a loja
+        SPA->>EXT: ping (extensão instalada?)
+        SPA->>U: abre a loja em outra aba (#pw=id)
+        U->>EXT: clica em "Acompanhar"
+        EXT->>API: POST /api/offers (dados extraídos)
+        EXT->>SPA: foca a aba do site
+    end
+    SPA->>API: POST /api/products/{id}/discover
+    API-->>SPA: candidatas
+    U->>SPA: "é o mesmo produto?" + acompanhar
+    SPA->>API: POST /api/candidates/{id}/feedback
+    SPA->>API: GET /api/products/{id}/comparison
+```
+
+### Serviços novos (`core/services`)
+
+| Serviço | Papel |
+|---|---|
+| `extension-bridge` | Ping e mensagens com a extensão (detecta instalação, recebe o retorno do fluxo "abrir loja") |
+| `store-catalog` | Carrega `GET /api/stores` (lojas e capacidades) |
+| `offer` / `candidate` | Chamadas de `/api/offers`, `/api/products/{id}/discover`, `candidates`, `feedback` |
+
+### Deploy
+
+Migrar da Vercel (plano gratuito não permite uso comercial) para a Cloudflare Pages, mantendo a URL da API em `environment.prod.ts`. A paleta atual (inspirada no Mercado Livre) é reavaliada junto com a identidade da landing e do app.
+
 ## Decisões Técnicas
 
 | Decisão | Escolha | Motivo |
