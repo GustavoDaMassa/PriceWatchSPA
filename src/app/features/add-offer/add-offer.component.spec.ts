@@ -15,7 +15,7 @@ import { StoreCapabilities } from '../../shared/models/store.model';
 
 const STORES: StoreCapabilities[] = [
   { source: 0, name: 'Mercado Livre', homeUrl: 'https://www.mercadolivre.com.br', canFetchByUrl: true, canSearch: true, canGenerateAffiliateLink: false },
-  { source: 1, name: 'KaBuM!', homeUrl: 'https://www.kabum.com.br', canFetchByUrl: false, canSearch: false, canGenerateAffiliateLink: false },
+  { source: 1, name: 'KaBuM!', homeUrl: 'https://www.kabum.com.br', canFetchByUrl: true, canSearch: false, canGenerateAffiliateLink: false },
 ];
 
 function offerFor(productId: string, listId?: string): OfferResponse {
@@ -71,7 +71,7 @@ describe('AddOfferComponent', () => {
     fixture.detectChanges();
   }
 
-  it('lists only the stores the platform can fetch by url', async () => {
+  it('lists only Mercado Livre in the prototype, even if another store can be fetched by url', async () => {
     await setup();
 
     expect(component.stores().map(s => s.name)).toEqual(['Mercado Livre']);

@@ -16,12 +16,16 @@ import { OffersApiService } from '../../core/services/api/offers-api.service';
 import { StoresApiService } from '../../core/services/api/stores-api.service';
 import { ToastService } from '../../core/services/toast.service';
 import { StoreCapabilities } from '../../shared/models/store.model';
+import { ProductSource } from '../../shared/models/tracked-product.model';
 import { ExtensionDialogComponent } from '../../shell/extension-dialog.component';
+
+/** Lojas liberadas no protótipo do teste com usuários: só o Mercado Livre (0). As demais ficam escondidas. */
+const PROTOTYPE_SOURCES: ProductSource[] = [0];
 
 /**
  * Adicionar um produto: colar o link (a API normaliza, segue links curtos e identifica a loja) ou
  * escolher uma loja e acompanhar direto pela página dela, com a extensão. Depois de adicionar, segue
- * para a descoberta do mesmo produto em outras lojas.
+ * para a busca de produtos parecidos.
  */
 @Component({
   selector: 'app-add-offer',
@@ -125,7 +129,7 @@ export class AddOfferComponent implements OnInit {
 
   ngOnInit(): void {
     this.storesApi.getStores().subscribe({
-      next: stores => this.stores.set(stores.filter(s => s.canFetchByUrl)),
+      next: stores => this.stores.set(stores.filter(s => s.canFetchByUrl && PROTOTYPE_SOURCES.includes(s.source))),
       error: () => this.stores.set([]),
     });
 
