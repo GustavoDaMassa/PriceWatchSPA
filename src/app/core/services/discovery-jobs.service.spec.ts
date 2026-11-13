@@ -108,6 +108,15 @@ describe('DiscoveryJobsService', () => {
       expect(service.job('P1')).toEqual(jasmine.objectContaining({ status: 'done', failure: 'cooldown', candidates: [CANDIDATE] }));
     });
 
+    it('flags that there is nothing left to find when the API answers 409', () => {
+      finishedFirstSearch();
+      api.discover.and.returnValue(throwError(() => new HttpErrorResponse({ status: 409 })));
+
+      service.refresh('P1');
+
+      expect(service.job('P1')).toEqual(jasmine.objectContaining({ status: 'done', failure: 'exhausted', candidates: [CANDIDATE] }));
+    });
+
     it('keeps the list and flags an error on other failures', () => {
       finishedFirstSearch();
       api.discover.and.returnValue(throwError(() => new HttpErrorResponse({ status: 500 })));

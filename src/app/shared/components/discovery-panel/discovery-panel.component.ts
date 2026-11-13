@@ -116,6 +116,7 @@ export class DiscoveryPanelComponent {
     if (job.status === 'running') return fresh ? 'DISCOVERY_PANEL.RUNNING_NEW' : 'DISCOVERY_PANEL.RUNNING';
     if (job.status === 'error' || job.failure === 'error') return 'DISCOVERY_PANEL.ERROR';
     if (job.failure === 'cooldown') return 'DISCOVERY_PANEL.COOLDOWN';
+    if (job.failure === 'exhausted') return 'DISCOVERY_PANEL.EXHAUSTED';
     const count = this.found(job);
     if (count === 0) return fresh ? 'DISCOVERY_PANEL.NONE_NEW' : 'DISCOVERY_PANEL.NONE';
     if (count === 1) return fresh ? 'DISCOVERY_PANEL.FOUND_NEW_ONE' : 'DISCOVERY_PANEL.FOUND_ONE';

@@ -71,7 +71,7 @@ import { ConfirmOutcome, OfferCandidate } from '../../../shared/models/candidate
         }
 
         <div class="footer">
-          <button mat-stroked-button class="find-new" [disabled]="refreshing()" (click)="findNew()">
+          <button mat-stroked-button class="find-new" [disabled]="refreshing() || exhausted()" (click)="findNew()">
             @if (refreshing()) { <mat-spinner diameter="16" /> }
             {{ (refreshing() ? 'CANDIDATES.NEW_SEARCHING' : 'CANDIDATES.NEW_BUTTON') | translate }}
           </button>
@@ -131,6 +131,8 @@ export class CandidateReviewComponent implements OnInit {
   /** Tela cheia de espera só na primeira busca; numa nova busca a lista atual continua visível. */
   readonly loading = computed(() => !this.job() || (this.job()!.status === 'running' && !this.job()!.fromRefresh));
   readonly refreshing = computed(() => this.job()?.status === 'running' && !!this.job()?.fromRefresh);
+  /** Depois de 3 novas buscas seguidas sem nada novo a API para de aceitar: o botão fica desativado. */
+  readonly exhausted = computed(() => this.job()?.failure === 'exhausted');
   private readonly newIds = computed(() => new Set(this.job()?.newIds ?? []));
 
   /** Aviso do resultado da última nova busca (só aparece depois que ela termina). */
@@ -138,6 +140,7 @@ export class CandidateReviewComponent implements OnInit {
     const job = this.job();
     if (!job || !job.fromRefresh || job.status !== 'done') return null;
     if (job.failure === 'cooldown') return { key: 'CANDIDATES.NEW_COOLDOWN', count: 0 };
+    if (job.failure === 'exhausted') return { key: 'CANDIDATES.NEW_EXHAUSTED', count: 0 };
     if (job.failure === 'error') return { key: 'CANDIDATES.NEW_ERROR', count: 0 };
     if (job.newIds.length === 0) return { key: 'CANDIDATES.NEW_NONE', count: 0 };
     return { key: job.newIds.length === 1 ? 'CANDIDATES.NEW_FOUND_ONE' : 'CANDIDATES.NEW_FOUND_MANY', count: job.newIds.length };

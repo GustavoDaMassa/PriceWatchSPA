@@ -192,7 +192,8 @@
     "NEW_FOUND_MANY": "Achamos {{count}} produtos parecidos novos!",
     "NEW_NONE": "Não achamos produtos novos desta vez. É normal. Você pode tentar de novo mais tarde.",
     "NEW_COOLDOWN": "Você acabou de buscar. Espere um instante e tente de novo.",
-    "NEW_ERROR": "Não deu para buscar agora."
+    "NEW_ERROR": "Não deu para buscar agora.",
+    "NEW_EXHAUSTED": "Já buscamos bastante: não há mais produtos parecidos por enquanto. Tente de novo amanhã."
   },
   "COMPARISON": {
     "TITLE": "Ofertas do produto",
@@ -222,6 +223,7 @@
     "FOUND_NEW_ONE": "Achamos 1 produto parecido novo!",
     "FOUND_NEW_MANY": "Achamos {{count}} produtos parecidos novos!",
     "NONE_NEW": "Nenhum produto novo desta vez. É normal.",
-    "COOLDOWN": "Você acabou de buscar. Espere um instante."
+    "COOLDOWN": "Você acabou de buscar. Espere um instante.",
+    "EXHAUSTED": "Não há mais produtos parecidos por enquanto."
   }
 }

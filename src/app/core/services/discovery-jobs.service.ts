@@ -15,8 +15,8 @@ export interface DiscoveryJob {
   fromRefresh: boolean;
   /** Ids das candidatas que chegaram na nova busca (as demais já estavam na lista). */
   newIds: string[];
-  /** Por que a nova busca não rodou: pausa entre buscas ou erro. A lista anterior continua valendo. */
-  failure?: 'cooldown' | 'error';
+  /** Por que a nova busca não rodou: pausa entre buscas, já não há mais o que achar (3 vazias seguidas) ou erro. */
+  failure?: 'cooldown' | 'exhausted' | 'error';
 }
 
 /**
@@ -60,7 +60,7 @@ export class DiscoveryJobsService {
         status: 'done', candidates, newIds: candidates.filter(c => !previousIds.has(c.id)).map(c => c.id),
       }),
       error: (err: HttpErrorResponse) => this.patch(productId, {
-        status: 'done', newIds: [], failure: err?.status === 429 ? 'cooldown' : 'error',
+        status: 'done', newIds: [], failure: err?.status === 429 ? 'cooldown' : err?.status === 409 ? 'exhausted' : 'error',
       }),
     });
   }

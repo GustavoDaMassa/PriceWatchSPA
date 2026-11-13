@@ -3,6 +3,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { ActivatedRoute, convertToParamMap, Router } from '@angular/router';
 import { provideTranslateService } from '@ngx-translate/core';
 import { By } from '@angular/platform-browser';
+import { HttpErrorResponse } from '@angular/common/http';
 import { of, Subject, throwError } from 'rxjs';
 import { CandidateReviewComponent } from './candidate-review.component';
 import { DiscoveryApiService } from '../../../core/services/api/discovery-api.service';
@@ -222,5 +223,18 @@ describe('CandidateReviewComponent', () => {
     await setup();
 
     expect(TestBed.inject(DiscoveryJobsService).job('P1')?.seen).toBeTrue();
+  });
+
+  it('disables the new search button and explains when the API says there is nothing more to find', async () => {
+    await setup();
+    api.discover.and.returnValue(throwError(() => new HttpErrorResponse({ status: 409 })));
+
+    component.findNew();
+    fixture.detectChanges();
+
+    expect(component.exhausted()).toBeTrue();
+    expect(component.refreshNote()?.key).toBe('CANDIDATES.NEW_EXHAUSTED');
+    expect((fixture.debugElement.query(By.css('.find-new')).nativeElement as HTMLButtonElement).disabled).toBeTrue();
+    expect(cards().length).toBe(2);
   });
 });
