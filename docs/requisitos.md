@@ -48,7 +48,7 @@
 - **Seletor de lojas:** alternativa ao link — o usuário escolhe a loja e é levado à página dela em outra aba; com a extensão instalada aparece o botão "Acompanhar com PriceWatch" e, ao clicar, volta para a aba do site já aberta (RF21)
 - **Detecção da extensão:** o site detecta se a extensão está instalada; sem ela, oferece instalar ou usa o campo de link
 - **Descoberta em outras lojas:** depois de acompanhar, a tela mostra as ofertas candidatas encontradas em outras lojas, com loja, preço, imagem e o motivo ("mesmo GTIN" ou "palavra-chave")
-- **Confirmação:** para cada candidata, "É o mesmo produto?" (sim/não) e "Acompanhar esta oferta?"; pré-seleção quando o GTIN é igual; o veredito é enviado à API (RF22, RF23)
+- **Confirmação:** para cada produto parecido, "Acompanhar este" ou "Não é parecido"; só o próprio usuário decide. O produto aceito vira um produto novo na mesma lista (histórico e alertas próprios) e a tela mostra a justificativa da IA quando ela opinou; o veredito é enviado à API (RF22, RF23)
 - **Comparação lado a lado:** ofertas do mesmo produto ordenadas por preço, com destaque da mais barata e indicação de "atualizado há X" por oferta (RF16, RNF18)
 - **Ir para a loja:** o botão passa pelo endpoint de redirect (`GET /api/offers/{id}/redirect`); a SPA nunca abre a URL original direto (RF17, `ProductLinkDialogComponent.openUrl()`)
 - **Lojas indisponíveis:** lojas sem busca não aparecem na descoberta; a lista vem de `GET /api/stores` (RF26)
