@@ -13,7 +13,7 @@ const CANDIDATES: OfferCandidate[] = [
   { id: 'C1', productId: 'P1', source: 1, storeName: 'KaBuM!', url: 'https://kabum/p/1', name: 'Notebook Acer',
     price: 2599.9, score: 1, reason: 0, preselected: true },
   { id: 'C2', productId: 'P1', source: 0, storeName: 'Mercado Livre', url: 'https://ml/p/2', name: 'Notebook Acer 16GB',
-    price: 2700, score: 0.7, reason: 1, preselected: false },
+    price: 2700, score: 0.7, reason: 1, preselected: false, aiSaysSame: true, aiReason: 'Mesmo modelo e memória' },
 ];
 
 describe('CandidateReviewComponent', () => {
@@ -35,7 +35,7 @@ describe('CandidateReviewComponent', () => {
         provideTranslateService({ fallbackLang: 'en' }),
         { provide: DiscoveryApiService, useValue: api },
         { provide: ToastService, useValue: toast },
-        { provide: ActivatedRoute, useValue: { snapshot: { paramMap: convertToParamMap({ productId: 'P1' }) } } },
+        { provide: ActivatedRoute, useValue: { snapshot: { paramMap: convertToParamMap({ productId: 'P1' }), queryParamMap: convertToParamMap({ listId: 'L1' }) } } },
       ],
     }).compileComponents();
 
@@ -74,7 +74,7 @@ describe('CandidateReviewComponent', () => {
         provideTranslateService({ fallbackLang: 'en' }),
         { provide: DiscoveryApiService, useValue: api },
         { provide: ToastService, useValue: toast },
-        { provide: ActivatedRoute, useValue: { snapshot: { paramMap: convertToParamMap({ productId: 'P1' }) } } },
+        { provide: ActivatedRoute, useValue: { snapshot: { paramMap: convertToParamMap({ productId: 'P1' }), queryParamMap: convertToParamMap({ listId: 'L1' }) } } },
       ],
     }).compileComponents();
     fixture = TestBed.createComponent(CandidateReviewComponent);
@@ -84,9 +84,9 @@ describe('CandidateReviewComponent', () => {
     expect(fixture.componentInstance.loading()).toBeFalse();
   });
 
-  it('confirming "same product" tracks the offer, removes the card and offers the comparison', async () => {
+  it('accepting a similar product tracks it as a new product, removes the card and offers the list', async () => {
     await setup();
-    api.sendFeedback.and.returnValue(of({ outcome: ConfirmOutcome.Attached, productId: 'P1', offerId: 'O9' }));
+    api.sendFeedback.and.returnValue(of({ outcome: ConfirmOutcome.Attached, productId: 'P2', offerId: 'O9' }));
 
     component.answer(CANDIDATES[0], true);
     fixture.detectChanges();
@@ -98,6 +98,14 @@ describe('CandidateReviewComponent', () => {
     expect(fixture.debugElement.query(By.css('.btn-primary'))).not.toBeNull();
   });
 
+  it('shows the AI reason only on the candidates the AI judged', async () => {
+    await setup();
+
+    const ai = fixture.debugElement.queryAll(By.css('.ai'));
+    expect(ai.length).toBe(1);
+    expect((ai[0].nativeElement as HTMLElement).textContent).toContain('Mesmo modelo e memória');
+  });
+
   it('rejecting sends "not the same" without tracking', async () => {
     await setup();
     api.sendFeedback.and.returnValue(of({ outcome: ConfirmOutcome.Rejected, productId: 'P1' }));
@@ -107,25 +115,6 @@ describe('CandidateReviewComponent', () => {
     expect(api.sendFeedback).toHaveBeenCalledWith('C2', { isSameProduct: false, track: false });
     expect(toast.success).toHaveBeenCalledWith('CANDIDATES.OUTCOME_REJECTED');
     expect(component.attached()).toBeFalse();
-  });
-
-  it('explains when the vote is pending because other users track the product', async () => {
-    await setup();
-    api.sendFeedback.and.returnValue(of({ outcome: ConfirmOutcome.Pending, productId: 'P1' }));
-
-    component.answer(CANDIDATES[1], true);
-
-    expect(toast.success).toHaveBeenCalledWith('CANDIDATES.OUTCOME_PENDING');
-    expect(component.attached()).toBeFalse();
-  });
-
-  it('explains when the offer already belongs to another product', async () => {
-    await setup();
-    api.sendFeedback.and.returnValue(of({ outcome: ConfirmOutcome.Unavailable, productId: 'P1' }));
-
-    component.answer(CANDIDATES[1], true);
-
-    expect(toast.success).toHaveBeenCalledWith('CANDIDATES.OUTCOME_UNAVAILABLE');
   });
 
   it('keeps the candidate and reports the error when the answer cannot be saved', async () => {
@@ -151,13 +140,13 @@ describe('CandidateReviewComponent', () => {
     expect(buttons.every(b => (b.nativeElement as HTMLButtonElement).disabled)).toBeTrue();
   });
 
-  it('navigates to the comparison and back to the items', async () => {
+  it('goes to the analysis of the list and back to the items', async () => {
     await setup();
 
-    component.goToComparison();
+    component.goToList();
     component.finish();
 
-    expect(router.navigate).toHaveBeenCalledWith(['/products', 'P1', 'comparison']);
+    expect(router.navigate).toHaveBeenCalledWith(['/lists', 'L1', 'analysis']);
     expect(router.navigate).toHaveBeenCalledWith(['/items']);
   });
 });

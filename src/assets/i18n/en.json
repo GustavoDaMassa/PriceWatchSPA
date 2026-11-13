@@ -171,21 +171,20 @@
     "ADDED": "Product added! Let's look in other stores."
   },
   "CANDIDATES": {
-    "TITLE": "Same product in other stores",
+    "TITLE": "Similar products",
     "SEARCHING": "Looking in other stores...",
-    "EMPTY": "We could not find this product in other stores for now.",
-    "NOTE": "Check that the model, capacity and color are the same before confirming.",
+    "EMPTY": "We could not find similar products for now.",
+    "NOTE": "Check that the model, capacity and color work for you before tracking.",
     "REASON_GTIN": "Same barcode (GTIN)",
     "REASON_KEYWORD": "Similar by name and features",
-    "SAME": "It's the same — track it",
-    "NOT_SAME": "Not the same",
+    "SAME": "Track this one",
+    "NOT_SAME": "Not similar",
     "SKIP": "Done",
-    "COMPARE": "See comparison",
-    "OUTCOME_ATTACHED": "Offer added to the comparison!",
-    "OUTCOME_PENDING": "Answer saved. The offer joins the comparison once another user also confirms.",
-    "OUTCOME_UNAVAILABLE": "This offer already belongs to another product and could not be added.",
+    "COMPARE": "See in my list",
+    "OUTCOME_ATTACHED": "Added to your list! We'll track the price.",
     "OUTCOME_REJECTED": "Thanks! We won't suggest this offer again.",
-    "OUTCOME_RECORDED": "Answer saved."
+    "OUTCOME_RECORDED": "Answer saved.",
+    "AI_SAYS": "AI:"
   },
   "COMPARISON": {
     "TITLE": "Store comparison",

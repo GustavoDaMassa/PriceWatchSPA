@@ -150,7 +150,7 @@ export class AddOfferComponent implements OnInit {
       .subscribe({
         next: offer => {
           this.toast.success(this.translate.instant('ADD_OFFER.ADDED'));
-          this.goToCandidates(offer.productId);
+          this.goToCandidates(offer.productId, offer.listId);
         },
         error: (err: HttpErrorResponse) =>
           this.toast.error(err.error?.message ?? err.error?.detail ?? this.translate.instant('COMMON.ERROR_GENERIC')),
@@ -165,7 +165,9 @@ export class AddOfferComponent implements OnInit {
     this.dialog.open(ExtensionDialogComponent, { width: '480px' });
   }
 
-  private goToCandidates(productId: string): void {
-    this.router.navigate(['/products', productId, 'candidates']);
+  private goToCandidates(productId: string, listId?: string | null): void {
+    const commands = ['/products', productId, 'candidates'];
+    if (listId) this.router.navigate(commands, { queryParams: { listId } });
+    else this.router.navigate(commands);
   }
 }

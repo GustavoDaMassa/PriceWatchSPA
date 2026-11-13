@@ -12,8 +12,8 @@ import { SourceBadgeComponent } from '../../../shared/components/source-badge/so
 import { ConfirmOutcome, OfferCandidate } from '../../../shared/models/candidate.model';
 
 /**
- * "Mesmo produto em outras lojas": mostra as ofertas candidatas e deixa o usuário confirmar
- * ("é o mesmo produto" e acompanhar) ou descartar. Candidatas não são monitoradas até a confirmação.
+ * "Produtos parecidos": mostra as ofertas candidatas e deixa o usuário aceitar (e acompanhar como um
+ * produto novo, na mesma lista) ou descartar. Só o próprio usuário decide. Candidatas não são monitoradas até aceitar.
  */
 @Component({
   selector: 'app-candidate-review',
@@ -49,6 +49,9 @@ import { ConfirmOutcome, OfferCandidate } from '../../../shared/models/candidate
               <span class="reason" [class.strong]="c.reason === 0">
                 {{ (c.reason === 0 ? 'CANDIDATES.REASON_GTIN' : 'CANDIDATES.REASON_KEYWORD') | translate }}
               </span>
+              @if (c.aiReason) {
+                <span class="ai"><mat-icon>auto_awesome</mat-icon>{{ 'CANDIDATES.AI_SAYS' | translate }} {{ c.aiReason }}</span>
+              }
             </div>
             <div class="actions">
               <button mat-flat-button class="btn-yes" [disabled]="busy().has(c.id)" (click)="answer(c, true)">
@@ -65,7 +68,7 @@ import { ConfirmOutcome, OfferCandidate } from '../../../shared/models/candidate
 
         <div class="footer">
           @if (attached()) {
-            <button mat-flat-button class="btn-primary" (click)="goToComparison()">
+            <button mat-flat-button class="btn-primary" (click)="goToList()">
               {{ 'CANDIDATES.COMPARE' | translate }}
             </button>
           }
@@ -88,6 +91,8 @@ import { ConfirmOutcome, OfferCandidate } from '../../../shared/models/candidate
     .name { margin: 0; font-size: 14px; color: #333; line-height: 1.35; }
     .reason { font-size: 12px; color: #666; }
     .reason.strong { color: #00A650; font-weight: 600; }
+    .ai { display: flex; align-items: center; gap: 4px; font-size: 12px; color: #5B3FD0; }
+    .ai mat-icon { font-size: 16px; width: 16px; height: 16px; }
     .actions { display: flex; flex-direction: column; gap: 8px; }
     .btn-yes { background: #3483FA !important; color: #fff !important; }
     .btn-primary { background: var(--pw-yellow); color: #333; }
@@ -108,6 +113,7 @@ export class CandidateReviewComponent implements OnInit {
   private readonly translate = inject(TranslateService);
 
   readonly productId = this.route.snapshot.paramMap.get('productId')!;
+  private readonly listId = this.route.snapshot.queryParamMap.get('listId');
   readonly candidates = signal<OfferCandidate[]>([]);
   readonly loading = signal(true);
   readonly busy = signal<Set<string>>(new Set());
@@ -144,8 +150,9 @@ export class CandidateReviewComponent implements OnInit {
     });
   }
 
-  goToComparison(): void {
-    this.router.navigate(['/products', this.productId, 'comparison']);
+  /** O produto aceito entra na mesma lista do original: a análise da lista mostra os dois lado a lado. */
+  goToList(): void {
+    this.router.navigate(this.listId ? ['/lists', this.listId, 'analysis'] : ['/items']);
   }
 
   finish(): void {
@@ -163,8 +170,6 @@ export class CandidateReviewComponent implements OnInit {
   private outcomeMessageKey(outcome: ConfirmOutcome): string {
     switch (outcome) {
       case ConfirmOutcome.Attached: return 'CANDIDATES.OUTCOME_ATTACHED';
-      case ConfirmOutcome.Pending: return 'CANDIDATES.OUTCOME_PENDING';
-      case ConfirmOutcome.Unavailable: return 'CANDIDATES.OUTCOME_UNAVAILABLE';
       case ConfirmOutcome.Rejected: return 'CANDIDATES.OUTCOME_REJECTED';
       default: return 'CANDIDATES.OUTCOME_RECORDED';
     }

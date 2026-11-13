@@ -18,6 +18,9 @@ export interface OfferCandidate {
   score: number;
   reason: CandidateReason;
   preselected: boolean;
+  /** Veredito do juiz de IA (só quando o GTIN não resolveu e a IA respondeu). */
+  aiSaysSame?: boolean | null;
+  aiReason?: string | null;
 }
 
 export interface ConfirmMatchRequest {
@@ -26,13 +29,11 @@ export interface ConfirmMatchRequest {
   targetPrice?: number;
 }
 
-/** Resultado do voto (a API serializa o enum como número). */
+/** Resultado do voto (a API serializa o enum como número). Em Attached, productId é o produto NOVO criado na mesma lista. */
 export const ConfirmOutcome = {
   Rejected: 0,
   Recorded: 1,
   Attached: 2,
-  Pending: 3,
-  Unavailable: 4,
 } as const;
 export type ConfirmOutcome = (typeof ConfirmOutcome)[keyof typeof ConfirmOutcome];
 

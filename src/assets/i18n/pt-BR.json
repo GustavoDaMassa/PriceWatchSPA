@@ -171,21 +171,20 @@
     "ADDED": "Produto adicionado! Vamos procurar nas outras lojas."
   },
   "CANDIDATES": {
-    "TITLE": "Mesmo produto em outras lojas",
+    "TITLE": "Produtos parecidos",
     "SEARCHING": "Procurando em outras lojas...",
-    "EMPTY": "Não encontramos este produto em outras lojas por enquanto.",
-    "NOTE": "Confira se o modelo, a capacidade e a cor são os mesmos antes de confirmar.",
+    "EMPTY": "Não encontramos produtos parecidos por enquanto.",
+    "NOTE": "Confira se o modelo, a capacidade e a cor servem para você antes de acompanhar.",
     "REASON_GTIN": "Mesmo código de barras (GTIN)",
     "REASON_KEYWORD": "Parecido pelo nome e pelas características",
-    "SAME": "É o mesmo — acompanhar",
-    "NOT_SAME": "Não é o mesmo",
+    "SAME": "Acompanhar este",
+    "NOT_SAME": "Não é parecido",
     "SKIP": "Concluir",
-    "COMPARE": "Ver comparação",
-    "OUTCOME_ATTACHED": "Oferta adicionada à comparação!",
-    "OUTCOME_PENDING": "Resposta registrada. A oferta entra na comparação quando outro usuário também confirmar.",
-    "OUTCOME_UNAVAILABLE": "Esta oferta já pertence a outro produto e não pôde ser adicionada.",
+    "COMPARE": "Ver na minha lista",
+    "OUTCOME_ATTACHED": "Adicionado à sua lista! Vamos acompanhar o preço.",
     "OUTCOME_REJECTED": "Obrigado! Não vamos mais sugerir esta oferta.",
-    "OUTCOME_RECORDED": "Resposta registrada."
+    "OUTCOME_RECORDED": "Resposta registrada.",
+    "AI_SAYS": "IA:"
   },
   "COMPARISON": {
     "TITLE": "Comparação entre lojas",

@@ -18,10 +18,10 @@ const STORES: StoreCapabilities[] = [
   { source: 1, name: 'KaBuM!', homeUrl: 'https://www.kabum.com.br', canFetchByUrl: false, canSearch: false, canGenerateAffiliateLink: false },
 ];
 
-function offerFor(productId: string): OfferResponse {
+function offerFor(productId: string, listId?: string): OfferResponse {
   return {
     subscriptionId: 'S1', productId, offerId: 'O1', name: 'Produto', url: 'https://loja/p/1', source: 1,
-    targetPrice: 0, currentPrice: 100, lowestPrice: 100, isActive: true, nextCheckAt: new Date().toISOString(),
+    targetPrice: 0, currentPrice: 100, lowestPrice: 100, isActive: true, nextCheckAt: new Date().toISOString(), listId,
   };
 }
 
@@ -108,7 +108,7 @@ describe('AddOfferComponent', () => {
 
   it('imports the link with the target price and the list, then goes to the candidates', async () => {
     await setup(true, 'L1');
-    offersApi.createOffer.and.returnValue(of(offerFor('P9')));
+    offersApi.createOffer.and.returnValue(of(offerFor('P9', 'L1')));
     component.form.patchValue({ url: ' https://www.kabum.com.br/produto/1 ', targetPrice: 2500 });
 
     component.submit();
@@ -119,7 +119,7 @@ describe('AddOfferComponent', () => {
       listId: 'L1',
     });
     expect(toast.success).toHaveBeenCalled();
-    expect(router.navigate).toHaveBeenCalledWith(['/products', 'P9', 'candidates']);
+    expect(router.navigate).toHaveBeenCalledWith(['/products', 'P9', 'candidates'], { queryParams: { listId: 'L1' } });
   });
 
   it('does not send a list or target when none was given', async () => {
