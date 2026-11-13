@@ -9,6 +9,7 @@ import { NotificationPollingService } from '../core/services/notification-pollin
 import { LanguageService } from '../core/services/language.service';
 import { Router } from '@angular/router';
 import { ExtensionDialogComponent } from './extension-dialog.component';
+import { DiscoveryPanelComponent } from '../shared/components/discovery-panel/discovery-panel.component';
 
 @Component({
   selector: 'app-shell',
@@ -16,7 +17,7 @@ import { ExtensionDialogComponent } from './extension-dialog.component';
   imports: [
     RouterOutlet, RouterLink, RouterLinkActive,
     MatIconModule, MatButtonModule, MatDialogModule,
-    TranslateModule,
+    TranslateModule, DiscoveryPanelComponent,
   ],
   templateUrl: './shell.component.html',
   styleUrl: './shell.component.scss',

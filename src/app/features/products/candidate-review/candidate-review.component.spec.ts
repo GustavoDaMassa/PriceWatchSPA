@@ -6,6 +6,7 @@ import { By } from '@angular/platform-browser';
 import { of, Subject, throwError } from 'rxjs';
 import { CandidateReviewComponent } from './candidate-review.component';
 import { DiscoveryApiService } from '../../../core/services/api/discovery-api.service';
+import { DiscoveryJobsService } from '../../../core/services/discovery-jobs.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { ConfirmOutcome, OfferCandidate } from '../../../shared/models/candidate.model';
 
@@ -54,6 +55,17 @@ describe('CandidateReviewComponent', () => {
     expect(api.discover).toHaveBeenCalledWith('P1');
     expect(cards().length).toBe(2);
     expect(component.loading()).toBeFalse();
+  });
+
+  it('keeps showing the spinner while the search is still running', async () => {
+    await setup();
+    const running = new Subject<OfferCandidate[]>();
+    api.discover.and.returnValue(running.asObservable());
+    TestBed.inject(DiscoveryJobsService).start('P1');
+    fixture.detectChanges();
+
+    expect(component.loading()).toBeTrue();
+    expect(fixture.debugElement.query(By.css('mat-spinner'))).not.toBeNull();
   });
 
   it('shows the empty state when nothing was found', async () => {

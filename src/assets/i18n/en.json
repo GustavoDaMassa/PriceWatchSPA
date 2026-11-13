@@ -103,7 +103,7 @@
     "ASSIGN_TO_LIST": "Add to list",
     "OPEN_IN_PLATFORM": "Open on platform",
     "BULK_DELETE_MSG": "{{ count }} product(s) will be removed. Price history will be lost.",
-    "COMPARE_STORES": "Compare stores"
+    "COMPARE_STORES": "See offers"
   },
   "NOTIFICATIONS": {
     "TITLE": "Notifications",
@@ -157,7 +157,7 @@
   },
   "ADD_OFFER": {
     "TITLE": "Add product",
-    "SUBTITLE": "Paste the product link and track its price. Then we look for the same product in other stores.",
+    "SUBTITLE": "Paste the link of a Mercado Livre product and track its price. Then we look for similar products on Mercado Livre itself.",
     "URL_LABEL": "Product link",
     "URL_HINT": "Short share links from the store apps work too",
     "TARGET_LABEL": "Target price (optional)",
@@ -168,12 +168,12 @@
     "EXTENSION_NEEDED": "To track straight from the store, install the PriceWatch extension.",
     "INSTALL_EXTENSION": "Install extension",
     "EXTENSION_READY": "Extension detected: open the store and click \"Track with PriceWatch\" on the product page.",
-    "ADDED": "Product added! Let's look in other stores."
+    "ADDED": "Product added! Let's look for similar products on Mercado Livre."
   },
   "CANDIDATES": {
     "TITLE": "Similar products",
-    "SEARCHING": "Looking in other stores...",
-    "EMPTY": "We could not find similar products for now.",
+    "SEARCHING": "Looking for similar products on Mercado Livre... You can leave this page: the search keeps running in the background.",
+    "EMPTY": "We found no similar products. That's normal: not every product has similar ones to compare.",
     "NOTE": "Check that the model, capacity and color work for you before tracking.",
     "REASON_GTIN": "Same barcode (GTIN)",
     "REASON_KEYWORD": "Similar by name and features",
@@ -187,14 +187,22 @@
     "AI_SAYS": "AI:"
   },
   "COMPARISON": {
-    "TITLE": "Store comparison",
+    "TITLE": "Product offers",
     "CHEAPEST": "Lowest price",
     "LOWEST_EVER": "Lowest seen",
     "GO_TO_STORE": "Go to the store",
-    "FIND_MORE": "Look in other stores",
+    "FIND_MORE": "Look for similar products",
     "LAST_CHECKED": "Updated",
     "NEVER_CHECKED": "Not checked yet",
     "FRESHNESS_NOTE": "Prices can lag slightly behind the store's website.",
     "EMPTY": "There are no offers for this product yet."
+  },
+  "DISCOVERY_PANEL": {
+    "RUNNING": "Looking for similar products...",
+    "FOUND_ONE": "1 similar product found",
+    "FOUND_MANY": "{{count}} similar products found",
+    "NONE": "No similar products found. That's normal.",
+    "ERROR": "Could not search right now. Tap to try again.",
+    "CLOSE": "Dismiss"
   }
 }

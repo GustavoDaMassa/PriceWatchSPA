@@ -103,7 +103,7 @@
     "ASSIGN_TO_LIST": "Adicionar à lista",
     "OPEN_IN_PLATFORM": "Abrir na plataforma",
     "BULK_DELETE_MSG": "{{ count }} produto(s) serão removidos. O histórico de preços será perdido.",
-    "COMPARE_STORES": "Comparar lojas"
+    "COMPARE_STORES": "Ver ofertas"
   },
   "NOTIFICATIONS": {
     "TITLE": "Notificações",
@@ -157,7 +157,7 @@
   },
   "ADD_OFFER": {
     "TITLE": "Adicionar produto",
-    "SUBTITLE": "Cole o link do produto e acompanhe o preço. Depois procuramos o mesmo produto em outras lojas.",
+    "SUBTITLE": "Cole o link de um produto do Mercado Livre e acompanhe o preço. Depois procuramos produtos parecidos no próprio Mercado Livre.",
     "URL_LABEL": "Link do produto",
     "URL_HINT": "Links curtos de compartilhamento dos apps das lojas também funcionam",
     "TARGET_LABEL": "Preço-alvo (opcional)",
@@ -168,12 +168,12 @@
     "EXTENSION_NEEDED": "Para acompanhar direto da loja, instale a extensão do PriceWatch.",
     "INSTALL_EXTENSION": "Instalar extensão",
     "EXTENSION_READY": "Extensão detectada: abra a loja e clique em \"Acompanhar com PriceWatch\" na página do produto.",
-    "ADDED": "Produto adicionado! Vamos procurar nas outras lojas."
+    "ADDED": "Produto adicionado! Vamos procurar produtos parecidos no Mercado Livre."
   },
   "CANDIDATES": {
     "TITLE": "Produtos parecidos",
-    "SEARCHING": "Procurando em outras lojas...",
-    "EMPTY": "Não encontramos produtos parecidos por enquanto.",
+    "SEARCHING": "Procurando produtos parecidos no Mercado Livre... Pode sair desta tela: a busca continua em segundo plano.",
+    "EMPTY": "Não encontramos produtos parecidos. É normal: nem todo produto tem parecidos para comparar.",
     "NOTE": "Confira se o modelo, a capacidade e a cor servem para você antes de acompanhar.",
     "REASON_GTIN": "Mesmo código de barras (GTIN)",
     "REASON_KEYWORD": "Parecido pelo nome e pelas características",
@@ -187,14 +187,22 @@
     "AI_SAYS": "IA:"
   },
   "COMPARISON": {
-    "TITLE": "Comparação entre lojas",
+    "TITLE": "Ofertas do produto",
     "CHEAPEST": "Menor preço",
     "LOWEST_EVER": "Menor já visto",
     "GO_TO_STORE": "Ir para a loja",
-    "FIND_MORE": "Buscar em outras lojas",
+    "FIND_MORE": "Buscar produtos parecidos",
     "LAST_CHECKED": "Atualizado",
     "NEVER_CHECKED": "Ainda não verificado",
     "FRESHNESS_NOTE": "Os preços podem ter um pequeno atraso em relação ao site da loja.",
     "EMPTY": "Ainda não há ofertas para este produto."
+  },
+  "DISCOVERY_PANEL": {
+    "RUNNING": "Procurando produtos parecidos...",
+    "FOUND_ONE": "1 produto parecido encontrado",
+    "FOUND_MANY": "{{count}} produtos parecidos encontrados",
+    "NONE": "Nenhum parecido encontrado. É normal.",
+    "ERROR": "Não deu para buscar agora. Toque para tentar de novo.",
+    "CLOSE": "Fechar aviso"
   }
 }

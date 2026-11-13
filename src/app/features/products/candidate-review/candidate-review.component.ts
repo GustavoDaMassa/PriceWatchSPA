@@ -1,10 +1,11 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, effect, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { DiscoveryApiService } from '../../../core/services/api/discovery-api.service';
+import { DiscoveryJobsService } from '../../../core/services/discovery-jobs.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { EmptyStateComponent } from '../../../shared/components/empty-state/empty-state.component';
 import { PriceDisplayComponent } from '../../../shared/components/price-display/price-display.component';
@@ -114,23 +115,26 @@ export class CandidateReviewComponent implements OnInit {
 
   readonly productId = this.route.snapshot.paramMap.get('productId')!;
   private readonly listId = this.route.snapshot.queryParamMap.get('listId');
-  readonly candidates = signal<OfferCandidate[]>([]);
-  readonly loading = signal(true);
+  private readonly jobs = inject(DiscoveryJobsService);
+  private readonly job = computed(() => this.jobs.job(this.productId));
+  readonly candidates = computed<OfferCandidate[]>(() => this.job()?.candidates ?? []);
+  readonly loading = computed(() => !this.job() || this.job()!.status === 'running');
   readonly busy = signal<Set<string>>(new Set());
   private readonly attachedCount = signal(0);
   readonly attached = computed(() => this.attachedCount() > 0);
 
-  ngOnInit(): void {
-    this.discoveryApi.discover(this.productId).subscribe({
-      next: candidates => {
-        this.candidates.set(candidates);
-        this.loading.set(false);
-      },
-      error: () => {
-        this.loading.set(false);
-        this.toast.error(this.translate.instant('COMMON.ERROR_GENERIC'));
-      },
+  private readonly status = computed(() => this.job()?.status);
+
+  constructor() {
+    effect(() => {
+      if (this.status() === 'error') this.toast.error(this.translate.instant('COMMON.ERROR_GENERIC'));
     });
+  }
+
+  /** A busca roda no serviço (não na tela): sair daqui não a interrompe e o painel do canto avisa quando acabar. */
+  ngOnInit(): void {
+    this.jobs.start(this.productId);
+    this.jobs.markSeen(this.productId);
   }
 
   answer(candidate: OfferCandidate, isSameProduct: boolean): void {
@@ -138,7 +142,7 @@ export class CandidateReviewComponent implements OnInit {
 
     this.discoveryApi.sendFeedback(candidate.id, { isSameProduct, track: isSameProduct }).subscribe({
       next: result => {
-        this.candidates.update(list => list.filter(c => c.id !== candidate.id));
+        this.jobs.removeCandidate(this.productId, candidate.id);
         if (result.outcome === ConfirmOutcome.Attached) this.attachedCount.update(n => n + 1);
         this.toast.success(this.translate.instant(this.outcomeMessageKey(result.outcome)));
         this.releaseBusy(candidate.id);
