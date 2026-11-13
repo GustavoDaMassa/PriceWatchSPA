@@ -12,9 +12,13 @@ import {
 export class DiscoveryApiService {
   private readonly http = inject(HttpClient);
 
-  /** Procura o produto nas outras lojas (no máximo uma vez a cada 6 h por produto) e devolve as candidatas. */
-  discover(productId: string): Observable<OfferCandidate[]> {
-    return this.http.post<OfferCandidate[]>(`${environment.apiUrl}/products/${productId}/discover`, null);
+  /**
+   * Procura produtos parecidos (no máximo uma vez a cada 6 h por produto) e devolve as candidatas. Com `refresh`
+   * faz uma nova busca, que só traz o que ainda não apareceu (a API responde 429 se for repetida em seguida).
+   */
+  discover(productId: string, refresh = false): Observable<OfferCandidate[]> {
+    return this.http.post<OfferCandidate[]>(
+      `${environment.apiUrl}/products/${productId}/discover`, null, refresh ? { params: { refresh: true } } : {});
   }
 
   getCandidates(productId: string): Observable<OfferCandidate[]> {

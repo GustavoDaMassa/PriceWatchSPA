@@ -24,6 +24,14 @@ describe('DiscoveryApiService', () => {
     req.flush([]);
   });
 
+  it('should ask for a new search with refresh=true', () => {
+    service.discover('P1', true).subscribe();
+
+    const req = http.expectOne(`${environment.apiUrl}/products/P1/discover?refresh=true`);
+    expect(req.request.method).toBe('POST');
+    req.flush([]);
+  });
+
   it('should GET /products/:id/candidates', () => {
     service.getCandidates('P1').subscribe();
 

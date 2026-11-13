@@ -184,7 +184,15 @@
     "OUTCOME_ATTACHED": "Added to your list! We'll track the price.",
     "OUTCOME_REJECTED": "Thanks! We won't suggest this offer again.",
     "OUTCOME_RECORDED": "Answer saved.",
-    "AI_SAYS": "AI:"
+    "AI_SAYS": "AI:",
+    "NEW_BUTTON": "Look for new similar products",
+    "NEW_SEARCHING": "Looking for new ones...",
+    "NEW_BADGE": "New",
+    "NEW_FOUND_ONE": "We found 1 new similar product!",
+    "NEW_FOUND_MANY": "We found {{count}} new similar products!",
+    "NEW_NONE": "We found no new products this time. That's normal. You can try again later.",
+    "NEW_COOLDOWN": "You just searched. Wait a moment and try again.",
+    "NEW_ERROR": "Could not search right now."
   },
   "COMPARISON": {
     "TITLE": "Product offers",
@@ -209,6 +217,11 @@
     "RETRY": "Try again",
     "OK": "Got it",
     "MINIMIZE": "Minimize",
-    "EXPAND": "Open"
+    "EXPAND": "Open",
+    "RUNNING_NEW": "Looking for new ones. You can keep browsing.",
+    "FOUND_NEW_ONE": "We found 1 new similar product!",
+    "FOUND_NEW_MANY": "We found {{count}} new similar products!",
+    "NONE_NEW": "No new products this time. That's normal.",
+    "COOLDOWN": "You just searched. Wait a moment."
   }
 }

@@ -20,7 +20,7 @@ import { DiscoveryJob, DiscoveryJobsService } from '../../../core/services/disco
   imports: [MatButtonModule, MatIconModule, MatProgressSpinnerModule, TranslateModule],
   template: `
     @for (job of visible(); track job.productId) {
-      <section class="win" [class.ready]="isReady(job)" [class.failed]="job.status === 'error'" role="status" aria-live="polite">
+      <section class="win" [class.ready]="isReady(job)" [class.failed]="job.status === 'error' || job.failure === 'error'" role="status" aria-live="polite">
         <header>
           @switch (job.status) {
             @case ('running') { <mat-spinner diameter="18" /> }
@@ -40,10 +40,10 @@ import { DiscoveryJob, DiscoveryJobsService } from '../../../core/services/disco
         </header>
         @if (isOpen(job)) {
           <div class="body">
-            <p>{{ messageKey(job) | translate: { count: job.candidates.length } }}</p>
+            <p>{{ messageKey(job) | translate: { count: found(job) } }}</p>
             @if (isReady(job)) {
               <button mat-flat-button class="cta" (click)="open(job)">{{ 'DISCOVERY_PANEL.VIEW' | translate }}</button>
-            } @else if (job.status === 'error') {
+            } @else if (job.status === 'error' || job.failure === 'error') {
               <button mat-stroked-button (click)="open(job)">{{ 'DISCOVERY_PANEL.RETRY' | translate }}</button>
             } @else if (job.status === 'done') {
               <button mat-stroked-button (click)="dismiss(job)">{{ 'DISCOVERY_PANEL.OK' | translate }}</button>
@@ -89,8 +89,13 @@ export class DiscoveryPanelComponent {
       (job.status === 'running' || !job.seen) && current !== `/products/${job.productId}/candidates`);
   });
 
+  /** Quantos produtos o aviso conta: numa nova busca, só os que chegaram agora. */
+  found(job: DiscoveryJob): number {
+    return job.fromRefresh ? job.newIds.length : job.candidates.length;
+  }
+
   isReady(job: DiscoveryJob): boolean {
-    return job.status === 'done' && job.candidates.length > 0;
+    return job.status === 'done' && !job.failure && this.found(job) > 0;
   }
 
   /** Minimizada enquanto roda; aberta assim que termina (é o aviso de que o resultado chegou). */
@@ -107,10 +112,14 @@ export class DiscoveryPanelComponent {
   }
 
   messageKey(job: DiscoveryJob): string {
-    if (job.status === 'running') return 'DISCOVERY_PANEL.RUNNING';
-    if (job.status === 'error') return 'DISCOVERY_PANEL.ERROR';
-    if (job.candidates.length === 0) return 'DISCOVERY_PANEL.NONE';
-    return job.candidates.length === 1 ? 'DISCOVERY_PANEL.FOUND_ONE' : 'DISCOVERY_PANEL.FOUND_MANY';
+    const fresh = job.fromRefresh;
+    if (job.status === 'running') return fresh ? 'DISCOVERY_PANEL.RUNNING_NEW' : 'DISCOVERY_PANEL.RUNNING';
+    if (job.status === 'error' || job.failure === 'error') return 'DISCOVERY_PANEL.ERROR';
+    if (job.failure === 'cooldown') return 'DISCOVERY_PANEL.COOLDOWN';
+    const count = this.found(job);
+    if (count === 0) return fresh ? 'DISCOVERY_PANEL.NONE_NEW' : 'DISCOVERY_PANEL.NONE';
+    if (count === 1) return fresh ? 'DISCOVERY_PANEL.FOUND_NEW_ONE' : 'DISCOVERY_PANEL.FOUND_ONE';
+    return fresh ? 'DISCOVERY_PANEL.FOUND_NEW_MANY' : 'DISCOVERY_PANEL.FOUND_MANY';
   }
 
   open(job: DiscoveryJob): void {

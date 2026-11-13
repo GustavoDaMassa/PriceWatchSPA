@@ -161,4 +161,66 @@ describe('CandidateReviewComponent', () => {
     expect(router.navigate).toHaveBeenCalledWith(['/lists', 'L1', 'analysis']);
     expect(router.navigate).toHaveBeenCalledWith(['/items']);
   });
+
+  it('asks for a new search, keeps the list visible meanwhile and marks the new candidates', async () => {
+    await setup();
+    const fresh = { ...CANDIDATES[1], id: 'C9', name: 'Produto novo' };
+    const running = new Subject<OfferCandidate[]>();
+    api.discover.and.returnValue(running.asObservable());
+
+    component.findNew();
+    fixture.detectChanges();
+
+    expect(api.discover).toHaveBeenCalledWith('P1', true);
+    expect(component.refreshing()).toBeTrue();
+    expect(component.loading()).toBeFalse();
+    expect(cards().length).toBe(2);
+    expect((fixture.debugElement.query(By.css('.find-new')).nativeElement as HTMLButtonElement).disabled).toBeTrue();
+
+    running.next([...CANDIDATES, fresh]);
+    fixture.detectChanges();
+
+    expect(cards().length).toBe(3);
+    expect(fixture.debugElement.queryAll(By.css('.new-badge')).length).toBe(1);
+    expect(component.refreshNote()?.key).toBe('CANDIDATES.NEW_FOUND_ONE');
+  });
+
+  it('says nothing new was found when the new search brings only known candidates', async () => {
+    await setup();
+    api.discover.and.returnValue(of(CANDIDATES));
+
+    component.findNew();
+
+    expect(component.refreshNote()?.key).toBe('CANDIDATES.NEW_NONE');
+  });
+
+  it('does not count a result that arrives after the user left the screen as seen, so the corner window warns', async () => {
+    api = jasmine.createSpyObj('DiscoveryApiService', ['discover', 'sendFeedback']);
+    const running = new Subject<OfferCandidate[]>();
+    api.discover.and.returnValue(running.asObservable());
+    toast = jasmine.createSpyObj('ToastService', ['success', 'error']);
+    await TestBed.configureTestingModule({
+      imports: [CandidateReviewComponent],
+      providers: [
+        provideAnimationsAsync(),
+        provideTranslateService({ fallbackLang: 'en' }),
+        { provide: DiscoveryApiService, useValue: api },
+        { provide: ToastService, useValue: toast },
+        { provide: ActivatedRoute, useValue: { snapshot: { paramMap: convertToParamMap({ productId: 'P1' }), queryParamMap: convertToParamMap({}) } } },
+      ],
+    }).compileComponents();
+    fixture = TestBed.createComponent(CandidateReviewComponent);
+    fixture.detectChanges();
+
+    fixture.destroy();                 // o usuário saiu da tela com a busca ainda rodando
+    running.next([CANDIDATES[0]]);
+
+    expect(TestBed.inject(DiscoveryJobsService).job('P1')?.seen).toBeFalse();
+  });
+
+  it('marks the result as seen when it arrives with the screen open', async () => {
+    await setup();
+
+    expect(TestBed.inject(DiscoveryJobsService).job('P1')?.seen).toBeTrue();
+  });
 });

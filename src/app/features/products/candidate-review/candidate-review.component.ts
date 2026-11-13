@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, effect, inject, OnInit, signal, untracked } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -36,6 +36,9 @@ import { ConfirmOutcome, OfferCandidate } from '../../../shared/models/candidate
         @if (candidates().length > 0) {
           <p class="note"><mat-icon>info</mat-icon>{{ 'CANDIDATES.NOTE' | translate }}</p>
         }
+        @if (refreshNote(); as note) {
+          <p class="note fresh"><mat-icon>travel_explore</mat-icon>{{ note.key | translate: { count: note.count } }}</p>
+        }
 
         @for (c of candidates(); track c.id) {
           <article class="candidate">
@@ -45,7 +48,7 @@ import { ConfirmOutcome, OfferCandidate } from '../../../shared/models/candidate
             </div>
             <div class="info">
               <app-source-badge [source]="c.source" />
-              <p class="name">{{ c.name }}</p>
+              <p class="name">{{ c.name }} @if (isNew(c)) { <span class="new-badge">{{ 'CANDIDATES.NEW_BADGE' | translate }}</span> }</p>
               <app-price-display [value]="c.price" />
               <span class="reason" [class.strong]="c.reason === 0">
                 {{ (c.reason === 0 ? 'CANDIDATES.REASON_GTIN' : 'CANDIDATES.REASON_KEYWORD') | translate }}
@@ -68,6 +71,10 @@ import { ConfirmOutcome, OfferCandidate } from '../../../shared/models/candidate
         }
 
         <div class="footer">
+          <button mat-stroked-button class="find-new" [disabled]="refreshing()" (click)="findNew()">
+            @if (refreshing()) { <mat-spinner diameter="16" /> }
+            {{ (refreshing() ? 'CANDIDATES.NEW_SEARCHING' : 'CANDIDATES.NEW_BUTTON') | translate }}
+          </button>
           @if (attached()) {
             <button mat-flat-button class="btn-primary" (click)="goToList()">
               {{ 'CANDIDATES.COMPARE' | translate }}
@@ -91,6 +98,9 @@ import { ConfirmOutcome, OfferCandidate } from '../../../shared/models/candidate
     .info { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
     .name { margin: 0; font-size: 14px; color: #333; line-height: 1.35; }
     .reason { font-size: 12px; color: #666; }
+    .new-badge { display: inline-block; margin-left: 6px; padding: 1px 8px; border-radius: 10px; background: #00A650; color: #fff; font-size: 11px; font-weight: 600; }
+    .note.fresh { background: #E8F5EE; }
+    .find-new { display: inline-flex; align-items: center; gap: 8px; margin-right: auto; }
     .reason.strong { color: #00A650; font-weight: 600; }
     .ai { display: flex; align-items: center; gap: 4px; font-size: 12px; color: #5B3FD0; }
     .ai mat-icon { font-size: 16px; width: 16px; height: 16px; }
@@ -118,7 +128,20 @@ export class CandidateReviewComponent implements OnInit {
   private readonly jobs = inject(DiscoveryJobsService);
   private readonly job = computed(() => this.jobs.job(this.productId));
   readonly candidates = computed<OfferCandidate[]>(() => this.job()?.candidates ?? []);
-  readonly loading = computed(() => !this.job() || this.job()!.status === 'running');
+  /** Tela cheia de espera só na primeira busca; numa nova busca a lista atual continua visível. */
+  readonly loading = computed(() => !this.job() || (this.job()!.status === 'running' && !this.job()!.fromRefresh));
+  readonly refreshing = computed(() => this.job()?.status === 'running' && !!this.job()?.fromRefresh);
+  private readonly newIds = computed(() => new Set(this.job()?.newIds ?? []));
+
+  /** Aviso do resultado da última nova busca (só aparece depois que ela termina). */
+  readonly refreshNote = computed<{ key: string; count: number } | null>(() => {
+    const job = this.job();
+    if (!job || !job.fromRefresh || job.status !== 'done') return null;
+    if (job.failure === 'cooldown') return { key: 'CANDIDATES.NEW_COOLDOWN', count: 0 };
+    if (job.failure === 'error') return { key: 'CANDIDATES.NEW_ERROR', count: 0 };
+    if (job.newIds.length === 0) return { key: 'CANDIDATES.NEW_NONE', count: 0 };
+    return { key: job.newIds.length === 1 ? 'CANDIDATES.NEW_FOUND_ONE' : 'CANDIDATES.NEW_FOUND_MANY', count: job.newIds.length };
+  });
   readonly busy = signal<Set<string>>(new Set());
   private readonly attachedCount = signal(0);
   readonly attached = computed(() => this.attachedCount() > 0);
@@ -129,12 +152,23 @@ export class CandidateReviewComponent implements OnInit {
     effect(() => {
       if (this.status() === 'error') this.toast.error(this.translate.instant('COMMON.ERROR_GENERIC'));
     });
+    // só vale como "visto" o resultado que chegou com esta tela aberta: se o usuário saiu antes, o painel do canto avisa
+    effect(() => {
+      if (this.status() === 'done' || this.status() === 'error') untracked(() => this.jobs.markSeen(this.productId));
+    });
   }
 
   /** A busca roda no serviço (não na tela): sair daqui não a interrompe e o painel do canto avisa quando acabar. */
   ngOnInit(): void {
     this.jobs.start(this.productId);
-    this.jobs.markSeen(this.productId);
+  }
+
+  isNew(candidate: OfferCandidate): boolean {
+    return this.newIds().has(candidate.id);
+  }
+
+  findNew(): void {
+    this.jobs.refresh(this.productId);
   }
 
   answer(candidate: OfferCandidate, isSameProduct: boolean): void {

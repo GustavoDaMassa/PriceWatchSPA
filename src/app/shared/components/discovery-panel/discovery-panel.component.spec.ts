@@ -94,4 +94,42 @@ describe('DiscoveryPanelComponent', () => {
 
     expect(windows().length).toBe(0);
   });
+
+  describe('nova busca', () => {
+    const fresh = { ...candidate, id: 'C2' } as OfferCandidate;
+
+    function finishFirstSearch(): void {
+      jobs.start('P1');
+      pending.next([candidate]);
+      jobs.markSeen('P1');
+      pending = new Subject<OfferCandidate[]>();
+      (TestBed.inject(DiscoveryApiService).discover as jasmine.Spy).and.returnValue(pending.asObservable());
+    }
+
+    it('warns, opened and green, only when the new search brings new products', () => {
+      finishFirstSearch();
+      jobs.refresh('P1');
+      fixture.detectChanges();
+      expect(windows().length).toBe(1);                   // buscando de novo: volta a aparecer minimizada
+      expect(body()).toBeNull();
+
+      pending.next([candidate, fresh]);
+      fixture.detectChanges();
+
+      expect(fixture.debugElement.query(By.css('.win.ready'))).not.toBeNull();
+      expect(body()).not.toBeNull();
+    });
+
+    it('says that nothing new is normal, without the green call to action', () => {
+      finishFirstSearch();
+      jobs.refresh('P1');
+
+      pending.next([candidate]);
+      fixture.detectChanges();
+
+      expect(windows().length).toBe(1);
+      expect(fixture.debugElement.query(By.css('.win.ready'))).toBeNull();
+      expect(fixture.debugElement.query(By.css('.cta'))).toBeNull();
+    });
+  });
 });
