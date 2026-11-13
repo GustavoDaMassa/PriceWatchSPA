@@ -33,41 +33,65 @@ describe('DiscoveryPanelComponent', () => {
     fixture.detectChanges();
   });
 
-  const pills = () => fixture.debugElement.queryAll(By.css('.pill'));
+  const windows = () => fixture.debugElement.queryAll(By.css('.win'));
+  const body = () => fixture.debugElement.query(By.css('.body'));
+  const click = (selector: string, index = 0) =>
+    (fixture.debugElement.queryAll(By.css(selector))[index].nativeElement as HTMLButtonElement).click();
+  const candidate = { id: 'C1', productId: 'P1', source: 0, storeName: 'Mercado Livre', url: 'u', name: 'n',
+    price: 1, score: 1, reason: 1, preselected: false } as OfferCandidate;
 
   it('shows nothing when there is no search', () => {
-    expect(pills().length).toBe(0);
+    expect(windows().length).toBe(0);
   });
 
-  it('shows a pill while the search runs and keeps it when the result arrives', () => {
+  it('stays minimized while the search runs and opens on demand', () => {
     jobs.start('P1');
     fixture.detectChanges();
-    expect(pills().length).toBe(1);
+
+    expect(windows().length).toBe(1);
     expect(fixture.debugElement.query(By.css('mat-spinner'))).not.toBeNull();
+    expect(body()).toBeNull();
 
-    pending.next([]);
+    click('header .icon', 0);
     fixture.detectChanges();
-    expect(pills().length).toBe(1);
-    expect(fixture.debugElement.query(By.css('mat-spinner'))).toBeNull();
+
+    expect(body()).not.toBeNull();
   });
 
-  it('opens the candidates of the product when the pill is clicked', () => {
+  it('opens by itself, turns green and points to the similar products when the result arrives', () => {
     jobs.start('P1');
     fixture.detectChanges();
+    expect(body()).toBeNull();
 
-    (fixture.debugElement.query(By.css('.open')).nativeElement as HTMLButtonElement).click();
+    pending.next([candidate]);
+    fixture.detectChanges();
 
+    expect(fixture.debugElement.query(By.css('.win.ready'))).not.toBeNull();
+    expect(body()).not.toBeNull();
+
+    click('.cta');
     expect(router.navigate).toHaveBeenCalledWith(['/products', 'P1', 'candidates']);
   });
 
-  it('hides a finished search once the user dismisses it', () => {
+  it('explains that finding nothing is normal and only offers to close', () => {
     jobs.start('P1');
     pending.next([]);
     fixture.detectChanges();
 
-    (fixture.debugElement.query(By.css('.close')).nativeElement as HTMLButtonElement).click();
+    expect(fixture.debugElement.query(By.css('.win.ready'))).toBeNull();
+    expect(fixture.debugElement.query(By.css('.cta'))).toBeNull();
+    expect(body()).not.toBeNull();
+  });
+
+  it('stays on screen until the user opens the result or closes it', () => {
+    jobs.start('P1');
+    pending.next([candidate]);
+    fixture.detectChanges();
+    expect(windows().length).toBe(1);
+
+    click('header .icon', 0);
     fixture.detectChanges();
 
-    expect(pills().length).toBe(0);
+    expect(windows().length).toBe(0);
   });
 });

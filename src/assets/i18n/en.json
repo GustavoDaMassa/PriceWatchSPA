@@ -198,11 +198,17 @@
     "EMPTY": "There are no offers for this product yet."
   },
   "DISCOVERY_PANEL": {
-    "RUNNING": "Looking for similar products...",
-    "FOUND_ONE": "1 similar product found",
-    "FOUND_MANY": "{{count}} similar products found",
+    "RUNNING": "Searching Mercado Livre. You can keep browsing.",
+    "FOUND_ONE": "We found 1 similar product!",
+    "FOUND_MANY": "We found {{count}} similar products!",
     "NONE": "No similar products found. That's normal.",
-    "ERROR": "Could not search right now. Tap to try again.",
-    "CLOSE": "Dismiss"
+    "ERROR": "Could not search right now.",
+    "CLOSE": "Dismiss",
+    "TITLE": "Similar products",
+    "VIEW": "See similar products",
+    "RETRY": "Try again",
+    "OK": "Got it",
+    "MINIMIZE": "Minimize",
+    "EXPAND": "Open"
   }
 }

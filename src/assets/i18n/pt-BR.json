@@ -198,11 +198,17 @@
     "EMPTY": "Ainda não há ofertas para este produto."
   },
   "DISCOVERY_PANEL": {
-    "RUNNING": "Procurando produtos parecidos...",
-    "FOUND_ONE": "1 produto parecido encontrado",
-    "FOUND_MANY": "{{count}} produtos parecidos encontrados",
+    "RUNNING": "Procurando no Mercado Livre. Você pode continuar navegando.",
+    "FOUND_ONE": "Achamos 1 produto parecido!",
+    "FOUND_MANY": "Achamos {{count}} produtos parecidos!",
     "NONE": "Nenhum parecido encontrado. É normal.",
-    "ERROR": "Não deu para buscar agora. Toque para tentar de novo.",
-    "CLOSE": "Fechar aviso"
+    "ERROR": "Não deu para buscar agora.",
+    "CLOSE": "Fechar aviso",
+    "TITLE": "Produtos parecidos",
+    "VIEW": "Ver produtos parecidos",
+    "RETRY": "Tentar de novo",
+    "OK": "Entendi",
+    "MINIMIZE": "Minimizar",
+    "EXPAND": "Abrir"
   }
 }
